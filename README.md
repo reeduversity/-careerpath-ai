@@ -116,5 +116,7 @@ Follow these instructions to clone the repository and run the Omni-Dashboard loc
 ---
 
 <div align="center">
+  <h3>👨‍💻 Lead AI Developer & Architect</h3>
+  <h2><strong>Ram Bhajan</strong></h2>
   <p>Built with ❤️ for the future of Career Navigation.</p>
 </div>
