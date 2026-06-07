@@ -1,0 +1,293 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CareerGoal {
+  id                         String                     @id @default(cuid())
+  goalName                   String
+  category                   String
+  createdAt                  DateTime                   @default(now())
+  updatedAt                  DateTime                   @updatedAt
+  higherEducationProfiles    HigherEducationProfile[]
+  jobSeekerProfiles          JobSeekerProfile[]
+  courseRecommendations      CourseRecommendation[]
+  certificationRecommendations CertificationRecommendation[]
+  projectRecommendations     ProjectRecommendation[]
+  roadmaps                   Roadmap[]
+  collegeRecommendations     CollegeRecommendation[]
+  jobRecommendations         JobRecommendation[]
+}
+
+model HigherEducationProfile {
+  id                  String                      @id @default(cuid())
+  fullName            String
+  email               String?
+  phone               String?
+  educationLevel      String
+  currentQualification String
+  boardUniversity     String
+  percentage          Float?
+  cgpa                Float?
+  passingYear         Int?
+  budget              String
+  careerGoal          CareerGoal?                @relation(fields: [careerGoalId], references: [id])
+  careerGoalId        String?
+  skills              Skill[]
+  domesticProfile     DomesticEducationProfile?
+  internationalProfile InternationalEducationProfile?
+  createdAt           DateTime                    @default(now())
+  updatedAt           DateTime                    @updatedAt
+}
+
+model DomesticEducationProfile {
+  id                     String                   @id @default(cuid())
+  higherEducationProfile HigherEducationProfile   @relation(fields: [higherEducationProfileId], references: [id])
+  higherEducationProfileId String                 @unique
+  state                  String
+  city                   String
+  preferredStudyLocation String
+  entranceExamScores     Json?
+  board                  String
+  percentage             Float?
+  cgpa                   Float?
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+}
+
+model InternationalEducationProfile {
+  id                     String                   @id @default(cuid())
+  higherEducationProfile HigherEducationProfile   @relation(fields: [higherEducationProfileId], references: [id])
+  higherEducationProfileId String                 @unique
+  preferredCountry       String
+  preferredUniversity    String?
+  ielts                  Float?
+  toefl                  Int?
+  pte                    Int?
+  sat                    Int?
+  gre                    Int?
+  gmat                   Int?
+  budget                 String
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+}
+
+model JobSeekerProfile {
+  id                 String        @id @default(cuid())
+  careerGoal         CareerGoal?   @relation(fields: [careerGoalId], references: [id])
+  careerGoalId       String?
+  qualification      String
+  experienceYears    Int?
+  experienceSummary  String?
+  preferredLocation  String
+  salaryExpectation  String?
+  skills             Skill[]
+  resumes            ResumeProfile[]
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+}
+
+model ResumeProfile {
+  id                 String           @id @default(cuid())
+  jobSeekerProfile   JobSeekerProfile? @relation(fields: [jobSeekerProfileId], references: [id])
+  jobSeekerProfileId String?
+  fileName           String
+  filePath           String
+  resumeText         String?
+  uploadDate         DateTime         @default(now())
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  analysis           ResumeAnalysis?
+  skillGapAnalysis   SkillGapAnalysis?
+}
+
+model Skill {
+  id                     String                   @id @default(cuid())
+  name                   String
+  level                  String
+  category               String
+  higherEducationProfile HigherEducationProfile? @relation(fields: [higherEducationProfileId], references: [id])
+  higherEducationProfileId String?
+  jobSeekerProfile       JobSeekerProfile?       @relation(fields: [jobSeekerProfileId], references: [id])
+  jobSeekerProfileId     String?
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+}
+
+model CourseRecommendation {
+  id            String      @id @default(cuid())
+  courseName    String
+  platform      String
+  level         String
+  url           String
+  careerGoal    CareerGoal? @relation(fields: [careerGoalId], references: [id])
+  careerGoalId  String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model CertificationRecommendation {
+  id            String      @id @default(cuid())
+  certificationName String
+  level         String
+  provider      String
+  careerGoal    CareerGoal? @relation(fields: [careerGoalId], references: [id])
+  careerGoalId  String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model ProjectRecommendation {
+  id            String      @id @default(cuid())
+  projectName   String
+  difficulty    String
+  description   String
+  careerGoal    CareerGoal? @relation(fields: [careerGoalId], references: [id])
+  careerGoalId  String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Roadmap {
+  id            String      @id @default(cuid())
+  title         String
+  description   String
+  stage         String
+  order         Int
+  careerGoal    CareerGoal? @relation(fields: [careerGoalId], references: [id])
+  careerGoalId  String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model CollegeRecommendation {
+  id                  String      @id @default(cuid())
+  collegeName         String
+  location            String
+  matchPercentage     Float?
+  admissionProbability Float?
+  fees                String
+  careerGoal          CareerGoal? @relation(fields: [careerGoalId], references: [id])
+  careerGoalId        String?
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+}
+
+model JobRecommendation {
+  id              String      @id @default(cuid())
+  jobTitle        String
+  matchPercentage Float?
+  salaryRange     String
+  growthOpportunity String
+  careerGoal      CareerGoal? @relation(fields: [careerGoalId], references: [id])
+  careerGoalId    String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model ResumeAnalysis {
+  id                 String        @id @default(cuid())
+  resumeProfile      ResumeProfile @relation(fields: [resumeProfileId], references: [id], onDelete: Cascade)
+  resumeProfileId    String        @unique
+
+  fullName           String?
+  email              String?
+  phone              String?
+  location           String?
+  education          Json?
+  skills             Json?
+  technicalSkills    Json?
+  softSkills         Json?
+  experience         Json?
+  projects           Json?
+  certifications     Json?
+  achievements       Json?
+
+  completenessScore  Float
+  qualityScore       Float
+  profileStrength    Float
+
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+}
+
+model SkillMaster {
+  id                   String                  @id @default(cuid())
+  name                 String                  @unique
+  category             String?
+  createdAt            DateTime                @default(now())
+  updatedAt            DateTime                @updatedAt
+  careerPathRequirements CareerPathRequirement[]
+  skillGapDetails      SkillGapDetail[]
+}
+
+model CareerCategory {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  description String?
+  roles       CareerRole[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model CareerRole {
+  id               String                  @id @default(cuid())
+  category         CareerCategory          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId       String
+  title            String                  @unique
+  description      String?
+  requirements     CareerPathRequirement[]
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+}
+
+model CareerPathRequirement {
+  id            String      @id @default(cuid())
+  careerRole    CareerRole  @relation(fields: [careerRoleId], references: [id], onDelete: Cascade)
+  careerRoleId  String
+  skillMaster   SkillMaster @relation(fields: [skillMasterId], references: [id], onDelete: Cascade)
+  skillMasterId String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@unique([careerRoleId, skillMasterId])
+}
+
+model SkillGapAnalysis {
+  id                  String           @id @default(cuid())
+  resumeProfile       ResumeProfile    @relation(fields: [resumeProfileId], references: [id], onDelete: Cascade)
+  resumeProfileId     String           @unique
+  careerGoal          String
+  existingSkills      Json             
+  requiredSkills      Json             
+  missingSkills       Json             
+  readinessPercentage Float
+  skillGapDetails     SkillGapDetail[]
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+}
+
+model SkillGapDetail {
+  id                 String           @id @default(cuid())
+  skillGapAnalysis   SkillGapAnalysis @relation(fields: [skillGapAnalysisId], references: [id], onDelete: Cascade)
+  skillGapAnalysisId String
+  skillMaster        SkillMaster      @relation(fields: [skillMasterId], references: [id], onDelete: Cascade)
+  skillMasterId      String
+  status             String           
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  @@unique([skillGapAnalysisId, skillMasterId])
+}
