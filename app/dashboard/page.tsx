@@ -74,7 +74,7 @@ function DashboardContent() {
           <span>/</span>
           <Link href="/job-seeker" className="text-sky-400 hover:text-sky-300">Job Seeker</Link>
           <span>/</span>
-          <span className="text-slate-200">Omni-Dashboard</span>
+          <span className="text-slate-200">Job Seeker Dashboard</span>
         </div>
 
         {/* Master AI Header with Gamification */}

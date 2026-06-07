@@ -1,7 +1,7 @@
 <div align="center">
   <img src="https://img.shields.io/badge/Status-Active-success.svg" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License">
-  <h1>🚀 CareerPath AI (Omni-Career Engine)</h1>
+  <h1>🚀 CareerPath AI (Job Seeker Dashboard)</h1>
   <p><strong>Next-Generation Career Orchestration & AI Job Readiness Platform</strong></p>
 </div>
 
@@ -11,7 +11,7 @@
 
 **CareerPath AI** is an advanced, AI-driven career orchestration platform designed to bridge the gap between job seekers and their dream careers. Leveraging cutting-edge Large Language Models (LLMs), the platform provides hyper-personalized career roadmaps, dynamic skill gap analysis, ATS resume optimization, and Netflix-style gamified learning paths.
 
-Whether you're a fresh graduate, a mid-level professional seeking a career pivot, or a seasoned expert aiming for executive roles, the Omni-Career Engine dynamically adapts to your profile to offer unparalleled market intelligence.
+Whether you're a fresh graduate, a mid-level professional seeking a career pivot, or a seasoned expert aiming for executive roles, the Job Seeker Dashboard dynamically adapts to your profile to offer unparalleled market intelligence.
 
 ---
 
