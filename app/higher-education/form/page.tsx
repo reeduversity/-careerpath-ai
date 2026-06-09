@@ -37,8 +37,7 @@ export default function HigherEducationForm() {
       ...formData, 
       educationLevel: e.target.value,
       currentQualification: "", // Reset context-dependent fields
-      careerGoal: "",
-      entranceExams: ""
+      careerGoal: ""
     });
   };
 
@@ -57,12 +56,13 @@ export default function HigherEducationForm() {
         ? `${formData.currentQualification} (Exams: ${examsCombined})` 
         : formData.currentQualification;
 
-      const response = await fetch("http://localhost:4000/api/higher-education/submit", {
+      const response = await fetch("/api/higher-education/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           ...formData, 
-          currentQualification: qualificationData,
+          currentQualification: formData.currentQualification,
+          entranceExams: examsCombined,
           careerGoal: `${formData.careerGoal} ${formData.preferredBranch ? `(Branch: ${formData.preferredBranch})` : ''} ${formData.targetBoard ? `(Board: ${formData.targetBoard})` : ''}`.trim(),
           percentage: parseFloat(formData.percentage) || null
         }),

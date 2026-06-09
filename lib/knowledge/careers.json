@@ -1,0 +1,47 @@
+[
+  {
+    "id": "software_engineer",
+    "name": "Software Engineer",
+    "requiredDegrees": ["B.Tech CSE", "BCA", "B.Sc IT", "MCA"],
+    "requiredStreams": ["PCM"],
+    "requiredExams": ["JEE Main", "JEE Advanced", "State Engineering Exams", "None"],
+    "requiredSkills": ["Programming", "DSA", "System Design"],
+    "domain": "ENGINEERING"
+  },
+  {
+    "id": "doctor",
+    "name": "Doctor (MBBS)",
+    "requiredDegrees": ["MBBS"],
+    "requiredStreams": ["PCB"],
+    "requiredExams": ["NEET"],
+    "requiredSkills": ["Medical Knowledge", "Empathy", "Clinical Skills"],
+    "domain": "MEDICAL"
+  },
+  {
+    "id": "ias_officer",
+    "name": "IAS Officer",
+    "requiredDegrees": ["ANY_UG"],
+    "requiredStreams": ["ANY"],
+    "requiredExams": ["UPSC"],
+    "requiredSkills": ["General Awareness", "Administration", "Decision Making"],
+    "domain": "GOVERNMENT"
+  },
+  {
+    "id": "investment_banker",
+    "name": "Investment Banker",
+    "requiredDegrees": ["MBA Finance", "BBA", "B.Com"],
+    "requiredStreams": ["Commerce", "PCM"],
+    "requiredExams": ["CAT", "GMAT"],
+    "requiredSkills": ["Financial Modeling", "Valuation", "Excel"],
+    "domain": "MANAGEMENT"
+  },
+  {
+    "id": "data_scientist",
+    "name": "Data Scientist",
+    "requiredDegrees": ["B.Tech CSE", "B.Sc Statistics", "MS Data Science"],
+    "requiredStreams": ["PCM"],
+    "requiredExams": ["JEE Main", "GRE", "None"],
+    "requiredSkills": ["Machine Learning", "Python", "Statistics", "SQL"],
+    "domain": "ENGINEERING"
+  }
+]

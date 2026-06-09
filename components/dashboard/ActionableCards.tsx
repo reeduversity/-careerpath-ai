@@ -25,14 +25,21 @@ const ActionableCards = React.memo(function ActionableCards({
           </div>
         ) : (
           <ul className="space-y-4 relative z-10">
-            {certifications.map((cert, idx) => (
-              <a key={idx} href={`https://www.google.com/search?q=${encodeURIComponent(cert + ' certification')}`} target="_blank" rel="noopener noreferrer" className="bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-amber-500/30 rounded-xl p-4 text-sm text-slate-200 transition-all shadow-inner cursor-pointer block">
-                <div className="flex items-start gap-3">
-                  <span className="text-amber-500 mt-0.5">•</span>
-                  <span className="font-medium tracking-wide leading-relaxed hover:text-amber-400 hover:underline">{cert}</span>
-                </div>
-              </a>
-            ))}
+            {certifications.map((cert: any, idx) => {
+              const certName = typeof cert === 'string' ? cert : cert.name;
+              const certUrl = typeof cert === 'object' && cert.url && cert.url !== 'N/A' 
+                ? cert.url 
+                : `https://www.google.com/search?q=${encodeURIComponent(certName + ' certification')}`;
+              
+              return (
+                <a key={idx} href={certUrl} target="_blank" rel="noopener noreferrer" className="bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-amber-500/30 rounded-xl p-4 text-sm text-slate-200 transition-all shadow-inner cursor-pointer block">
+                  <div className="flex items-start gap-3">
+                    <span className="text-amber-500 mt-0.5">•</span>
+                    <span className="font-medium tracking-wide leading-relaxed hover:text-amber-400 hover:underline">{certName}</span>
+                  </div>
+                </a>
+              );
+            })}
           </ul>
         )}
       </div>

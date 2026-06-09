@@ -33,7 +33,7 @@ export default function CareerHeader({
             
             {resumeProfileId && (
               <a 
-                href={`http://localhost:4000/api/resume/export/${resumeProfileId}`} 
+                href={`/api/resume/export/${resumeProfileId}`} 
                 download
                 className="inline-flex items-center gap-2 bg-sky-500 hover:bg-sky-600 text-white px-6 py-2 rounded-full font-medium transition-colors shadow-lg shadow-sky-500/20"
               >

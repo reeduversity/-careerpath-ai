@@ -88,11 +88,23 @@ model JobSeekerProfile {
   id                 String        @id @default(cuid())
   careerGoal         CareerGoal?   @relation(fields: [careerGoalId], references: [id])
   careerGoalId       String?
+  profileType        String?
+  targetJobRole      String?
+  industry           String?
   qualification      String
+  experienceLevel    String?
   experienceYears    Int?
   experienceSummary  String?
+  currentCity        String?
+  currentState       String?
   preferredLocation  String
+  workPreference     String?
   salaryExpectation  String?
+  linkedin           String?
+  github             String?
+  portfolio          String?
+  jobSearchType      String?       // "domestic" | "international"
+  preferredCountry   String?
   skills             Skill[]
   resumes            ResumeProfile[]
   createdAt          DateTime      @default(now())

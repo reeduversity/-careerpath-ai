@@ -20,12 +20,19 @@ const workPrefs = [
   { value: "onsite", label: "Onsite" },
 ];
 
-const salaryOptions = [
+const salaryOptionsDomestic = [
   { value: "below-3-lpa", label: "Below 3 LPA" },
   { value: "3-6-lpa", label: "3-6 LPA" },
   { value: "6-10-lpa", label: "6-10 LPA" },
   { value: "10-20-lpa", label: "10-20 LPA" },
   { value: "20-plus", label: "20+ LPA" },
+];
+
+const salaryOptionsInternational = [
+  { value: "below-50k-usd", label: "Below $50k USD" },
+  { value: "50k-80k-usd", label: "$50k - $80k USD" },
+  { value: "80k-120k-usd", label: "$80k - $120k USD" },
+  { value: "120k-plus-usd", label: "$120k+ USD" },
 ];
 
 export default function JobSeeker() {
@@ -44,6 +51,8 @@ export default function JobSeeker() {
     linkedin: "",
     github: "",
     portfolio: "",
+    jobSearchType: "domestic", // "domestic" or "international"
+    preferredCountry: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -116,7 +125,7 @@ export default function JobSeeker() {
     try {
       const formData = new FormData();
       formData.append("resume", file);
-      const uploadRes = await fetch("http://localhost:4000/api/resume/upload", {
+      const uploadRes = await fetch("/api/resume/upload", {
         method: "POST",
         body: formData,
       });
@@ -136,7 +145,7 @@ export default function JobSeeker() {
       setAutofillStatus("AI is reading your resume...");
 
       // Call analysis endpoint
-      const analyzeRes = await fetch("http://localhost:4000/api/resume/analyze", {
+      const analyzeRes = await fetch("/api/resume/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ resumeId: uploadJson.id })
@@ -179,7 +188,13 @@ export default function JobSeeker() {
 
     if (!values.currentCity.trim()) next.currentCity = "Current city is required.";
     if (!values.currentState.trim()) next.currentState = "Current state is required.";
-    if (!values.preferredLocation.trim()) next.preferredLocation = "Preferred job location is required.";
+    
+    if (values.jobSearchType === "international" && !values.preferredCountry.trim()) {
+      next.preferredCountry = "Preferred country is required for international jobs.";
+    } else if (values.jobSearchType === "domestic" && !values.preferredLocation.trim()) {
+      next.preferredLocation = "Preferred job location is required.";
+    }
+
     if (!values.workPreference.trim()) next.workPreference = "Work preference is required.";
     if (!values.salaryExpectation.trim()) next.salaryExpectation = "Salary expectation is required.";
 
@@ -209,7 +224,7 @@ export default function JobSeeker() {
         finalResumeId = uploadResult.id;
       } else {
         setResumeStatus("Uploading resume...");
-        const response = await fetch("http://localhost:4000/api/resume/upload", {
+        const response = await fetch("/api/resume/upload", {
           method: "POST",
           body: formData,
         });
@@ -223,17 +238,36 @@ export default function JobSeeker() {
         
         // Ensure AI analysis runs so database is populated before orchestrator starts
         setResumeStatus("Analyzing resume profile...");
-        await fetch("http://localhost:4000/api/resume/analyze", {
+        await fetch("/api/resume/analyze", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ resumeId: finalResumeId })
         });
       }
 
+      setResumeStatus("Saving full profile to database...");
+
+      // Submit full form data to new API endpoint
+      const submitRes = await fetch("/api/job-seeker/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          resumeProfileId: finalResumeId,
+          ...values,
+          skills
+        })
+      });
+
+      const submitJson = await submitRes.json();
+      if (!submitRes.ok) {
+        throw new Error(submitJson.error || "Failed to save job seeker profile");
+      }
+
       setResumeStatus("Upload successful. Redirecting to dashboard...");
       
-      // Redirect to Dashboard with full Omni-Career preferences
+      // Redirect to Dashboard with the new jobSeekerProfileId
       const queryParams = new URLSearchParams({
+        jobSeekerProfileId: submitJson.data.id,
         resumeProfileId: finalResumeId,
         careerRoleId: values.targetJobRole,
         profileType: values.profileType
@@ -241,7 +275,7 @@ export default function JobSeeker() {
       
       router.push(`/dashboard?${queryParams}`);
     } catch (error) {
-      setResumeStatus(`Upload failed: ${String(error)}`);
+      setResumeStatus(`Process failed: ${String(error)}`);
     } finally {
       setIsUploading(false);
     }
@@ -378,6 +412,24 @@ export default function JobSeeker() {
                 <p className="text-sm uppercase tracking-[0.35em] text-sky-400">Location & Salary</p>
                 <h3 className="mt-3 text-lg font-medium text-white">Where are you and what do you expect?</h3>
               </div>
+              
+              <div className="grid gap-6 lg:grid-cols-2">
+                <FieldWrapper label="Job Search Type" htmlFor="jobSearchType">
+                  <RadioGroup 
+                    name="jobSearchType" 
+                    options={[
+                      { value: "domestic", label: "Domestic" },
+                      { value: "international", label: "International" }
+                    ]} 
+                    value={values.jobSearchType} 
+                    onChange={(e) => {
+                      handleChange("jobSearchType", e.target.value);
+                      handleChange("salaryExpectation", ""); // reset salary selection
+                    }} 
+                  />
+                </FieldWrapper>
+                <div />
+              </div>
 
               <div className="grid gap-6 lg:grid-cols-2">
                 <FieldWrapper label="Current City" htmlFor="currentCity" error={errors.currentCity}>
@@ -389,9 +441,15 @@ export default function JobSeeker() {
               </div>
 
               <div className="grid gap-6 lg:grid-cols-2">
-                <FieldWrapper label="Preferred Job Location" htmlFor="preferredLocation" error={errors.preferredLocation}>
-                  <Input id="preferredLocation" value={values.preferredLocation} onChange={(e) => handleChange("preferredLocation", e.target.value)} placeholder="e.g., Remote / Bangalore" />
-                </FieldWrapper>
+                {values.jobSearchType === "international" ? (
+                  <FieldWrapper label="Preferred Country" htmlFor="preferredCountry" error={errors.preferredCountry}>
+                    <Input id="preferredCountry" value={values.preferredCountry} onChange={(e) => handleChange("preferredCountry", e.target.value)} placeholder="e.g., USA, UK, Canada" />
+                  </FieldWrapper>
+                ) : (
+                  <FieldWrapper label="Preferred Job Location" htmlFor="preferredLocation" error={errors.preferredLocation}>
+                    <Input id="preferredLocation" value={values.preferredLocation} onChange={(e) => handleChange("preferredLocation", e.target.value)} placeholder="e.g., Remote / Bangalore" />
+                  </FieldWrapper>
+                )}
                 <FieldWrapper label="Work Preference" htmlFor="workPreference" error={errors.workPreference}>
                   <RadioGroup name="workPref" options={workPrefs} value={values.workPreference} onChange={(e) => handleChange("workPreference", e.target.value)} />
                 </FieldWrapper>
@@ -399,7 +457,12 @@ export default function JobSeeker() {
 
               <div className="grid gap-6 lg:grid-cols-2">
                 <FieldWrapper label="Salary Expectation" htmlFor="salaryExpectation" error={errors.salaryExpectation}>
-                  <RadioGroup name="salary" options={salaryOptions} value={values.salaryExpectation} onChange={(e) => handleChange("salaryExpectation", e.target.value)} />
+                  <RadioGroup 
+                    name="salary" 
+                    options={values.jobSearchType === "international" ? salaryOptionsInternational : salaryOptionsDomestic} 
+                    value={values.salaryExpectation} 
+                    onChange={(e) => handleChange("salaryExpectation", e.target.value)} 
+                  />
                 </FieldWrapper>
                 <div />
               </div>

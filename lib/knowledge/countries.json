@@ -1,0 +1,34 @@
+[
+  {
+    "id": "USA",
+    "name": "United States of America",
+    "acceptedExams": ["SAT", "ACT", "GRE", "GMAT", "TOEFL", "IELTS"],
+    "visaRequirements": ["F-1 Visa", "I-20 Form"],
+    "minBudgetUSD": 30000,
+    "topDomains": ["Technology", "Business", "Healthcare"]
+  },
+  {
+    "id": "UK",
+    "name": "United Kingdom",
+    "acceptedExams": ["IELTS", "GMAT", "GRE"],
+    "visaRequirements": ["Tier 4 (General) Student Visa", "CAS"],
+    "minBudgetUSD": 25000,
+    "topDomains": ["Finance", "Management", "Law"]
+  },
+  {
+    "id": "Canada",
+    "name": "Canada",
+    "acceptedExams": ["IELTS", "TOEFL", "GRE", "GMAT", "SAT"],
+    "visaRequirements": ["Study Permit"],
+    "minBudgetUSD": 20000,
+    "topDomains": ["Technology", "Healthcare", "Engineering"]
+  },
+  {
+    "id": "India",
+    "name": "India",
+    "acceptedExams": ["JEE Main", "JEE Advanced", "NEET", "CAT", "UPSC", "CUET", "GATE", "None"],
+    "visaRequirements": ["None"],
+    "minBudgetUSD": 1000,
+    "topDomains": ["Engineering", "Medical", "Management", "Government"]
+  }
+]

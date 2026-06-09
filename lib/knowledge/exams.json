@@ -1,0 +1,84 @@
+[
+  {
+    "id": "jee_main",
+    "name": "JEE Main",
+    "domain": "ENGINEERING",
+    "minQualification": "12th",
+    "requiredStream": "PCM",
+    "countries": ["India"],
+    "description": "Joint Entrance Examination for Engineering in India."
+  },
+  {
+    "id": "jee_advanced",
+    "name": "JEE Advanced",
+    "domain": "ENGINEERING",
+    "minQualification": "12th",
+    "requiredStream": "PCM",
+    "prerequisiteExam": "jee_main",
+    "countries": ["India"]
+  },
+  {
+    "id": "neet",
+    "name": "NEET",
+    "domain": "MEDICAL",
+    "minQualification": "12th",
+    "requiredStream": "PCB",
+    "countries": ["India"]
+  },
+  {
+    "id": "cat",
+    "name": "CAT",
+    "domain": "MANAGEMENT",
+    "minQualification": "UG",
+    "requiredStream": "ANY",
+    "countries": ["India"]
+  },
+  {
+    "id": "gre",
+    "name": "GRE",
+    "domain": "INTERNATIONAL_PG",
+    "minQualification": "UG",
+    "requiredStream": "ANY",
+    "countries": ["USA", "Canada", "Europe", "Singapore"]
+  },
+  {
+    "id": "gmat",
+    "name": "GMAT",
+    "domain": "INTERNATIONAL_MBA",
+    "minQualification": "UG",
+    "requiredStream": "ANY",
+    "countries": ["USA", "UK", "Canada", "Australia", "Europe"]
+  },
+  {
+    "id": "sat",
+    "name": "SAT",
+    "domain": "INTERNATIONAL_UG",
+    "minQualification": "10th",
+    "requiredStream": "ANY",
+    "countries": ["USA", "Canada", "Singapore"]
+  },
+  {
+    "id": "ielts",
+    "name": "IELTS",
+    "domain": "LANGUAGE",
+    "minQualification": "ANY",
+    "requiredStream": "ANY",
+    "countries": ["UK", "Canada", "Australia", "New Zealand", "Europe"]
+  },
+  {
+    "id": "toefl",
+    "name": "TOEFL",
+    "domain": "LANGUAGE",
+    "minQualification": "ANY",
+    "requiredStream": "ANY",
+    "countries": ["USA", "Canada"]
+  },
+  {
+    "id": "upsc",
+    "name": "UPSC Civil Services",
+    "domain": "GOVERNMENT",
+    "minQualification": "UG",
+    "requiredStream": "ANY",
+    "countries": ["India"]
+  }
+]

@@ -23,7 +23,7 @@ function StudentDashboardContent() {
 
     async function loadData() {
       try {
-        const response = await fetch("http://localhost:4000/api/higher-education/orchestrate", {
+        const response = await fetch("/api/higher-education/orchestrate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ profileId })
@@ -134,8 +134,19 @@ function StudentDashboardContent() {
                     className="bg-slate-800/50 border border-slate-700 hover:border-indigo-500/50 hover:bg-slate-800/80 transition-all cursor-pointer rounded-xl p-5 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center relative overflow-hidden group"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/0 via-indigo-500/0 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div className="space-y-1 relative z-10">
-                      <h4 className="text-lg font-bold text-slate-100 group-hover:text-indigo-400 transition-colors">{college.collegeName}</h4>
+                    <div className="space-y-1 relative z-10 flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className="text-lg font-bold text-slate-100 group-hover:text-indigo-400 transition-colors">{college.collegeName}</h4>
+                        {college.category && (
+                          <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border ${
+                            college.category.toLowerCase().includes('dream') ? 'bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/20' :
+                            college.category.toLowerCase().includes('target') ? 'bg-sky-500/10 text-sky-400 border-sky-500/20' :
+                            'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                          }`}>
+                            {college.category}
+                          </span>
+                        )}
+                      </div>
                       <p className="text-sm text-slate-400 flex items-center gap-1">
                         <span>📍</span> {college.location}
                       </p>

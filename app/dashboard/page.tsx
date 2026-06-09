@@ -18,6 +18,7 @@ function DashboardContent() {
   const jobInterest = searchParams.get("jobInterest") || undefined;
   const examName = searchParams.get("examName") || undefined;
   const profileType = searchParams.get("profileType") || undefined;
+  const jobSeekerProfileId = searchParams.get("jobSeekerProfileId") || undefined;
 
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -32,7 +33,14 @@ function DashboardContent() {
 
     async function loadData() {
       try {
-        const result = await orchestrateCareer(resumeProfileId as string, careerRoleId as string);
+        const result = await orchestrateCareer(
+          resumeProfileId as string, 
+          careerRoleId as string,
+          jobInterest,
+          examName,
+          profileType,
+          jobSeekerProfileId
+        );
         setData(result);
       } catch (err: any) {
         setError(err.message || "An error occurred while generating your career plan.");
@@ -42,7 +50,7 @@ function DashboardContent() {
     }
 
     loadData();
-  }, [resumeProfileId, careerRoleId]);
+  }, [resumeProfileId, careerRoleId, jobInterest, examName, profileType, jobSeekerProfileId]);
 
   if (loading) {
     return <DashboardSkeleton />;

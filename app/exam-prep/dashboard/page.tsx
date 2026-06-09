@@ -26,7 +26,7 @@ function ExamDashboardContent() {
 
     async function loadData() {
       try {
-        const res = await fetch("http://localhost:4000/api/exam-prep/orchestrate", {
+        const res = await fetch("/api/exam-prep/orchestrate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ stage, sector, examName, hours, budget })

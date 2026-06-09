@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:4000/api";
+const API_BASE = "/api";
 
 export async function fetchCareers() {
   const res = await fetch(`${API_BASE}/careers`, { next: { revalidate: 600 } });
@@ -13,14 +13,15 @@ export async function orchestrateCareer(
   careerRoleId: string,
   jobInterest?: string,
   examName?: string,
-  profileType?: string
+  profileType?: string,
+  jobSeekerProfileId?: string
 ) {
   const res = await fetch(`${API_BASE}/career/orchestrate`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ resumeProfileId, careerRoleId, jobInterest, examName, profileType }),
+    body: JSON.stringify({ resumeProfileId, careerRoleId, jobInterest, examName, profileType, jobSeekerProfileId }),
   });
   
   if (!res.ok) throw new Error("Failed to orchestrate career");
