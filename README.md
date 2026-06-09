@@ -37,20 +37,6 @@ Earn XP and industry-specific badges as you complete milestones. Career growth s
 
 ---
 
-## 📸 Screenshots
-
-*(Add high-quality screenshots or GIFs here to showcase the beautiful UI)*
-
-| Landing Page | Job Seeker Dashboard |
-| --- | --- |
-| `<img src="docs/landing.png" alt="Landing Page" width="400"/>` | `<img src="docs/job-dashboard.png" alt="Job Seeker Dashboard" width="400"/>` |
-
-| Higher Education Plan | Binge Learning Series |
-| --- | --- |
-| `<img src="docs/higher-ed.png" alt="Higher Education Plan" width="400"/>` | `<img src="docs/learning-path.png" alt="Binge Learning Path" width="400"/>` |
-
----
-
 ## 🛠️ Architecture & Tech Stack
 
 CareerPath AI is built on a unified, high-performance edge architecture.
