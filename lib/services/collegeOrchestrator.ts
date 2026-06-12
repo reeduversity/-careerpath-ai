@@ -46,19 +46,23 @@ export async function orchestrateCollegePlan(profileId: string) {
 
   const entranceExams = profile.domesticProfile?.entranceExamScores || "None (Applying via Board Marks)";
 
+  const isInternational = constraints.targetDomains.includes("INTERNATIONAL");
+  const contextType = isInternational ? "INTERNATIONAL EDUCATION (Strictly outside India)" : "DOMESTIC EDUCATION (Strictly inside India)";
+  
   // PASS 1: CANDIDATE GENERATION (No Explanations)
   const candidatePrompt = `You are a Candidate Generation Engine.
 Based on the profile, propose 10 potential institutions.
 Profile: 
+- Form Context: ${contextType}
 - Level: ${profile.educationLevel}
 - Current Qualification/Stream: ${profile.currentQualification}
 - Academic Performance: ${profile.twelfthPercentage ? profile.twelfthPercentage + '% in 12th' : (profile.cgpa ? profile.cgpa + ' CGPA' : 'Not specified')}
 - Budget: ${profile.budget}
-- Target Location: ${constraints.targetDomains.includes("INTERNATIONAL") ? profile.internationalProfile?.preferredCountry : profile.domesticProfile?.preferredStudyLocation}
+- User's Typed Target Location: ${isInternational ? profile.internationalProfile?.preferredCountry : profile.domesticProfile?.preferredStudyLocation}
 - Entrance Exams Taken: ${entranceExams}
 
 CRITICAL RULES:
-1. STRICT LOCATION ISOLATION: If the user is applying for Domestic Education (Target Location is in India), you MUST ONLY suggest institutions (schools/colleges/universities) located IN INDIA. If the user is applying for International Education, you MUST ONLY suggest institutions outside India. NEVER MIX THEM.
+1. STRICT LOCATION ISOLATION: The Form Context is ${contextType}. You MUST ONLY suggest institutions that match this Form Context. If DOMESTIC, suggest ONLY Indian colleges. If INTERNATIONAL, suggest ONLY non-Indian colleges. If the user's Typed Target Location contradicts the Form Context (e.g. they typed 'USA' on a DOMESTIC form), IGNORE their typed location and strictly follow the Form Context.
 2. If "Entrance Exams Taken" says "None" or "Board Marks", you MUST NOT recommend colleges that mandate strict competitive exams (like JEE, NEET, etc.). Instead, recommend universities in the Target Location that accept students based on high school/12th board merit or holistic review.
 3. Ensure the fees fit the budget limit.
 
@@ -128,7 +132,8 @@ ${JSON.stringify(passedCandidates.map(p => ({
 })))}
 
 USER PROFILE:
-- Target Location: ${constraints.targetDomains.includes("INTERNATIONAL") ? profile.internationalProfile?.preferredCountry : profile.domesticProfile?.preferredStudyLocation}
+- Form Context: ${contextType}
+- User's Typed Target Location: ${isInternational ? profile.internationalProfile?.preferredCountry : profile.domesticProfile?.preferredStudyLocation}
 - Education Level: ${profile.educationLevel}
 - Current Qualification/Stream: ${profile.currentQualification}
 - Academic Performance: ${profile.twelfthPercentage ? profile.twelfthPercentage + '% in 12th' : (profile.cgpa ? profile.cgpa + ' CGPA' : 'Not specified')}
@@ -136,7 +141,7 @@ USER PROFILE:
 - Entrance Exams Taken: ${entranceExams}
 
 CRITICAL RULES:
-1. STRICT LOCATION ISOLATION: If the user is on the Domestic page (Target Location in India) but types an international city, politely inform them in 'whyRecommended' that you are focusing on top domestic options as per the form. NEVER suggest international colleges for Domestic applications, and vice-versa.
+1. STRICT LOCATION ISOLATION: The Form Context is ${contextType}. If DOMESTIC, you must ONLY recommend Indian colleges. If the user typed an international city (like London, USA) in their Typed Target Location on a DOMESTIC form, IGNORE their typed location. Tell them in 'whyRecommended': "Since you applied through the Domestic form, I am recommending top options in India." NEVER mix domestic and international!
 2. If the user is a Science/Engineering student (PCM/PCB), DO NOT recommend Arts or Humanities paths unless specifically asked. Align 'recommendedStreams' exactly with their past 'Stream/Major' and 'Current Qualification'.
 3. Only use the colleges from the provided list. Do not hallucinate.
 
