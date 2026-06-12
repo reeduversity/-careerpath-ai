@@ -51,8 +51,7 @@ export async function orchestrateCollegePlan(profileId: string) {
 Based on the profile, propose 10 potential institutions.
 Profile: 
 - Level: ${profile.educationLevel}
-- Current Qualification: ${profile.currentQualification}
-- Stream/Major: ${profile.stream || "Not specified"}
+- Current Qualification/Stream: ${profile.currentQualification}
 - Academic Performance: ${profile.twelfthPercentage ? profile.twelfthPercentage + '% in 12th' : (profile.cgpa ? profile.cgpa + ' CGPA' : 'Not specified')}
 - Budget: ${profile.budget}
 - Target Location: ${constraints.targetDomains.includes("INTERNATIONAL") ? profile.internationalProfile?.preferredCountry : profile.domesticProfile?.preferredStudyLocation}
@@ -131,10 +130,9 @@ ${JSON.stringify(passedCandidates.map(p => ({
 USER PROFILE:
 - Target Location: ${constraints.targetDomains.includes("INTERNATIONAL") ? profile.internationalProfile?.preferredCountry : profile.domesticProfile?.preferredStudyLocation}
 - Education Level: ${profile.educationLevel}
-- Current Qualification: ${profile.currentQualification}
-- Stream/Major: ${profile.stream || "Not specified"}
+- Current Qualification/Stream: ${profile.currentQualification}
 - Academic Performance: ${profile.twelfthPercentage ? profile.twelfthPercentage + '% in 12th' : (profile.cgpa ? profile.cgpa + ' CGPA' : 'Not specified')}
-- Budget Limit: INR ${profile.budgetLimit}
+- Budget Limit: INR ${profile.budget}
 - Entrance Exams Taken: ${entranceExams}
 
 CRITICAL RULES:

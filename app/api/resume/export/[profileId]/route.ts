@@ -40,26 +40,21 @@ export async function GET(req: Request, { params }: { params: Promise<{ profileI
       doc.moveDown(1);
     }
 
-    const hasSpecificEdu = analysis.degree || analysis.institute;
     const education = Array.isArray(analysis.education) ? analysis.education.filter((e: any) => e) : [];
-    
-    if (hasSpecificEdu || education.length > 0) {
+    if (education.length > 0) {
       doc.fontSize(14).font('Helvetica-Bold').text("EDUCATION", { underline: true });
       doc.moveDown(0.5);
-      
-      if (hasSpecificEdu) {
-        doc.fontSize(12).font('Helvetica-Bold').text(analysis.degree || "Degree Not Specified");
-        doc.fontSize(10).font('Helvetica').text(`${analysis.institute || "Unknown Institute"} | ${analysis.passingYear || "Year N/A"}`);
-        if (analysis.cgpa) doc.text(`CGPA / Percentage: ${analysis.cgpa}`);
+      education.forEach((edu: any) => {
+        if (typeof edu === 'object') {
+          doc.fontSize(12).font('Helvetica-Bold').text(edu.degree || edu.institution || "Education Details");
+          if (edu.institution) doc.fontSize(10).font('Helvetica').text(edu.institution);
+          if (edu.year || edu.passingYear) doc.fontSize(10).font('Helvetica').text(`Year: ${edu.year || edu.passingYear}`);
+          if (edu.cgpa || edu.score) doc.fontSize(10).font('Helvetica').text(`Score: ${edu.cgpa || edu.score}`);
+        } else {
+          doc.fontSize(10).font('Helvetica-Bold').text(String(edu));
+        }
         doc.moveDown(0.5);
-      }
-      
-      if (education.length > 0) {
-        education.forEach((edu: any) => {
-          doc.fontSize(10).font('Helvetica').text(edu.degree || edu);
-          doc.moveDown(0.2);
-        });
-      }
+      });
       doc.moveDown(1);
     }
 
