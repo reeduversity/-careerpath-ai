@@ -64,8 +64,42 @@ export async function GET(req: Request, { params }: { params: Promise<{ profileI
       doc.moveDown(0.5);
       experience.forEach((exp: any) => {
         doc.fontSize(10).font('Helvetica-Bold').text(exp.role || exp);
+        if (exp.company) doc.font('Helvetica-Oblique').text(exp.company);
         if (exp.description) doc.font('Helvetica').text(exp.description);
         doc.moveDown(0.5);
+      });
+      doc.moveDown(1);
+    }
+
+    const projects = Array.isArray(analysis.projects) ? analysis.projects.filter(p => p) : [];
+    if (projects.length > 0) {
+      doc.fontSize(14).font('Helvetica-Bold').text("PROJECTS", { underline: true });
+      doc.moveDown(0.5);
+      projects.forEach((proj: any) => {
+        if (typeof proj === 'object') {
+          doc.fontSize(10).font('Helvetica-Bold').text(proj.name || proj.title || "Project");
+          if (proj.techStack) doc.font('Helvetica-Oblique').text(`Tech Stack: ${proj.techStack}`);
+          if (proj.description) doc.font('Helvetica').text(proj.description);
+        } else {
+          doc.fontSize(10).font('Helvetica-Bold').text(String(proj));
+        }
+        doc.moveDown(0.5);
+      });
+      doc.moveDown(1);
+    }
+
+    const certsAndAchievements = [
+      ...(Array.isArray(analysis.certifications) ? analysis.certifications : []),
+      ...(Array.isArray(analysis.achievements) ? analysis.achievements : [])
+    ].filter(Boolean);
+
+    if (certsAndAchievements.length > 0) {
+      doc.fontSize(14).font('Helvetica-Bold').text("CERTIFICATIONS & ACHIEVEMENTS", { underline: true });
+      doc.moveDown(0.5);
+      certsAndAchievements.forEach((cert: any) => {
+        const text = typeof cert === 'object' ? (cert.name || cert.title || cert.description || JSON.stringify(cert)) : String(cert);
+        doc.fontSize(10).font('Helvetica').text(`• ${text}`);
+        doc.moveDown(0.2);
       });
       doc.moveDown(1);
     }
