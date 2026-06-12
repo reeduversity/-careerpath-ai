@@ -3,6 +3,8 @@ frontend:
   phases:
     preBuild:
       commands:
+        - echo "DATABASE_URL=$DATABASE_URL" >> .env
+        - echo "GROQ_API_KEY=$GROQ_API_KEY" >> .env
         - echo "DATABASE_URL=$DATABASE_URL" >> .env.production
         - echo "GROQ_API_KEY=$GROQ_API_KEY" >> .env.production
         - npm install
