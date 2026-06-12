@@ -40,14 +40,26 @@ export async function GET(req: Request, { params }: { params: Promise<{ profileI
       doc.moveDown(1);
     }
 
-    const education = Array.isArray(analysis.education) ? analysis.education.filter(e => e) : [];
-    if (education.length > 0) {
+    const hasSpecificEdu = analysis.degree || analysis.institute;
+    const education = Array.isArray(analysis.education) ? analysis.education.filter((e: any) => e) : [];
+    
+    if (hasSpecificEdu || education.length > 0) {
       doc.fontSize(14).font('Helvetica-Bold').text("EDUCATION", { underline: true });
       doc.moveDown(0.5);
-      education.forEach((edu: any) => {
-        doc.fontSize(10).font('Helvetica-Bold').text(edu.degree || edu);
+      
+      if (hasSpecificEdu) {
+        doc.fontSize(12).font('Helvetica-Bold').text(analysis.degree || "Degree Not Specified");
+        doc.fontSize(10).font('Helvetica').text(`${analysis.institute || "Unknown Institute"} | ${analysis.passingYear || "Year N/A"}`);
+        if (analysis.cgpa) doc.text(`CGPA / Percentage: ${analysis.cgpa}`);
         doc.moveDown(0.5);
-      });
+      }
+      
+      if (education.length > 0) {
+        education.forEach((edu: any) => {
+          doc.fontSize(10).font('Helvetica').text(edu.degree || edu);
+          doc.moveDown(0.2);
+        });
+      }
       doc.moveDown(1);
     }
 
@@ -66,11 +78,14 @@ export async function GET(req: Request, { params }: { params: Promise<{ profileI
     doc.end();
     
     const pdfBuffer = await pdfPromise;
+    
+    // Sanitize user name for filename
+    const safeName = analysis.fullName ? analysis.fullName.replace(/[^a-zA-Z0-9]/g, '_') : 'User';
 
     return new Response(pdfBuffer, {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename=ATS_Resume_${profileId}.pdf`
+        'Content-Disposition': `attachment; filename="ATS_Resume_${safeName}.pdf"`
       }
     });
 

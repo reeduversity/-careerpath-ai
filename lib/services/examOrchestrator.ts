@@ -50,9 +50,9 @@ export async function orchestrateExamPrep(
   }
 
   // Filter by Stage
-  if (stage === "12th") {
+  if (stage.includes("10th") || stage.includes("12th")) {
     validExams = validExams.filter((e: any) => e.minQualification === "12th" || e.minQualification === "10th" || e.minQualification === "ANY");
-  } else if (stage === "Graduate") {
+  } else if (stage.includes("Graduate") || stage.includes("Diploma") || stage.includes("PG") || stage.includes("UG") || stage.includes("Technical")) {
     validExams = validExams.filter((e: any) => e.minQualification === "UG" || e.minQualification === "ANY");
   }
 
@@ -133,6 +133,16 @@ DO NOT hallucinate formatting. Return pure JSON.`;
   let aiData: any;
   try {
     aiData = await generateGroqResponse(systemPrompt, userMessage, true);
+    
+    // Post-process to eliminate hallucinated exams (like "None")
+    if (aiData.recommendedExams) {
+      aiData.recommendedExams = aiData.recommendedExams.filter((generatedExam: any) => 
+        candidatesToExplain.some((validExam: any) => 
+          validExam.name.toLowerCase().includes(generatedExam.name.toLowerCase()) || 
+          generatedExam.name.toLowerCase().includes(validExam.name.toLowerCase())
+        )
+      );
+    }
   } catch (error) {
     console.error("Failed to generate AI data for Exam Prep:", error);
     aiData = { recommendedExams: [], roadmap: [], institutes: [], studyResources: [] };

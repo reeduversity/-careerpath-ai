@@ -48,9 +48,12 @@ export async function orchestrateCollegePlan(profileId: string) {
 
   // PASS 1: CANDIDATE GENERATION (No Explanations)
   const candidatePrompt = `You are a Candidate Generation Engine.
-Based on the profile, propose 10 potential colleges.
+Based on the profile, propose 10 potential institutions.
 Profile: 
 - Level: ${profile.educationLevel}
+- Current Qualification: ${profile.currentQualification}
+- Stream/Major: ${profile.stream || "Not specified"}
+- Academic Performance: ${profile.twelfthPercentage ? profile.twelfthPercentage + '% in 12th' : (profile.cgpa ? profile.cgpa + ' CGPA' : 'Not specified')}
 - Budget: ${profile.budget}
 - Target Location: ${constraints.targetDomains.includes("INTERNATIONAL") ? profile.internationalProfile?.preferredCountry : profile.domesticProfile?.preferredStudyLocation}
 - Entrance Exams Taken: ${entranceExams}
@@ -124,6 +127,20 @@ ${JSON.stringify(passedCandidates.map(p => ({
   validationPassed: p.passed,
   blockReason: p.blockReason
 })))}
+
+USER PROFILE:
+- Target Location: ${constraints.targetDomains.includes("INTERNATIONAL") ? profile.internationalProfile?.preferredCountry : profile.domesticProfile?.preferredStudyLocation}
+- Education Level: ${profile.educationLevel}
+- Current Qualification: ${profile.currentQualification}
+- Stream/Major: ${profile.stream || "Not specified"}
+- Academic Performance: ${profile.twelfthPercentage ? profile.twelfthPercentage + '% in 12th' : (profile.cgpa ? profile.cgpa + ' CGPA' : 'Not specified')}
+- Budget Limit: INR ${profile.budgetLimit}
+- Entrance Exams Taken: ${entranceExams}
+
+CRITICAL RULES:
+1. STRICT LOCATION ISOLATION: If the user is on the Domestic page (Target Location in India) but types an international city, politely inform them in 'whyRecommended' that you are focusing on top domestic options as per the form. NEVER suggest international colleges for Domestic applications, and vice-versa.
+2. If the user is a Science/Engineering student (PCM/PCB), DO NOT recommend Arts or Humanities paths unless specifically asked. Align 'recommendedStreams' exactly with their past 'Stream/Major' and 'Current Qualification'.
+3. Only use the colleges from the provided list. Do not hallucinate.
 
 ${isFallback ? "WARNING: None of the generated colleges perfectly matched the user's strict criteria (e.g. budget, country, exam). These are FALLBACK recommendations. In 'whyRecommended' or 'riskFactors', clearly explain why they are being shown despite failing some constraints (e.g., 'Exceeds budget', 'Different country'). You MUST still generate all other required fields (streams, scholarships, careers)." : "You MUST generate all required fields."}
 
