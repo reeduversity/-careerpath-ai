@@ -56,7 +56,7 @@ Profile:
 - Entrance Exams Taken: ${entranceExams}
 
 CRITICAL RULES:
-1. STRICT LOCATION ISOLATION: If the user is applying for Domestic Education (Target Location is in India or a specific Indian state/city), you MUST ONLY suggest universities located IN INDIA. If the user is applying for International Education (Target Location is USA, UK, Canada, etc.), you MUST ONLY suggest universities outside India. NEVER MIX THEM.
+1. STRICT LOCATION ISOLATION: If the user is applying for Domestic Education (Target Location is in India), you MUST ONLY suggest institutions (schools/colleges/universities) located IN INDIA. If the user is applying for International Education, you MUST ONLY suggest institutions outside India. NEVER MIX THEM.
 2. If "Entrance Exams Taken" says "None" or "Board Marks", you MUST NOT recommend colleges that mandate strict competitive exams (like JEE, NEET, etc.). Instead, recommend universities in the Target Location that accept students based on high school/12th board merit or holistic review.
 3. Ensure the fees fit the budget limit.
 
