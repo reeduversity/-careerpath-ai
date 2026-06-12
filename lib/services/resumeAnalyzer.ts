@@ -1,4 +1,6 @@
-export function analyzeResumeText(text: string) {
+import { generateGroqResponse } from "./groqClient";
+
+export function analyzeResumeTextFallback(text: string) {
   const result = {
     fullName: null as string | null,
     email: null as string | null,
@@ -215,4 +217,82 @@ export function analyzeResumeText(text: string) {
   result.profileStrength = Math.round((result.completenessScore * 0.5) + (result.qualityScore * 0.5));
 
   return result;
+}
+
+export async function analyzeResumeText(text: string) {
+  if (!text) return analyzeResumeTextFallback(text);
+
+  const prompt = `You are a strict JSON-only API that extracts structured data from resumes.
+Extract the following fields from the given resume text. If a field cannot be found, output null (for strings) or empty array (for arrays).
+
+Schema:
+{
+  "fullName": "string | null",
+  "email": "string | null",
+  "phone": "string | null",
+  "location": "string | null",
+  "currentCity": "string | null",
+  "currentState": "string | null",
+  "degree": "string | null (e.g. B.Tech, B.Sc, MBA)",
+  "institute": "string | null (e.g. IIT Bombay, Lamrin Tech Skills University)",
+  "cgpa": "string | null (e.g. 8.1)",
+  "passingYear": "string | null (e.g. 2024, 2027)",
+  "tenthPercentage": "string | null (e.g. 88)",
+  "twelfthPercentage": "string | null (e.g. 88.2)",
+  "experienceLevel": "string | null (must be one of: Fresher, 0-1 Years, 1-3 Years, 3-5 Years, 5+ Years)",
+  "linkedin": "string | null",
+  "github": "string | null",
+  "portfolio": "string | null",
+  "education": ["string"],
+  "skills": ["string"],
+  "technicalSkills": ["string"],
+  "softSkills": ["string"],
+  "experience": ["string"],
+  "projects": ["string"],
+  "certifications": ["string"],
+  "achievements": ["string"]
+}
+
+Resume Text:
+${text.substring(0, 5000)}
+
+Return ONLY valid JSON matching the schema.`;
+
+  try {
+    const aiResult = await generateGroqResponse(prompt, "Extract resume JSON", true);
+    
+    // Merge with fallback logic scores
+    const fallback = analyzeResumeTextFallback(text);
+    
+    return {
+      ...fallback,
+      fullName: aiResult.fullName || fallback.fullName,
+      email: aiResult.email || fallback.email,
+      phone: aiResult.phone || fallback.phone,
+      location: aiResult.location || fallback.location,
+      currentCity: aiResult.currentCity || null,
+      currentState: aiResult.currentState || null,
+      degree: aiResult.degree || null,
+      institute: aiResult.institute || null,
+      cgpa: aiResult.cgpa || null,
+      passingYear: aiResult.passingYear || null,
+      tenthPercentage: aiResult.tenthPercentage || null,
+      twelfthPercentage: aiResult.twelfthPercentage || null,
+      experienceLevel: aiResult.experienceLevel || null,
+      linkedin: aiResult.linkedin || fallback.linkedin,
+      github: aiResult.github || fallback.github,
+      portfolio: aiResult.portfolio || fallback.portfolio,
+      education: (aiResult.education && aiResult.education.length > 0) ? aiResult.education : fallback.education,
+      skills: (aiResult.skills && aiResult.skills.length > 0) ? aiResult.skills : fallback.skills,
+      technicalSkills: (aiResult.technicalSkills && aiResult.technicalSkills.length > 0) ? aiResult.technicalSkills : fallback.technicalSkills,
+      softSkills: (aiResult.softSkills && aiResult.softSkills.length > 0) ? aiResult.softSkills : fallback.softSkills,
+      experience: (aiResult.experience && aiResult.experience.length > 0) ? aiResult.experience : fallback.experience,
+      projects: (aiResult.projects && aiResult.projects.length > 0) ? aiResult.projects : fallback.projects,
+      certifications: (aiResult.certifications && aiResult.certifications.length > 0) ? aiResult.certifications : fallback.certifications,
+      achievements: (aiResult.achievements && aiResult.achievements.length > 0) ? aiResult.achievements : fallback.achievements,
+    };
+  } catch (error) {
+    console.error("Groq extraction failed, falling back to regex", error);
+    return analyzeResumeTextFallback(text);
+  }
 }

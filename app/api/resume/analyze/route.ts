@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Resume not found or text not extracted" }, { status: 404 });
     }
 
-    const analysisResult = analyzeResumeText(resume.resumeText);
+    const analysisResult = await analyzeResumeText(resume.resumeText);
 
     const savedAnalysis = await prisma.resumeAnalysis.upsert({
       where: { resumeProfileId: resumeId },
@@ -64,6 +64,15 @@ export async function POST(req: Request) {
       linkedin: analysisResult.linkedin,
       github: analysisResult.github,
       portfolio: analysisResult.portfolio,
+      degree: analysisResult.degree,
+      institute: analysisResult.institute,
+      cgpa: analysisResult.cgpa,
+      passingYear: analysisResult.passingYear,
+      tenthPercentage: analysisResult.tenthPercentage,
+      twelfthPercentage: analysisResult.twelfthPercentage,
+      experienceLevel: analysisResult.experienceLevel,
+      currentCity: analysisResult.currentCity,
+      currentState: analysisResult.currentState,
     };
 
     return NextResponse.json({ success: true, analysis: finalAnalysis });

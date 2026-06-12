@@ -163,7 +163,15 @@ export default function JobSeeker() {
       if (analysis) {
         setValues((prev) => ({
           ...prev,
-          degree: Array.isArray(analysis.education) && analysis.education.length > 0 ? analysis.education[0] : prev.degree,
+          degree: analysis.degree || prev.degree,
+          institute: analysis.institute || prev.institute,
+          cgpa: analysis.cgpa || prev.cgpa,
+          passingYear: analysis.passingYear || prev.passingYear,
+          tenthPercentage: analysis.tenthPercentage || prev.tenthPercentage,
+          twelfthPercentage: analysis.twelfthPercentage || prev.twelfthPercentage,
+          experienceLevel: analysis.experienceLevel || prev.experienceLevel,
+          currentCity: analysis.currentCity || prev.currentCity,
+          currentState: analysis.currentState || prev.currentState,
           linkedin: analysis.linkedin || prev.linkedin,
           github: analysis.github || prev.github,
           portfolio: analysis.portfolio || prev.portfolio,
