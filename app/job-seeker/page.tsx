@@ -41,7 +41,13 @@ export default function JobSeeker() {
     careerGoal: "",
     targetJobRole: "",
     industry: "",
-    qualification: "",
+    degree: "",
+    institute: "",
+    cgpa: "",
+    tenthPercentage: "",
+    twelfthPercentage: "",
+    category: "General",
+    passingYear: "",
     experienceLevel: "",
     currentCity: "",
     currentState: "",
@@ -157,7 +163,7 @@ export default function JobSeeker() {
       if (analysis) {
         setValues((prev) => ({
           ...prev,
-          qualification: Array.isArray(analysis.education) && analysis.education.length > 0 ? analysis.education[0] : prev.qualification,
+          degree: Array.isArray(analysis.education) && analysis.education.length > 0 ? analysis.education[0] : prev.degree,
           linkedin: analysis.linkedin || prev.linkedin,
           github: analysis.github || prev.github,
           portfolio: analysis.portfolio || prev.portfolio,
@@ -183,7 +189,7 @@ export default function JobSeeker() {
     if (!values.careerGoal.trim()) next.careerGoal = "Career goal is required.";
     if (!values.targetJobRole.trim()) next.targetJobRole = "Target job role is required.";
     if (!values.industry.trim()) next.industry = "Industry is required.";
-    if (!values.qualification.trim()) next.qualification = "Qualification is required.";
+    if (!values.degree.trim()) next.degree = "Degree is required.";
     if (!values.experienceLevel.trim()) next.experienceLevel = "Experience level is required.";
 
     if (!values.currentCity.trim()) next.currentCity = "Current city is required.";
@@ -386,8 +392,42 @@ export default function JobSeeker() {
                 <FieldWrapper label="Industry" htmlFor="industry" error={errors.industry}>
                   <Input id="industry" value={values.industry} onChange={(e) => handleChange("industry", e.target.value)} placeholder="e.g., Software, Finance" />
                 </FieldWrapper>
-                <FieldWrapper label="Qualification" htmlFor="qualification" error={errors.qualification}>
-                  <Input id="qualification" value={values.qualification} onChange={(e) => handleChange("qualification", e.target.value)} placeholder="e.g., B.Tech, MBA" />
+                <FieldWrapper label="Degree" htmlFor="degree" error={errors.degree}>
+                  <Input id="degree" value={values.degree} onChange={(e) => handleChange("degree", e.target.value)} placeholder="e.g., B.Tech, MBA" />
+                </FieldWrapper>
+              </div>
+
+              <div className="grid gap-6 lg:grid-cols-3">
+                <FieldWrapper label="Institute" htmlFor="institute" error={errors.institute}>
+                  <Input id="institute" value={values.institute} onChange={(e) => handleChange("institute", e.target.value)} placeholder="e.g., IIT Bombay" />
+                </FieldWrapper>
+                <FieldWrapper label="CGPA / % (Graduation)" htmlFor="cgpa" error={errors.cgpa}>
+                  <Input id="cgpa" value={values.cgpa} onChange={(e) => handleChange("cgpa", e.target.value)} placeholder="e.g., 8.5" />
+                </FieldWrapper>
+                <FieldWrapper label="Passing Year" htmlFor="passingYear" error={errors.passingYear}>
+                  <Input id="passingYear" value={values.passingYear} type="number" onChange={(e) => handleChange("passingYear", e.target.value)} placeholder="e.g., 2024" />
+                </FieldWrapper>
+              </div>
+
+              <div className="grid gap-6 lg:grid-cols-3">
+                <FieldWrapper label="10th Percentage" htmlFor="tenthPercentage" error={errors.tenthPercentage}>
+                  <Input id="tenthPercentage" value={values.tenthPercentage} onChange={(e) => handleChange("tenthPercentage", e.target.value)} placeholder="e.g., 85" type="number" />
+                </FieldWrapper>
+                <FieldWrapper label="12th Percentage" htmlFor="twelfthPercentage" error={errors.twelfthPercentage}>
+                  <Input id="twelfthPercentage" value={values.twelfthPercentage} onChange={(e) => handleChange("twelfthPercentage", e.target.value)} placeholder="e.g., 80" type="number" />
+                </FieldWrapper>
+                <FieldWrapper label="Category" htmlFor="category" error={errors.category}>
+                  <select 
+                    id="category" 
+                    value={values.category} 
+                    onChange={(e) => handleChange("category", e.target.value)}
+                    className="flex h-10 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
+                  >
+                    <option value="General">General</option>
+                    <option value="OBC">OBC</option>
+                    <option value="SC">SC</option>
+                    <option value="ST">ST</option>
+                  </select>
                 </FieldWrapper>
               </div>
 

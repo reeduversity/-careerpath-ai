@@ -1,0 +1,42 @@
+[
+  {
+    "category": "Tier 1 Engineering",
+    "examples": ["IIT", "NIT", "BITS", "IIIT"],
+    "requiredStream": ["PCM"],
+    "min12thPercentage": 75,
+    "requiredExams": ["JEE Main", "JEE Advanced", "BITSAT"],
+    "message": "Tier 1 engineering institutes strictly require 75%+ in 12th PCM and valid competitive exam scores."
+  },
+  {
+    "category": "State Engineering / Tier 2",
+    "examples": ["State CET Colleges", "VIT", "SRM", "Manipal"],
+    "requiredStream": ["PCM"],
+    "min12thPercentage": 60,
+    "requiredExams": [],
+    "message": "Tier 2 or State colleges typically require at least 60% in 12th PCM."
+  },
+  {
+    "category": "Medical Tier 1",
+    "examples": ["AIIMS", "GMC"],
+    "requiredStream": ["PCB"],
+    "min12thPercentage": 50,
+    "requiredExams": ["NEET"],
+    "message": "Government medical colleges strictly require 50%+ in 12th PCB (for General) and NEET."
+  },
+  {
+    "category": "Top Commerce & Arts",
+    "examples": ["SRCC", "Hindu", "St. Stephens", "Christ University"],
+    "requiredStream": ["Commerce", "Arts", "ANY"],
+    "min12thPercentage": 85,
+    "requiredExams": ["CUET"],
+    "message": "Top commerce and arts colleges often require high board percentages or excellent CUET scores."
+  },
+  {
+    "category": "General Degree (BBA, B.Com, BA)",
+    "examples": ["Local State Universities", "Private Universities"],
+    "requiredStream": ["ANY"],
+    "min12thPercentage": 45,
+    "requiredExams": [],
+    "message": "General degree colleges require passing marks (usually 45-50%)."
+  }
+]

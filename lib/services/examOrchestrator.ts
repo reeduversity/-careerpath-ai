@@ -13,20 +13,40 @@ export async function orchestrateExamPrep(
   budget: string
 ) {
   
+  // PHASE 5: EXAM ALIAS RESOLVER
+  const aliasMap: Record<string, string> = {
+    "cgl": "SSC CGL",
+    "jee": "JEE Main",
+    "neet": "NEET",
+    "upsc": "UPSC Civil Services",
+    "gate": "GATE",
+    "ibps": "IBPS PO",
+    "sbi": "SBI PO",
+    "rbi": "RBI Grade B"
+  };
+
+  let resolvedExamName = examName ? examName.trim() : "";
+  if (resolvedExamName && aliasMap[resolvedExamName.toLowerCase()]) {
+    resolvedExamName = aliasMap[resolvedExamName.toLowerCase()];
+  }
+
   // LAYER 1: Programmatic Exam Filtering (Validation)
   let validExams = examsDB;
 
-  // Filter by sector/domain
-  if (sector === "Engineering") {
-    validExams = validExams.filter((e: any) => e.domain === "ENGINEERING");
-  } else if (sector === "Medical") {
-    validExams = validExams.filter((e: any) => e.domain === "MEDICAL");
-  } else if (sector === "Government/UPSC") {
-    validExams = validExams.filter((e: any) => e.domain === "GOVERNMENT");
-  } else if (sector === "International") {
+  // PHASE 3: EXAM FILTER ENGINE
+  const sec = sector.toLowerCase();
+  if (sec.includes("ssc")) {
+    validExams = validExams.filter((e: any) => e.name.toUpperCase().includes("SSC") || e.domain === "GOVERNMENT");
+  } else if (sec.includes("engineering")) {
+    validExams = validExams.filter((e: any) => e.name.toUpperCase().includes("JEE") || e.name.toUpperCase().includes("GATE") || e.domain === "ENGINEERING");
+  } else if (sec.includes("medical")) {
+    validExams = validExams.filter((e: any) => e.name.toUpperCase().includes("NEET") || e.domain === "MEDICAL");
+  } else if (sec.includes("banking")) {
+    validExams = validExams.filter((e: any) => e.name.toUpperCase().includes("IBPS") || e.name.toUpperCase().includes("SBI") || e.name.toUpperCase().includes("RBI") || e.name.includes("PO"));
+  } else if (sec.includes("upsc") || sec.includes("government")) {
+    validExams = validExams.filter((e: any) => e.name.toUpperCase().includes("UPSC") || e.domain === "GOVERNMENT");
+  } else if (sec === "international") {
     validExams = validExams.filter((e: any) => e.domain.startsWith("INTERNATIONAL") || e.domain === "LANGUAGE");
-  } else if (sector === "Banking") {
-    validExams = validExams.filter((e: any) => e.name.includes("PO") || e.name.includes("Clerk"));
   }
 
   // Filter by Stage
@@ -36,9 +56,10 @@ export async function orchestrateExamPrep(
     validExams = validExams.filter((e: any) => e.minQualification === "UG" || e.minQualification === "ANY");
   }
 
-  // If user requested a specific exam, filter to that if it's in the valid list
-  if (examName && examName !== "undefined" && examName.trim() !== "") {
-    const explicitlyRequested = validExams.filter((e: any) => e.name.toLowerCase().includes(examName.toLowerCase()));
+  // PHASE 4: TARGET EXAM EXACT MATCH
+  if (resolvedExamName && resolvedExamName !== "undefined" && resolvedExamName !== "None") {
+    const explicitlyRequested = examsDB.filter((e: any) => e.name.toLowerCase() === resolvedExamName.toLowerCase() || e.name.toLowerCase().includes(resolvedExamName.toLowerCase()));
+    
     if (explicitlyRequested.length > 0) {
       validExams = explicitlyRequested;
     } else {

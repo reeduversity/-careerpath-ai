@@ -89,34 +89,38 @@ function StudentDashboardContent() {
           {/* Left Column - Streams & Careers */}
           <div className="space-y-8 lg:col-span-1">
             {/* Recommended Streams */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg">
-              <h3 className="text-xl font-bold text-sky-400 mb-4 flex items-center gap-2">
-                <span>📚</span> Recommended Paths
-              </h3>
-              <div className="space-y-4">
-                {(data.recommendedStreams || []).map((stream: any, idx: number) => (
-                  <div key={idx} className="bg-slate-800/50 p-4 rounded-xl border border-slate-700/50">
-                    <h4 className="font-semibold text-slate-200 mb-1">{stream.name}</h4>
-                    <p className="text-xs text-slate-400">{stream.reason}</p>
-                  </div>
-                ))}
+            {(data.recommendedStreams && data.recommendedStreams.length > 0) && (
+              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg">
+                <h3 className="text-xl font-bold text-sky-400 mb-4 flex items-center gap-2">
+                  <span>📚</span> Recommended Paths
+                </h3>
+                <div className="space-y-4">
+                  {data.recommendedStreams.map((stream: any, idx: number) => (
+                    <div key={idx} className="bg-slate-800/50 p-4 rounded-xl border border-slate-700/50">
+                      <h4 className="font-semibold text-slate-200 mb-1">{stream.name}</h4>
+                      <p className="text-xs text-slate-400">{stream.reason}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Career Pathways */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg">
-              <h3 className="text-xl font-bold text-emerald-400 mb-4 flex items-center gap-2">
-                <span>🎯</span> Future Careers
-              </h3>
-              <ul className="space-y-3">
-                {(data.careerPathways || []).map((career: string, idx: number) => (
-                  <li key={idx} className="flex items-start gap-3 text-sm text-slate-300">
-                    <span className="mt-0.5 text-emerald-500">→</span>
-                    <span>{career}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {(data.careerPathways && data.careerPathways.length > 0) && (
+              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg">
+                <h3 className="text-xl font-bold text-emerald-400 mb-4 flex items-center gap-2">
+                  <span>🎯</span> Future Careers
+                </h3>
+                <ul className="space-y-3">
+                  {data.careerPathways.map((career: string, idx: number) => (
+                    <li key={idx} className="flex items-start gap-3 text-sm text-slate-300">
+                      <span className="mt-0.5 text-emerald-500">→</span>
+                      <span>{career}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* Right Column - Colleges & Scholarships */}
@@ -176,54 +180,52 @@ function StudentDashboardContent() {
             </div>
 
             {/* Scholarships */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg">
-              <h3 className="text-xl font-bold text-amber-400 mb-4 flex items-center gap-2">
-                <span>🏆</span> Available Scholarships
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {(data.scholarships || []).map((scholarship: any, idx: number) => (
-                  <div key={idx} className="bg-amber-500/5 border border-amber-500/20 p-4 rounded-xl">
-                    <h4 className="font-bold text-amber-300 mb-1">{scholarship.name}</h4>
-                    <p className="text-sm font-medium text-slate-200 mb-2">{scholarship.amount}</p>
-                    <p className="text-xs text-slate-400 leading-relaxed">{scholarship.eligibility}</p>
-                  </div>
-                ))}
-                {(data.scholarships || []).length === 0 && (
-                  <p className="text-slate-400">No scholarships mapped for this profile yet.</p>
-                )}
+            {(data.scholarships && data.scholarships.length > 0) && (
+              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg">
+                <h3 className="text-xl font-bold text-amber-400 mb-4 flex items-center gap-2">
+                  <span>🏆</span> Available Scholarships
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {data.scholarships.map((scholarship: any, idx: number) => (
+                    <div key={idx} className="bg-amber-500/5 border border-amber-500/20 p-4 rounded-xl">
+                      <h4 className="font-bold text-amber-300 mb-1">{scholarship.name}</h4>
+                      <p className="text-sm font-medium text-slate-200 mb-2">{scholarship.amount}</p>
+                      <p className="text-xs text-slate-400 leading-relaxed">{scholarship.eligibility}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
             
           </div>
         </div>
 
         {/* Full-width Admission Process Timeline */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-xl mt-8">
-          <h3 className="text-3xl font-bold text-rose-400 mb-2 flex items-center gap-3">
-            <span>🎓</span> Complete Admission Roadmap
-          </h3>
-          <p className="text-slate-400 mb-8 max-w-2xl">Follow these chronological steps to secure your admission. This timeline is customized based on your target location and education level.</p>
-          
-          <div className="relative border-l-2 border-slate-700 ml-4 md:ml-6 space-y-8 pb-4">
-            {(data.admissionProcess || []).map((stepInfo: any, idx: number) => (
-              <div key={idx} className="relative pl-8 md:pl-10">
-                <span className="absolute -left-[11px] top-1 h-5 w-5 rounded-full bg-rose-500 ring-4 ring-slate-900"></span>
-                <div className="bg-slate-800/50 border border-slate-700 p-5 rounded-2xl hover:border-rose-500/50 transition-colors">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-2">
-                    <h4 className="text-lg font-bold text-slate-100">{stepInfo.step}</h4>
-                    <span className="inline-flex items-center rounded-md bg-rose-400/10 px-2 py-1 text-xs font-medium text-rose-400 ring-1 ring-inset ring-rose-400/20 whitespace-nowrap">
-                      {stepInfo.timeline}
-                    </span>
+        {(data.admissionProcess && data.admissionProcess.length > 0) && (
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-xl mt-8">
+            <h3 className="text-3xl font-bold text-rose-400 mb-2 flex items-center gap-3">
+              <span>🎓</span> Complete Admission Roadmap
+            </h3>
+            <p className="text-slate-400 mb-8 max-w-2xl">Follow these chronological steps to secure your admission. This timeline is customized based on your target location and education level.</p>
+            
+            <div className="relative border-l-2 border-slate-700 ml-4 md:ml-6 space-y-8 pb-4">
+              {data.admissionProcess.map((stepInfo: any, idx: number) => (
+                <div key={idx} className="relative pl-8 md:pl-10">
+                  <span className="absolute -left-[11px] top-1 h-5 w-5 rounded-full bg-rose-500 ring-4 ring-slate-900"></span>
+                  <div className="bg-slate-800/50 border border-slate-700 p-5 rounded-2xl hover:border-rose-500/50 transition-colors">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-2">
+                      <h4 className="text-lg font-bold text-slate-100">{stepInfo.step}</h4>
+                      <span className="inline-flex items-center rounded-md bg-rose-400/10 px-2 py-1 text-xs font-medium text-rose-400 ring-1 ring-inset ring-rose-400/20 whitespace-nowrap">
+                        {stepInfo.timeline}
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-400 leading-relaxed">{stepInfo.description}</p>
                   </div>
-                  <p className="text-sm text-slate-400 leading-relaxed">{stepInfo.description}</p>
                 </div>
-              </div>
-            ))}
-            {(data.admissionProcess || []).length === 0 && (
-              <div className="pl-8 text-slate-400">No admission process generated.</div>
-            )}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
         {/* Deep Insights Modal */}
         {selectedCollege && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">

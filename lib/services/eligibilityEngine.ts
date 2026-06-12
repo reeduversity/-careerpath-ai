@@ -37,24 +37,43 @@ export function evaluateEligibility(profile: any): EligibilityResult {
 
   // 1. Detect Stream and Contradictions
   let determinedStream = "ANY";
-  if (goal.includes("ENGINEER") || goal.includes("B.TECH") || goal.includes("CSE") || goal.includes("TECH")) {
+  const qualification = (profile.currentQualification || "").toUpperCase();
+
+  if (goal.includes("ENGINEER") || goal.includes("B.TECH") || goal.includes("CSE") || goal.includes("TECH") || qualification.includes("PCM")) {
     determinedStream = "PCM";
-  } else if (goal.includes("MBBS") || goal.includes("DOCTOR") || goal.includes("MEDICAL") || goal.includes("BDS")) {
+  } else if (goal.includes("MBBS") || goal.includes("DOCTOR") || goal.includes("MEDICAL") || goal.includes("BDS") || qualification.includes("PCB")) {
     determinedStream = "PCB";
-  } else if (goal.includes("CA") || goal.includes("COMMERCE") || goal.includes("B.COM") || goal.includes("ACCOUNT")) {
+  } else if (goal.includes("CA") || goal.includes("COMMERCE") || goal.includes("B.COM") || goal.includes("ACCOUNT") || qualification.includes("COMMERCE")) {
     determinedStream = "COMMERCE";
+  } else if (qualification.includes("ARTS") || qualification.includes("HUMANITIES")) {
+    determinedStream = "ARTS";
   }
 
   result.criteria.stream = determinedStream;
 
+  // STRICT DOMAIN BLOCKING (PHASE 2)
+  if (determinedStream === "PCM") {
+    result.eligibleDomains.push("ENGINEERING", "DEFENCE");
+    result.blockedDomains.push("MEDICAL", "COMMERCE", "ARTS", "LAW", "MANAGEMENT_UG");
+  } else if (determinedStream === "PCB") {
+    result.eligibleDomains.push("MEDICAL", "BIOTECH");
+    result.blockedDomains.push("ENGINEERING", "COMMERCE", "DEFENCE", "ARTS");
+  } else if (determinedStream === "COMMERCE") {
+    result.eligibleDomains.push("COMMERCE", "FINANCE", "BANKING");
+    result.blockedDomains.push("ENGINEERING", "MEDICAL", "DEFENCE", "SCIENCE");
+  } else if (determinedStream === "ARTS") {
+    result.eligibleDomains.push("ARTS", "LAW", "TEACHING");
+    result.blockedDomains.push("ENGINEERING", "MEDICAL", "COMMERCE", "SCIENCE");
+  }
+
   // Check Contradictions
   if (determinedStream === "PCM" && examsLower.includes("neet")) {
-    result.contradictions.push("You are preparing for NEET (Medical) but your goal is Engineering (PCM). This is a direct contradiction.");
+    result.contradictions.push("You are preparing for NEET (Medical) but your stream/goal is PCM. This is a direct contradiction.");
     result.hasContradiction = true;
     result.confidenceScore -= 50;
   }
   if (determinedStream === "PCB" && (examsLower.includes("jee") || examsLower.includes("jee main"))) {
-    result.contradictions.push("You are preparing for JEE (Engineering) but your goal is Medical (PCB). This is a direct contradiction.");
+    result.contradictions.push("You are preparing for JEE (Engineering) but your stream/goal is Medical (PCB). This is a direct contradiction.");
     result.hasContradiction = true;
     result.confidenceScore -= 50;
   }
@@ -98,8 +117,8 @@ export function evaluateEligibility(profile: any): EligibilityResult {
         result.criteria.requiredExams.push("JEE Main");
       }
       if (examsLower.includes("neet")) {
-        result.eligibleDomains.push("MEDICAL");
-        result.blockedDomains.push("ENGINEERING");
+        result.eligibleDomains.push("MEDICAL_TIER");
+        result.blockedDomains.push("ENGINEERING_TIER");
         result.criteria.requiredExams.push("NEET");
       }
       if (examsLower.includes("cat") || examsLower.includes("mat")) {

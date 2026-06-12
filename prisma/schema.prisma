@@ -40,6 +40,9 @@ model HigherEducationProfile {
   currentQualification String
   boardUniversity     String
   percentage          Float?
+  tenthPercentage     Float?
+  twelfthPercentage   Float?
+  category            String?
   cgpa                Float?
   passingYear         Int?
   budget              String
@@ -91,7 +94,13 @@ model JobSeekerProfile {
   profileType        String?
   targetJobRole      String?
   industry           String?
-  qualification      String
+  degree             String
+  institute          String?
+  cgpa               Float?
+  tenthPercentage    Float?
+  twelfthPercentage  Float?
+  category           String?
+  passingYear        Int?
   experienceLevel    String?
   experienceYears    Int?
   experienceSummary  String?

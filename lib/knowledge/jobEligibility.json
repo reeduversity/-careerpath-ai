@@ -1,0 +1,38 @@
+[
+  {
+    "domain": "Software Engineering",
+    "minCgpa": 6.5,
+    "requiredDegrees": ["B.Tech", "B.E", "BCA", "MCA", "M.Tech", "B.Sc CS", "UG", "PG"],
+    "message": "Software engineering roles generally require a technical degree and a minimum CGPA of 6.5."
+  },
+  {
+    "domain": "Data Science",
+    "minCgpa": 7.0,
+    "requiredDegrees": ["B.Tech", "M.Tech", "Statistics", "Mathematics", "MCA", "UG", "PG"],
+    "message": "Data Science roles often strictly screen for quantitative backgrounds and 7.0+ CGPA."
+  },
+  {
+    "domain": "UPSC Civil Services",
+    "minCgpa": 0,
+    "requiredDegrees": ["UG", "PG", "B.A", "B.Sc", "B.Com", "B.Tech", "MBBS"],
+    "message": "UPSC strictly requires completing Graduation. No strict CGPA cutoff."
+  },
+  {
+    "domain": "SSC CGL",
+    "minCgpa": 0,
+    "requiredDegrees": ["UG", "PG", "B.A", "B.Sc", "B.Com", "B.Tech"],
+    "message": "SSC CGL strictly requires a Graduation degree. 12th pass are not eligible."
+  },
+  {
+    "domain": "Banking PO (IBPS / SBI)",
+    "minCgpa": 5.0,
+    "requiredDegrees": ["UG", "PG", "B.A", "B.Sc", "B.Com", "B.Tech", "BBA"],
+    "message": "Banking PO roles require Graduation and sometimes a minimum of 50-60%."
+  },
+  {
+    "domain": "NDA / Defence",
+    "minCgpa": 0,
+    "requiredDegrees": ["12th", "UG"],
+    "message": "NDA requires 12th pass (PCM for Air Force/Navy)."
+  }
+]

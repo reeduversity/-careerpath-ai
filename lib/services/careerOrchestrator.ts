@@ -156,6 +156,13 @@ DO NOT hallucinate formatting. Return pure JSON.`;
   // Step 5: Merge all outputs into one response
   const finalMissingSkills = missingSkills.length > 0 ? missingSkills : (aiData.inferredMissingSkills || []);
 
+  // Step 6: Filter Invalid Jobs
+  const { enforceJobEligibility } = require("./eligibilityFilters");
+  const seekerForFilter = jobSeekerProfileId ? await prisma.jobSeekerProfile.findUnique({ where: { id: jobSeekerProfileId } }) : {};
+  const validJobRoles = enforceJobEligibility(aiData.privateJobPath?.roles || [], seekerForFilter || {}, careerRoleTitle)
+    .filter((j: any) => j.passed)
+    .map((j: any) => j.job);
+
   return {
     careerRole: careerRoleTitle,
     skillGap: {
@@ -165,7 +172,7 @@ DO NOT hallucinate formatting. Return pure JSON.`;
     learningPath: aiData.netflixLearningPath?.series || [],
     certifications: aiData.certifications || [],
     projects: aiData.projects || [],
-    jobRoles: aiData.privateJobPath?.roles || [],
+    jobRoles: validJobRoles.length > 0 ? validJobRoles : ["General " + careerRoleTitle],
     salaryRange: aiData.privateJobPath?.salaryEstimate || "Not available",
     roadmap: aiData.roadmap || [],
     atsScore: aiData.atsScore || 40,

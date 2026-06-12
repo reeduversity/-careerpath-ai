@@ -29,42 +29,38 @@ export async function GET(req: Request, { params }: { params: Promise<{ profileI
     doc.fontSize(10).font('Helvetica').text(`${analysis.email || ""} | ${analysis.phone || ""} | ${analysis.location || ""}`, { align: 'center' });
     doc.moveDown(2);
 
-    doc.fontSize(14).font('Helvetica-Bold').text("SKILLS", { underline: true });
-    doc.moveDown(0.5);
+    const technicalSkills = Array.isArray(analysis.technicalSkills) && analysis.technicalSkills.length > 0 ? analysis.technicalSkills.join(", ") : null;
+    const softSkills = Array.isArray(analysis.softSkills) && analysis.softSkills.length > 0 ? analysis.softSkills.join(", ") : null;
     
-    const technicalSkills = Array.isArray(analysis.technicalSkills) ? analysis.technicalSkills.join(", ") : "N/A";
-    const softSkills = Array.isArray(analysis.softSkills) ? analysis.softSkills.join(", ") : "N/A";
-    
-    doc.fontSize(10).font('Helvetica-Bold').text("Technical: ", { continued: true }).font('Helvetica').text(technicalSkills);
-    doc.fontSize(10).font('Helvetica-Bold').text("Soft Skills: ", { continued: true }).font('Helvetica').text(softSkills);
-    doc.moveDown(1.5);
+    if (technicalSkills || softSkills) {
+      doc.fontSize(14).font('Helvetica-Bold').text("SKILLS", { underline: true });
+      doc.moveDown(0.5);
+      if (technicalSkills) doc.fontSize(10).font('Helvetica-Bold').text("Technical: ", { continued: true }).font('Helvetica').text(technicalSkills).moveDown(0.5);
+      if (softSkills) doc.fontSize(10).font('Helvetica-Bold').text("Soft Skills: ", { continued: true }).font('Helvetica').text(softSkills);
+      doc.moveDown(1);
+    }
 
-    doc.fontSize(14).font('Helvetica-Bold').text("EDUCATION", { underline: true });
-    doc.moveDown(0.5);
-    const education = Array.isArray(analysis.education) ? analysis.education : [];
+    const education = Array.isArray(analysis.education) ? analysis.education.filter(e => e) : [];
     if (education.length > 0) {
+      doc.fontSize(14).font('Helvetica-Bold').text("EDUCATION", { underline: true });
+      doc.moveDown(0.5);
       education.forEach((edu: any) => {
         doc.fontSize(10).font('Helvetica-Bold').text(edu.degree || edu);
         doc.moveDown(0.5);
       });
-    } else {
-      doc.fontSize(10).font('Helvetica').text("Details not provided.");
-      doc.moveDown(0.5);
+      doc.moveDown(1);
     }
-    doc.moveDown(1);
 
-    doc.fontSize(14).font('Helvetica-Bold').text("PROFESSIONAL EXPERIENCE", { underline: true });
-    doc.moveDown(0.5);
-    const experience = Array.isArray(analysis.experience) ? analysis.experience : [];
+    const experience = Array.isArray(analysis.experience) ? analysis.experience.filter(e => e) : [];
     if (experience.length > 0) {
+      doc.fontSize(14).font('Helvetica-Bold').text("PROFESSIONAL EXPERIENCE", { underline: true });
+      doc.moveDown(0.5);
       experience.forEach((exp: any) => {
         doc.fontSize(10).font('Helvetica-Bold').text(exp.role || exp);
         if (exp.description) doc.font('Helvetica').text(exp.description);
         doc.moveDown(0.5);
       });
-    } else {
-      doc.fontSize(10).font('Helvetica').text("Details not provided.");
-      doc.moveDown(0.5);
+      doc.moveDown(1);
     }
 
     doc.end();

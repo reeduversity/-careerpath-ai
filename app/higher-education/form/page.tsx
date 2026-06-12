@@ -26,6 +26,9 @@ export default function HigherEducationForm() {
     exam2Name: "",
     exam2Score: "",
     targetBoard: "", // Target Board or University Type
+    tenthPercentage: "",
+    twelfthPercentage: "",
+    category: "General",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -64,7 +67,10 @@ export default function HigherEducationForm() {
           currentQualification: formData.currentQualification,
           entranceExams: examsCombined,
           careerGoal: `${formData.careerGoal} ${formData.preferredBranch ? `(Branch: ${formData.preferredBranch})` : ''} ${formData.targetBoard ? `(Board: ${formData.targetBoard})` : ''}`.trim(),
-          percentage: parseFloat(formData.percentage) || null
+          percentage: parseFloat(formData.percentage) || null,
+          tenthPercentage: parseFloat(formData.tenthPercentage) || null,
+          twelfthPercentage: parseFloat(formData.twelfthPercentage) || null,
+          category: formData.category
         }),
       });
       const data = await response.json();

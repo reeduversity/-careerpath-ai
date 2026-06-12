@@ -31,6 +31,19 @@ export async function orchestrateCollegePlan(profileId: string) {
   // LAYER 2: Domain Resolver
   const constraints = resolveDomains(eligibility);
 
+  // PHASE 7: CONFIDENCE ENGINE
+  if (eligibility.confidenceScore < 70) {
+    return {
+      hasContradiction: true,
+      contradictions: ["Your profile inputs generated a confidence score below 70 due to conflicting data. We cannot confidently recommend a path. Please review your inputs."],
+      recommendedColleges: [],
+      careerPathways: [],
+      admissionProcess: [],
+      scholarships: [],
+      recommendedStreams: []
+    };
+  }
+
   const entranceExams = profile.domesticProfile?.entranceExamScores || "None (Applying via Board Marks)";
 
   // PASS 1: CANDIDATE GENERATION (No Explanations)
@@ -72,15 +85,34 @@ Return raw JSON only.`;
   }
 
   // LAYER 3-8: VALIDATION PIPELINE
-  const validationResults = validateCandidates(rawCandidates.candidates || [], constraints);
+  const { enforceCollegeCutoffs } = require("./eligibilityFilters");
+  const filteredRawCandidates = enforceCollegeCutoffs(rawCandidates.candidates || [], profile).filter((c: any) => c.passedCutoff);
+
+  const validationResults = validateCandidates(filteredRawCandidates, constraints);
   
   // Filter passed candidates and sort by match score
   let passedCandidates = validationResults.filter(r => r.passed).sort((a, b) => b.matchScore - a.matchScore).slice(0, 3);
   let isFallback = false;
 
   if (passedCandidates.length === 0) {
-    console.warn("[Validation] ALL candidates failed. Using top 3 fallbacks.");
-    passedCandidates = validationResults.sort((a, b) => b.matchScore - a.matchScore).slice(0, 3);
+    console.warn("[Validation] ALL candidates failed. Finding nearest valid alternative...");
+    
+    // PHASE 6: FALLBACK ENGINE
+    // Find nearest alternative by relaxing budget or country constraints
+    passedCandidates = validationResults
+      .sort((a, b) => b.eligibilityScore - a.eligibilityScore || b.matchScore - a.matchScore)
+      .slice(0, 3);
+      
+    if (passedCandidates.length === 0) {
+      // Hard fallback if generation totally failed
+      passedCandidates = [{
+        candidate: { name: "Nearest Regional University", domain: constraints.targetDomains[0] || "GENERAL", country: "Local" },
+        passed: false,
+        blockReason: "Hard Fallback",
+        matchScore: 50,
+        eligibilityScore: 50
+      }];
+    }
     isFallback = true;
   }
 

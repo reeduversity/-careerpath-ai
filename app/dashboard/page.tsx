@@ -185,47 +185,52 @@ function DashboardContent() {
         </div>
 
         {/* Netflix-Style Learning Path */}
-        <div className="bg-slate-950 py-10 px-8 rounded-3xl border border-slate-800 shadow-2xl relative overflow-hidden">
-          <div className="absolute -top-40 -left-40 w-96 h-96 bg-rose-500/10 blur-3xl rounded-full"></div>
-          <h2 className="text-3xl font-black text-white tracking-wider mb-8 relative z-10">BINGE LEARNING SERIES <span className="text-rose-500 ml-2">▶</span></h2>
-          
-          <div className="flex overflow-x-auto pb-8 gap-6 snap-x relative z-10 custom-scrollbar">
-            {(omni.netflixLearningPath?.series || []).map((series: any, i: number) => (
-              <div key={i} className="min-w-[300px] sm:min-w-[400px] bg-slate-900 rounded-2xl border border-slate-700 p-6 snap-center hover:scale-[1.02] transition-transform shadow-xl">
-                <h3 className="text-xl font-bold text-white mb-4 flex items-center justify-between">
-                  {series.title} <span className="text-rose-500 text-sm">Series {i+1}</span>
-                </h3>
-                <div className="space-y-3 max-h-[250px] overflow-y-auto pr-2">
-                  {(series.episodes || []).map((ep: string, j: number) => (
-                    <a key={j} href={`https://www.youtube.com/results?search_query=${encodeURIComponent(ep + ' tutorial')}`} target="_blank" rel="noopener noreferrer" className="flex gap-4 items-start group cursor-pointer hover:bg-slate-800/50 p-2 rounded-lg transition-colors -ml-2">
-                      <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-400 group-hover:bg-rose-500 group-hover:text-white transition-colors shrink-0">
-                        {j+1}
-                      </div>
-                      <p className="text-sm text-slate-300 mt-1 leading-relaxed group-hover:text-white group-hover:underline transition-colors">{ep}</p>
-                    </a>
-                  ))}
+        {(omni.netflixLearningPath?.series && omni.netflixLearningPath.series.length > 0) && (
+          <div className="bg-slate-950 py-10 px-8 rounded-3xl border border-slate-800 shadow-2xl relative overflow-hidden">
+            <div className="absolute -top-40 -left-40 w-96 h-96 bg-rose-500/10 blur-3xl rounded-full"></div>
+            <h2 className="text-3xl font-black text-white tracking-wider mb-8 relative z-10">BINGE LEARNING SERIES <span className="text-rose-500 ml-2">▶</span></h2>
+            
+            <div className="flex overflow-x-auto pb-8 gap-6 snap-x relative z-10 custom-scrollbar">
+              {omni.netflixLearningPath.series.map((series: any, i: number) => (
+                <div key={i} className="min-w-[300px] sm:min-w-[400px] bg-slate-900 rounded-2xl border border-slate-700 p-6 snap-center hover:scale-[1.02] transition-transform shadow-xl">
+                  <h3 className="text-xl font-bold text-white mb-4 flex items-center justify-between">
+                    {series.title} <span className="text-rose-500 text-sm">Series {i+1}</span>
+                  </h3>
+                  <div className="space-y-3 max-h-[250px] overflow-y-auto pr-2">
+                    {(series.episodes || []).map((ep: string, j: number) => (
+                      <a key={j} href={`https://www.youtube.com/results?search_query=${encodeURIComponent(ep + ' tutorial')}`} target="_blank" rel="noopener noreferrer" className="flex gap-4 items-start group cursor-pointer hover:bg-slate-800/50 p-2 rounded-lg transition-colors -ml-2">
+                        <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-400 group-hover:bg-rose-500 group-hover:text-white transition-colors shrink-0">
+                          {j+1}
+                        </div>
+                        <p className="text-sm text-slate-300 mt-1 leading-relaxed group-hover:text-white group-hover:underline transition-colors">{ep}</p>
+                      </a>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
-            {(omni.netflixLearningPath?.series?.length === 0) && (
-              <div className="text-slate-500 italic">Learning series currently unavailable.</div>
-            )}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Skill Gap & Actions */}
-        <SkillGapCard 
-          existing={data.skillGap.existingSkills} 
-          missing={data.skillGap.missingSkills} 
-        />
-        <ActionableCards 
-          certifications={data.certifications} 
-          projects={data.projects} 
-          jobRoles={data.jobRoles} 
-        />
+        {(data.skillGap?.missingSkills?.length > 0 || data.skillGap?.existingSkills?.length > 0) && (
+          <SkillGapCard 
+            existing={data.skillGap.existingSkills} 
+            missing={data.skillGap.missingSkills} 
+          />
+        )}
+        {(data.certifications?.length > 0 || data.projects?.length > 0 || data.jobRoles?.length > 0) && (
+          <ActionableCards 
+            certifications={data.certifications} 
+            projects={data.projects} 
+            jobRoles={data.jobRoles} 
+          />
+        )}
 
         {/* High Level Roadmap */}
-        <RoadmapChart roadmap={data.roadmap} />
+        {(data.roadmap && data.roadmap.length > 0) && (
+          <RoadmapChart roadmap={data.roadmap} />
+        )}
       </div>
       
       <style dangerouslySetInnerHTML={{__html: `

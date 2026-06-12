@@ -80,5 +80,50 @@
     "minQualification": "UG",
     "requiredStream": "ANY",
     "countries": ["India"]
+  },
+  {
+    "id": "ssc_cgl",
+    "name": "SSC CGL",
+    "domain": "GOVERNMENT",
+    "minQualification": "UG",
+    "requiredStream": "ANY",
+    "countries": ["India"],
+    "description": "Staff Selection Commission - Combined Graduate Level"
+  },
+  {
+    "id": "gate",
+    "name": "GATE",
+    "domain": "ENGINEERING",
+    "minQualification": "UG",
+    "requiredStream": "PCM",
+    "countries": ["India"],
+    "description": "Graduate Aptitude Test in Engineering"
+  },
+  {
+    "id": "ibps_po",
+    "name": "IBPS PO",
+    "domain": "BANKING",
+    "minQualification": "UG",
+    "requiredStream": "ANY",
+    "countries": ["India"],
+    "description": "Institute of Banking Personnel Selection - Probationary Officer"
+  },
+  {
+    "id": "sbi_po",
+    "name": "SBI PO",
+    "domain": "BANKING",
+    "minQualification": "UG",
+    "requiredStream": "ANY",
+    "countries": ["India"],
+    "description": "State Bank of India - Probationary Officer"
+  },
+  {
+    "id": "rbi_grade_b",
+    "name": "RBI Grade B",
+    "domain": "BANKING",
+    "minQualification": "UG",
+    "requiredStream": "ANY",
+    "countries": ["India"],
+    "description": "Reserve Bank of India - Grade B Officer"
   }
 ]
