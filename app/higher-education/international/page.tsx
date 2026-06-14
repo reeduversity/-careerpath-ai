@@ -27,7 +27,7 @@ const internationalCountries = [
   "Austria", "Belgium", "Denmark", "Finland", "Norway", "Poland", "Portugal",
   "Brazil", "Argentina", "Mexico", "South Africa", "Egypt", "Turkey", "Saudi Arabia",
   "Qatar", "Oman", "Kuwait", "Bahrain", "Israel", "Philippines", "Thailand", "Vietnam",
-  "Indonesia", "Taiwan", "Hong Kong", "Any"
+  "Indonesia", "Taiwan", "Hong Kong", "Anywhere in the World (Except India)"
 ];
 
 const defaultValues = {
