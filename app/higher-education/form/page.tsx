@@ -159,7 +159,8 @@ function HigherEducationFormContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
-          ...formData, 
+          ...formData,
+          formType,
           currentQualification: formData.currentQualification,
           entranceExams: examsCombined,
           careerGoal: `${formData.careerGoal} ${formData.preferredBranch ? `(Branch: ${formData.preferredBranch})` : ''} ${formData.targetBoard ? `(Board: ${formData.targetBoard})` : ''}`.trim(),

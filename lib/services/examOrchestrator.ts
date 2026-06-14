@@ -51,7 +51,7 @@ export async function orchestrateExamPrep(
 
   // Filter by Stage
   if (stage.includes("10th") || stage.includes("12th")) {
-    validExams = validExams.filter((e: any) => e.minQualification === "12th" || e.minQualification === "10th" || e.minQualification === "ANY");
+    validExams = validExams.filter((e: any) => e.minQualification === "12th" || e.minQualification === "10th" || e.minQualification === "ANY" || e.minQualification === "UG");
   } else if (stage.includes("Graduate") || stage.includes("Diploma") || stage.includes("PG") || stage.includes("UG") || stage.includes("Technical")) {
     validExams = validExams.filter((e: any) => e.minQualification === "UG" || e.minQualification === "ANY");
   }
@@ -120,7 +120,8 @@ You MUST return a raw JSON object exactly matching this schema:
 
 RULES:
 - "recommendedExams": ONLY include the exams I provided above. Do not hallucinate others. Explain WHY they match the user. Assign a high matchScore.
-- "roadmap": Break it down into phases based on ${hours} daily study.
+- "roadmap": Break it down into phases based on ${hours} daily study. 
+  CRITICAL: If the user is currently in 10th or 12th grade but the exam requires a Graduation (UG) degree (like UPSC, SSC CGL), you MUST build a 3-5 year "Long-term Early Prep Roadmap" that integrates their college studies with foundational exam prep. Do NOT tell them they are ineligible; encourage early preparation.
 - "institutes": Suggest real coaching institutes/online platforms fitting their ${budget} budget. Do not exceed the budget.
 - "studyResources": Specific books, NCERTs, or standard resources.
 - "futurePlan.planB": Give a solid, realistic backup career path if they don't clear the exam.

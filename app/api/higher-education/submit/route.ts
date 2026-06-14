@@ -5,6 +5,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const {
+      formType,
       fullName,
       email,
       phone,
@@ -21,49 +22,100 @@ export async function POST(req: Request) {
       entranceExams
     } = body;
 
-    const indianStates = [
-      "Andaman and Nicobar Islands", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", 
-      "Chandigarh", "Chhattisgarh", "Dadra and Nagar Haveli", "Daman and Diu", "Delhi NCR", 
-      "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jammu and Kashmir", "Jharkhand", 
-      "Karnataka", "Kerala", "Ladakh", "Lakshadweep", "Madhya Pradesh", "Maharashtra", 
-      "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Puducherry", "Punjab", 
-      "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", 
-      "Uttarakhand", "West Bengal", "Anywhere in India"
-    ];
-
     if (preferredStudyLocation) {
       const normalized = preferredStudyLocation.trim().toLowerCase().replace(/\s+/g, ' ');
-      const exactMatch = indianStates.find(state => state.trim().toLowerCase().replace(/\s+/g, ' ') === normalized);
-      if (!exactMatch) {
-        return NextResponse.json({ success: false, message: "You are currently on the Domestic page; please only search for Indian locations." }, { status: 400 });
+      if (formType === "international") {
+        // Validate against global countries
+        const countriesDB = require("@/lib/knowledge/countries.json");
+        const exactMatch = countriesDB.find((c: any) => c.name.toLowerCase().replace(/\s+/g, ' ') === normalized);
+        if (!exactMatch) {
+          return NextResponse.json({ success: false, message: "You are currently on the International page; please only search for international locations." }, { status: 400 });
+        }
+      } else {
+        const indianStates = [
+          "Andaman and Nicobar Islands", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", 
+          "Chandigarh", "Chhattisgarh", "Dadra and Nagar Haveli", "Daman and Diu", "Delhi NCR", 
+          "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jammu and Kashmir", "Jharkhand", 
+          "Karnataka", "Kerala", "Ladakh", "Lakshadweep", "Madhya Pradesh", "Maharashtra", 
+          "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Puducherry", "Punjab", 
+          "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", 
+          "Uttarakhand", "West Bengal", "Anywhere in India"
+        ];
+        const exactMatch = indianStates.find(state => state.trim().toLowerCase().replace(/\s+/g, ' ') === normalized);
+        if (!exactMatch) {
+          return NextResponse.json({ success: false, message: "You are currently on the Domestic page; please only search for Indian locations." }, { status: 400 });
+        }
       }
     }
 
-    const profile = await prisma.higherEducationProfile.create({
-      data: {
-        fullName,
-        email,
-        phone,
-        educationLevel,
-        currentQualification,
-        boardUniversity,
-        percentage,
-        tenthPercentage,
-        twelfthPercentage,
-        category,
-        passingYear: passingYear ? parseInt(passingYear) : null,
-        budget,
-        domesticProfile: {
-          create: {
-            state: "TBD",
-            city: "TBD",
-            preferredStudyLocation,
-            entranceExamScores: entranceExams || null,
-            board: boardUniversity,
-            percentage
-          }
-        }
+    let sat = null, gre = null, gmat = null, ielts = null, toefl = null;
+    if (formType === "international" && entranceExams) {
+      const examsLower = entranceExams.toLowerCase();
+      if (examsLower.includes("sat")) {
+        const match = examsLower.match(/sat[^\d]*(\d+)/);
+        if (match) sat = parseInt(match[1]);
       }
+      if (examsLower.includes("gre")) {
+        const match = examsLower.match(/gre[^\d]*(\d+)/);
+        if (match) gre = parseInt(match[1]);
+      }
+      if (examsLower.includes("gmat")) {
+        const match = examsLower.match(/gmat[^\d]*(\d+)/);
+        if (match) gmat = parseInt(match[1]);
+      }
+      if (examsLower.includes("ielts")) {
+        const match = examsLower.match(/ielts[^\d]*([\d.]+)/);
+        if (match) ielts = parseFloat(match[1]);
+      }
+      if (examsLower.includes("toefl")) {
+        const match = examsLower.match(/toefl[^\d]*(\d+)/);
+        if (match) toefl = parseInt(match[1]);
+      }
+    }
+
+    const profileData: any = {
+      fullName,
+      email,
+      phone,
+      educationLevel,
+      currentQualification,
+      boardUniversity,
+      percentage,
+      tenthPercentage,
+      twelfthPercentage,
+      category,
+      passingYear: passingYear ? parseInt(passingYear) : null,
+      budget,
+    };
+
+    if (formType === "international") {
+      profileData.internationalProfile = {
+        create: {
+          preferredCountry: preferredStudyLocation,
+          preferredUniversity: "TBD",
+          budget,
+          sat,
+          gre,
+          gmat,
+          ielts,
+          toefl
+        }
+      };
+    } else {
+      profileData.domesticProfile = {
+        create: {
+          state: "TBD",
+          city: "TBD",
+          preferredStudyLocation,
+          entranceExamScores: entranceExams || null,
+          board: boardUniversity,
+          percentage
+        }
+      };
+    }
+
+    const profile = await prisma.higherEducationProfile.create({
+      data: profileData
     });
 
     return NextResponse.json({ success: true, profileId: profile.id });

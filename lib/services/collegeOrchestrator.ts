@@ -44,10 +44,24 @@ export async function orchestrateCollegePlan(profileId: string) {
     };
   }
 
-  const entranceExams = profile.domesticProfile?.entranceExamScores || "None (Applying via Board Marks)";
+  const isInternational = !!profile.internationalProfile;
+  
+  let entranceExams = "None (Applying via Board Marks)";
+  if (isInternational) {
+    const intl = profile.internationalProfile;
+    const exams = [];
+    if (intl?.sat) exams.push(`SAT: ${intl.sat}`);
+    if (intl?.gre) exams.push(`GRE: ${intl.gre}`);
+    if (intl?.gmat) exams.push(`GMAT: ${intl.gmat}`);
+    if (intl?.ielts) exams.push(`IELTS: ${intl.ielts}`);
+    if (intl?.toefl) exams.push(`TOEFL: ${intl.toefl}`);
+    if (exams.length > 0) entranceExams = exams.join(", ");
+  } else {
+    entranceExams = (profile.domesticProfile?.entranceExamScores as string) || "None (Applying via Board Marks)";
+  }
 
-  const isInternational = constraints.targetDomains.includes("INTERNATIONAL");
-  const contextType = isInternational ? "INTERNATIONAL EDUCATION (Strictly outside India)" : "DOMESTIC EDUCATION (Strictly inside India)";
+  const isTargetInternational = constraints.targetDomains.includes("INTERNATIONAL");
+  const contextType = isTargetInternational ? "INTERNATIONAL EDUCATION (Strictly outside India)" : "DOMESTIC EDUCATION (Strictly inside India)";
   
   // PASS 1: CANDIDATE GENERATION (No Explanations)
   const candidatePrompt = `You are a Candidate Generation Engine.
