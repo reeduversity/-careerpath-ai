@@ -268,7 +268,13 @@ ${text.substring(0, 5000)}
 Return ONLY valid JSON matching the schema.`;
 
   try {
-    const aiResult = await generateGroqResponse(prompt, "Extract resume JSON", true);
+    const aiPromise = generateGroqResponse(prompt, "Extract resume JSON", true);
+    // 8-second strict timeout to prevent AWS/Vercel serverless function 504 timeouts
+    const timeoutPromise = new Promise<any>((_, reject) => 
+      setTimeout(() => reject(new Error("Groq API Timeout (took longer than 8s)")), 8000)
+    );
+    
+    const aiResult = await Promise.race([aiPromise, timeoutPromise]);
     
     // Merge with fallback logic scores
     const fallback = analyzeResumeTextFallback(text);

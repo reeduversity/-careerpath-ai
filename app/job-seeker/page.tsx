@@ -156,7 +156,15 @@ export default function JobSeeker() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ resumeId: uploadJson.id })
       });
-      const analyzeJson = await analyzeRes.json();
+      
+      let analyzeJson;
+      const textResponse = await analyzeRes.text();
+      try {
+        analyzeJson = JSON.parse(textResponse);
+      } catch (e) {
+        throw new Error("Server returned an invalid response (possibly a timeout). Please try again or fill manually.");
+      }
+      
       if (!analyzeRes.ok) throw new Error(analyzeJson.error || "Analysis failed");
 
       const analysis = analyzeJson.analysis;
