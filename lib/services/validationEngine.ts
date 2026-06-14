@@ -49,8 +49,14 @@ export function validateCandidates(candidates: Candidate[], constraints: Resolve
 
     // 3. Exam Validation
     if (passed && candidate.requiredExam && candidate.requiredExam !== "None") {
-      // If the candidate strictly requires an exam the user doesn't have
-      if (constraints.allowedExams.length > 0 && !constraints.allowedExams.includes(candidate.requiredExam)) {
+      // If user has NO exams (allowedExams is only ["None"]), block any college requiring a real exam
+      const userHasNoExams = constraints.allowedExams.length === 1 && constraints.allowedExams[0] === "None";
+      if (userHasNoExams) {
+        passed = false;
+        blockReason = `Requires ${candidate.requiredExam} but you are applying via Board Marks only`;
+        eligibilityScore -= 50;
+      } else if (constraints.allowedExams.length > 0 && !constraints.allowedExams.includes(candidate.requiredExam)) {
+        // User has specific exams but not this one
         passed = false;
         blockReason = `Requires ${candidate.requiredExam} which the user has not taken or is ineligible for`;
         eligibilityScore -= 50;

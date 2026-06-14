@@ -102,10 +102,11 @@ export function evaluateEligibility(profile: any): EligibilityResult {
     result.eligibleDomains.push("DOMESTIC");
     result.blockedDomains.push("INTERNATIONAL");
 
-    if (examsLower === "none" || examsLower.includes("board marks")) {
+    if (!examsLower || examsLower === "" || examsLower === "none" || examsLower.includes("board marks") || examsLower.includes("board")) {
       result.eligibleDomains.push("DIRECT_ADMISSION");
       result.blockedDomains.push("JEE_TIER", "NEET_TIER", "GFTI", "NIT", "IIT", "STATE_ENGG");
       result.eligibilityReasons.push("User has no competitive exam score, eligible only for merit-based direct admission.");
+      // CRITICAL: Keep requiredExams as ["None"] so domainResolver knows user has NO exams
     } else {
       if (examsLower.includes("jee adv")) {
         result.eligibleDomains.push("IIT_TIER", "NIT_TIER");

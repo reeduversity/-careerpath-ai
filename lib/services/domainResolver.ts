@@ -53,9 +53,16 @@ export function resolveDomains(eligibility: EligibilityResult): ResolvedConstrai
       }
     }
     
-    if (eligibility.criteria.requiredExams.includes(exam.name) || eligibility.criteria.requiredExams.includes("None")) {
+    // If user has actual exams, check if this DB exam matches
+    if (eligibility.criteria.requiredExams.includes(exam.name)) {
       constraints.allowedExams.push(exam.name);
     }
+  }
+  
+  // If user has NO entrance exams (only "None"), explicitly set allowedExams to just ["None"]
+  // This means the validation engine will block any college that requires a real exam
+  if (eligibility.criteria.requiredExams.length === 1 && eligibility.criteria.requiredExams[0] === "None") {
+    constraints.allowedExams = ["None"];
   }
 
   // Always explicitly allow the user's target location so the validation engine does not drop unknown locations (like Germany)
