@@ -16,6 +16,7 @@ export default function ExamPrepForm() {
     examName: "",
     hours: "",
     budget: "",
+    category: "General",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -103,6 +104,22 @@ export default function ExamPrepForm() {
                   placeholder="e.g., UPSC CSE, SSC CGL, NDA" 
                   className="h-12 bg-slate-950 rounded-xl"
                 />
+              </FieldWrapper>
+
+              <FieldWrapper label="Category" htmlFor="category">
+                <select 
+                  id="category" 
+                  value={values.category} 
+                  onChange={(e) => handleChange("category", e.target.value)}
+                  className="flex h-12 w-full rounded-xl border border-slate-700 bg-slate-950 px-4 text-slate-100 focus:ring-2 focus:ring-amber-500"
+                >
+                  <option value="General">General</option>
+                  <option value="OBC">OBC</option>
+                  <option value="EWS">EWS</option>
+                  <option value="SC">SC</option>
+                  <option value="ST">ST</option>
+                  <option value="PwD">PwD (Person with Disability)</option>
+                </select>
               </FieldWrapper>
             </div>
 

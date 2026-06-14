@@ -12,6 +12,7 @@ function ExamDashboardContent() {
   const examName = searchParams.get("examName") || "";
   const hours = searchParams.get("hours") || "";
   const budget = searchParams.get("budget") || "";
+  const category = searchParams.get("category") || "General";
 
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -29,7 +30,7 @@ function ExamDashboardContent() {
         const res = await fetch("/api/exam-prep/orchestrate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ stage, sector, examName, hours, budget })
+          body: JSON.stringify({ stage, sector, examName, hours, budget, category })
         });
         
         const json = await res.json();
@@ -45,7 +46,7 @@ function ExamDashboardContent() {
     }
 
     loadData();
-  }, [stage, sector, examName, hours, budget]);
+  }, [stage, sector, examName, hours, budget, category]);
 
   if (loading) return <DashboardSkeleton />;
 
@@ -109,8 +110,8 @@ function ExamDashboardContent() {
               <div key={i} className="bg-slate-900/80 border-t-4 border-amber-500 rounded-2xl p-6 shadow-xl relative overflow-hidden group">
                 <div className="absolute -right-10 -top-10 w-32 h-32 bg-amber-500/10 blur-3xl rounded-full group-hover:bg-amber-500/20 transition-all"></div>
                 <h3 className="text-xl font-bold text-white mb-2">{exam.name}</h3>
-                <span className={`text-xs px-2 py-1 rounded font-bold mb-4 inline-block ${exam.difficulty.includes("High") || exam.difficulty.includes("Hard") ? "bg-rose-500/20 text-rose-400" : "bg-sky-500/20 text-sky-400"}`}>
-                  {exam.difficulty} Difficulty
+                <span className={`text-xs px-2 py-1 rounded font-bold mb-4 inline-block ${exam.difficulty.toLowerCase().includes("high") || exam.difficulty.toLowerCase().includes("hard") || exam.difficulty.toLowerCase().includes("extreme") ? "bg-rose-500/20 text-rose-400" : "bg-sky-500/20 text-sky-400"}`}>
+                  {exam.difficulty.toLowerCase().includes("difficulty") ? exam.difficulty : `${exam.difficulty} Difficulty`}
                 </span>
                 <p className="text-sm text-slate-300 mb-2"><strong>Eligibility:</strong> {exam.eligibility}</p>
                 <p className="text-sm text-slate-300"><strong>Attempts:</strong> {exam.attemptsLeft}</p>

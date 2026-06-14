@@ -10,7 +10,8 @@ export async function orchestrateExamPrep(
   sector: string,
   examName: string,
   hours: string,
-  budget: string
+  budget: string,
+  category: string = "General"
 ) {
   
   // PHASE 5: EXAM ALIAS RESOLVER
@@ -117,6 +118,7 @@ USER PROFILE:
 - Target Sector: ${sector}
 - Daily Study Hours: ${hours}
 - Budget for Prep: ${budget}
+- Social Category: ${category}
 
 You MUST return a raw JSON object exactly matching this schema:
 {
@@ -141,6 +143,20 @@ You MUST return a raw JSON object exactly matching this schema:
 
 RULES:
 - "recommendedExams": ONLY include the exams I provided above. Do not hallucinate others. Explain WHY they match the user. Assign a high matchScore.
+  For each recommended exam, you MUST:
+  * Calculate "attemptsLeft" accurately based on the user's category (${category}):
+    - UPSC Civil Services: General/EWS is "6 attempts (Age limit 32 years)", OBC is "9 attempts (Age limit 35 years)", SC/ST is "Unlimited attempts (Age limit 37 years)", PwD is "9 attempts (Age limit 42 years)".
+    - State PCS: "Unlimited attempts (Age limit 37-40 years, varies by state & category)".
+    - SSC CGL / CHSL: "Unlimited attempts (CGL age limit 32, CHSL age limit 27, category relaxations apply)".
+    - SBI PO: General/EWS is "4 attempts (Age limit 30 years)", OBC is "7 attempts (Age limit 33 years)", SC/ST is "Unlimited attempts (Age limit 35 years)", PwD is "7 attempts for Gen/OBC/EWS (Age limit 40 years)".
+    - IBPS PO: "Unlimited attempts (Age limit 30 years, category relaxations apply)".
+    - RBI Grade B: General is "6 attempts for Phase-1 (Age limit 30 years)", EWS is "Unlimited attempts (Age limit 30 years)", OBC is "Unlimited (Age limit 33 years)", SC/ST is "Unlimited (Age limit 35 years)", PwD is "Unlimited (Age limit 40 years)".
+    - Defence exams like NDA/CDS/AFCAT: "No limit on attempts (NDA age limit 16.5-19.5 years, CDS age limit 19-25 years, AFCAT age limit 20-24 years)".
+    - Teaching/Railways: "Unlimited attempts (Age limit varies by category)".
+  * For "difficulty", write an encouraging and motivational sentence instead of a dry label. Examples:
+    - High/Extremely High Difficulty: "High Difficulty (But with consistent study of 5-8 hours daily and proper planning, you can crack it!)" or "Extremely High (Consistent hard work and mock tests will definitely help you clear it!)"
+    - Medium Difficulty: "Medium Difficulty (A focused effort of 4-6 months with proper revision will make you succeed!)"
+    - Low Difficulty: "Low to Medium Difficulty (Very achievable with regular study and guidance!)"
 - "roadmap": Break it down into phases based on ${hours} daily study. 
   CRITICAL: If the user is currently in 10th or 12th grade but the exam requires a Graduation (UG) degree (like UPSC, SSC CGL), you MUST build a 3-5 year "Long-term Early Prep Roadmap" that integrates their college studies with foundational exam prep. Do NOT tell them they are ineligible; encourage early preparation.
 - "institutes": Suggest real, popular, and existing coaching institutes or online platforms (e.g. Vision IAS, Vajiram & Ravi, Unacademy, Physics Wallah, Career Launcher, Testbook, etc.) fitting their ${budget} budget. Do not exceed the budget. Provide correct cost estimates. You MUST provide the real, actual official website URL of the coaching institute/platform in the 'officialWebsite' field (e.g., https://unacademy.com, https://testbook.com).
@@ -150,7 +166,7 @@ DO NOT hallucinate formatting. Return pure JSON.`;
 
   const userMessage = `Generate the validated exam prep explanation.`;
 
-  console.log(`[Groq] Requesting exam prep explanation for ${stage} -> ${sector}`);
+  console.log(`[Groq] Requesting exam prep explanation for ${stage} -> ${sector} with category: ${category}`);
 
   let aiData: any;
   try {
@@ -208,7 +224,7 @@ DO NOT hallucinate formatting. Return pure JSON.`;
     } else if (secLower.includes("civil") || secLower.includes("upsc") || secLower.includes("psc")) {
       examsList = [
         { name: "UPSC Civil Services Examination", difficulty: "Extremely High", eligibility: "Graduation (UG Degree)", attemptsLeft: "6 attempts for General category (Age limit 32)", whyRecommended: "The premier civil service exam in India for administrative leadership.", matchScore: 95 },
-        { name: "State PSC Examination", difficulty: "High", eligibility: "Graduation (UG Degree)", attemptsLeft: "Varies by State rules", whyRecommended: "Excellent option to serve in your home state administration.", matchScore: 85 }
+        { name: "State PCS Examination", difficulty: "High", eligibility: "Graduation (UG Degree)", attemptsLeft: "Varies by State rules", whyRecommended: "Excellent option to serve in your home state administration.", matchScore: 85 }
       ];
       phaseList = [
         { phase: "Phase 1: NCERTs & Daily News", duration: "3 Months", focusArea: "Read NCERT books (Class 6-12) for History, Geography, Polity, and Economics. Read news daily.", milestone: "Complete baseline NCERT readings" },
@@ -239,7 +255,7 @@ DO NOT hallucinate formatting. Return pure JSON.`;
         { name: "IBPS PO", difficulty: "Medium to High", eligibility: "Graduation (UG Degree)", attemptsLeft: "No attempt limit (Age limit 30)", whyRecommended: "Single window entry to multiple nationalized banks.", matchScore: 90 }
       ];
       phaseList = [
-        { phase: "Phase 1: Foundation Quant & Reasoning", duration: "2 Months", focusArea: "Learn speed math tricks, logical puzzles, grammar rules, and vocabulary.", milestone: "Master basic arithmetic & puzzles" },
+        { phase: "Phase 1: Quant & Reasoning Foundation", duration: "2 Months", focusArea: "Learn speed math tricks, logical puzzles, grammar rules, and vocabulary.", milestone: "Master basic arithmetic & puzzles" },
         { phase: "Phase 2: Speed Practice & Mains GS", duration: "2 Months", focusArea: "Solve daily sectional quizzes, learn banking awareness, and practice mains-level questions.", milestone: "Achieve 80%+ accuracy in sectional mocks" },
         { phase: "Phase 3: Prelims & Mains Mocks", duration: "2 Months", focusArea: "Solve full-length prelims mocks daily. Work on general awareness and computer aptitude.", milestone: "Consistent mock scores above cutoff" }
       ];
@@ -267,7 +283,7 @@ DO NOT hallucinate formatting. Return pure JSON.`;
         { name: "CTET", difficulty: "Medium", eligibility: "Graduation + B.Ed/D.El.Ed", attemptsLeft: "No attempt limits", whyRecommended: "Qualifying exam for central government school teachers (KVS, NVS).", matchScore: 90 }
       ];
       phaseList = [
-        { phase: "Phase 1: Syllabus Core & Concepts", duration: "2 Months", focusArea: "Study Paper 1 teaching aptitude, research methodologies, and specialize in your core PG subject.", milestone: "Finish Paper 1 curriculum" },
+        { phase: "Phase 1: Syllabus Core & Concepts", duration: "2 Months", focusArea: "Study Paper 1 teaching aptitude, research methodologies, and specialize in your PG subject.", milestone: "Finish Paper 1 curriculum" },
         { phase: "Phase 2: Mock Tests & MCQ Drill", duration: "2 Months", focusArea: "Solve previous years papers, practice mock tests, and perfect key topic summaries.", milestone: "Achieve 60%+ average in full mock tests" }
       ];
       instList = [
@@ -353,6 +369,195 @@ DO NOT hallucinate formatting. Return pure JSON.`;
     };
   }
   
+  // Post-process / Override attemptsLeft & difficulty to guarantee 100% correctness based on category and rules
+  if (aiData.recommendedExams) {
+    aiData.recommendedExams = aiData.recommendedExams.map((exam: any) => {
+      const nameLower = exam.name.toLowerCase();
+      
+      // 1. Calculate attemptsLeft dynamically
+      let calculatedAttempts = exam.attemptsLeft;
+      
+      if (nameLower.includes("upsc civil") || nameLower.includes("civil services")) {
+        if (category === "General" || category === "EWS") {
+          calculatedAttempts = "6 attempts (Age limit 32 years)";
+        } else if (category === "OBC") {
+          calculatedAttempts = "9 attempts (Age limit 35 years)";
+        } else if (category === "SC" || category === "ST") {
+          calculatedAttempts = "Unlimited attempts (Age limit 37 years)";
+        } else if (category === "PwD") {
+          calculatedAttempts = "9 attempts (Age limit 42 years)";
+        } else {
+          calculatedAttempts = "6 attempts (General) / 9 attempts (OBC) / Unlimited (SC/ST)";
+        }
+      } else if (nameLower.includes("state pcs") || nameLower.includes("pcs exam") || nameLower.includes("public service commission")) {
+        if (category === "General" || category === "EWS") {
+          calculatedAttempts = "Unlimited attempts (Age limit 37-40 years, varies by state)";
+        } else if (category === "OBC") {
+          calculatedAttempts = "Unlimited attempts (Age limit 40-43 years, varies by state)";
+        } else if (category === "SC" || category === "ST") {
+          calculatedAttempts = "Unlimited attempts (Age limit 42-45 years, varies by state)";
+        } else if (category === "PwD") {
+          calculatedAttempts = "Unlimited attempts (Age limit 47-50 years, varies by state)";
+        } else {
+          calculatedAttempts = "Unlimited attempts (Age limit varies by state and category)";
+        }
+      } else if (nameLower.includes("ssc cgl")) {
+        if (category === "General" || category === "EWS") {
+          calculatedAttempts = "Unlimited attempts (Age limit 32 years)";
+        } else if (category === "OBC") {
+          calculatedAttempts = "Unlimited attempts (Age limit 35 years)";
+        } else if (category === "SC" || category === "ST") {
+          calculatedAttempts = "Unlimited attempts (Age limit 37 years)";
+        } else if (category === "PwD") {
+          calculatedAttempts = "Unlimited attempts (Age limit 42 years)";
+        } else {
+          calculatedAttempts = "Unlimited attempts (Age limit 32 years, category relaxations apply)";
+        }
+      } else if (nameLower.includes("ssc chsl")) {
+        if (category === "General" || category === "EWS") {
+          calculatedAttempts = "Unlimited attempts (Age limit 27 years)";
+        } else if (category === "OBC") {
+          calculatedAttempts = "Unlimited attempts (Age limit 30 years)";
+        } else if (category === "SC" || category === "ST") {
+          calculatedAttempts = "Unlimited attempts (Age limit 32 years)";
+        } else if (category === "PwD") {
+          calculatedAttempts = "Unlimited attempts (Age limit 37 years)";
+        } else {
+          calculatedAttempts = "Unlimited attempts (Age limit 27 years, category relaxations apply)";
+        }
+      } else if (nameLower.includes("sbi po")) {
+        if (category === "General" || category === "EWS") {
+          calculatedAttempts = "4 attempts (Age limit 30 years)";
+        } else if (category === "OBC") {
+          calculatedAttempts = "7 attempts (Age limit 33 years)";
+        } else if (category === "SC" || category === "ST") {
+          calculatedAttempts = "Unlimited attempts (Age limit 35 years)";
+        } else if (category === "PwD") {
+          calculatedAttempts = "7 attempts for Gen/OBC/EWS (Age limit 40 years)";
+        } else {
+          calculatedAttempts = "4 attempts (General) / 7 attempts (OBC) / Unlimited (SC/ST)";
+        }
+      } else if (nameLower.includes("ibps po")) {
+        if (category === "General" || category === "EWS") {
+          calculatedAttempts = "Unlimited attempts (Age limit 30 years)";
+        } else if (category === "OBC") {
+          calculatedAttempts = "Unlimited attempts (Age limit 33 years)";
+        } else if (category === "SC" || category === "ST") {
+          calculatedAttempts = "Unlimited attempts (Age limit 35 years)";
+        } else if (category === "PwD") {
+          calculatedAttempts = "Unlimited attempts (Age limit 40 years)";
+        } else {
+          calculatedAttempts = "Unlimited attempts (Age limit 30 years, category relaxations apply)";
+        }
+      } else if (nameLower.includes("rbi grade b")) {
+        if (category === "General") {
+          calculatedAttempts = "6 attempts for Phase-1 (Age limit 30 years)";
+        } else if (category === "EWS") {
+          calculatedAttempts = "Unlimited attempts (Age limit 30 years)";
+        } else if (category === "OBC") {
+          calculatedAttempts = "Unlimited attempts (Age limit 33 years)";
+        } else if (category === "SC" || category === "ST") {
+          calculatedAttempts = "Unlimited attempts (Age limit 35 years)";
+        } else if (category === "PwD") {
+          calculatedAttempts = "Unlimited attempts (Age limit 40 years)";
+        } else {
+          calculatedAttempts = "6 attempts for General Phase-1, Unlimited for other categories";
+        }
+      } else if (nameLower.includes("nda") || nameLower.includes("national defence academy")) {
+        calculatedAttempts = "No limit on attempts (Strict age limit 16.5 - 19.5 years, no reservation relaxations)";
+      } else if (nameLower.includes("cds") || nameLower.includes("combined defence services")) {
+        calculatedAttempts = "No limit on attempts (Strict age limit 19 - 25 years, no reservation relaxations)";
+      } else if (nameLower.includes("afcat")) {
+        calculatedAttempts = "No limit on attempts (Strict age limit 20 - 24 for Flying, 26 for Ground Duty)";
+      } else if (nameLower.includes("capf ac")) {
+        if (category === "General" || category === "EWS") {
+          calculatedAttempts = "Unlimited attempts (Age limit 25 years)";
+        } else if (category === "OBC") {
+          calculatedAttempts = "Unlimited attempts (Age limit 28 years)";
+        } else if (category === "SC" || category === "ST") {
+          calculatedAttempts = "Unlimited attempts (Age limit 30 years)";
+        } else if (category === "PwD") {
+          calculatedAttempts = "Unlimited attempts (Age limit 35 years)";
+        } else {
+          calculatedAttempts = "Unlimited attempts (Age limit 25, relaxation for reservation)";
+        }
+      } else if (nameLower.includes("ugc net")) {
+        if (category === "General") {
+          calculatedAttempts = "Unlimited attempts (JRF age limit 30 years, Assistant Professor no limit)";
+        } else if (category === "OBC") {
+          calculatedAttempts = "Unlimited attempts (JRF age limit 33 years, Assistant Professor no limit)";
+        } else if (category === "SC" || category === "ST" || category === "PwD") {
+          calculatedAttempts = "Unlimited attempts (JRF age limit 35 years, Assistant Professor no limit)";
+        } else {
+          calculatedAttempts = "Unlimited attempts (JRF age limit 30, relaxation applies)";
+        }
+      } else if (nameLower.includes("ctet")) {
+        calculatedAttempts = "Unlimited attempts (No age limit)";
+      } else if (nameLower.includes("rrb ntpc")) {
+        if (category === "General" || category === "EWS") {
+          calculatedAttempts = "Unlimited attempts (Age limit 18-33 years)";
+        } else if (category === "OBC") {
+          calculatedAttempts = "Unlimited attempts (Age limit 18-36 years)";
+        } else if (category === "SC" || category === "ST") {
+          calculatedAttempts = "Unlimited attempts (Age limit 18-38 years)";
+        } else if (category === "PwD") {
+          calculatedAttempts = "Unlimited attempts (Age limit 18-43 years)";
+        } else {
+          calculatedAttempts = "Unlimited attempts (Age limit 18-33, relaxation applies)";
+        }
+      } else if (nameLower.includes("rrb group d") || nameLower.includes("level 1")) {
+        if (category === "General" || category === "EWS") {
+          calculatedAttempts = "Unlimited attempts (Age limit 18-33 years)";
+        } else if (category === "OBC") {
+          calculatedAttempts = "Unlimited attempts (Age limit 18-36 years)";
+        } else if (category === "SC" || category === "ST") {
+          calculatedAttempts = "Unlimited attempts (Age limit 18-38 years)";
+        } else if (category === "PwD") {
+          calculatedAttempts = "Unlimited attempts (Age limit 18-43 years)";
+        } else {
+          calculatedAttempts = "Unlimited attempts (Age limit 18-33, relaxation applies)";
+        }
+      } else if (nameLower.includes("rrb alp")) {
+        if (category === "General" || category === "EWS") {
+          calculatedAttempts = "Unlimited attempts (Age limit 18-30 years)";
+        } else if (category === "OBC") {
+          calculatedAttempts = "Unlimited attempts (Age limit 18-33 years)";
+        } else if (category === "SC" || category === "ST") {
+          calculatedAttempts = "Unlimited attempts (Age limit 18-35 years)";
+        } else if (category === "PwD") {
+          calculatedAttempts = "Unlimited attempts (Age limit 18-40 years)";
+        } else {
+          calculatedAttempts = "Unlimited attempts (Age limit 18-30, relaxation applies)";
+        }
+      }
+
+      // 2. Format difficulty dynamically to be encouraging/supportive
+      let calculatedDifficulty = exam.difficulty;
+      const diffLower = exam.difficulty.toLowerCase();
+      
+      // If it doesn't already contain motivational guidance
+      if (!diffLower.includes("study") && !diffLower.includes("work") && !diffLower.includes("effort") && !diffLower.includes("clear") && !diffLower.includes("practice") && !diffLower.includes("prepare")) {
+        if (diffLower.includes("extremely high") || diffLower.includes("very high") || diffLower.includes("extreme")) {
+          calculatedDifficulty = "Extremely High (But with consistent study of 6-8 hours daily and regular mock tests, you can clear it!)";
+        } else if (diffLower.includes("high") || diffLower.includes("hard")) {
+          calculatedDifficulty = "High (Hard work and dedicated preparation of 5-8 hours daily will definitely help you clear it!)";
+        } else if (diffLower.includes("medium")) {
+          calculatedDifficulty = "Medium (With a structured 4-6 months plan and consistent revision, you will easily succeed!)";
+        } else if (diffLower.includes("low")) {
+          calculatedDifficulty = "Low to Medium (Very achievable with standard preparation and regular study!)";
+        } else {
+          calculatedDifficulty = `${exam.difficulty} (Proper guidance and regular study will help you succeed!)`;
+        }
+      }
+      
+      return {
+        ...exam,
+        attemptsLeft: calculatedAttempts,
+        difficulty: calculatedDifficulty
+      };
+    });
+  }
+
   aiData.hasContradictions = false;
   return aiData;
 }
