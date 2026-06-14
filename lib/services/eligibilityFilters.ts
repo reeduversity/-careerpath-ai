@@ -61,37 +61,81 @@ export function enforceCollegeCutoffs(candidates: any[], profile: any): any[] {
       }
     }
 
-    // --- GROUND TRUTH VALIDATOR: STOP AI HALLUCINATIONS ---
-    // Engineering (JEE/State Exams)
-    const jeeKeywords = [
-      "IIT", "Indian Institute of Technology", "NIT", "National Institute of Technology", 
-      "IIIT", "Indian Institute of Information Technology", "DTU", "Delhi Technological", 
-      "NSUT", "Netaji Subhas", "BITS", "Birla Institute", "Jadavpur", "VJTI", "COEP", "PEC", 
-      "Punjab Engineering College", "Thapar", "RVCE", "BMS", "Anna University",
-      "Maharaja Agrasen", "Maharaja Surajmal", "Bharati Vidyapeeth", "GGSIPU", "Indraprastha University", 
-      "IP University", "LNMIIT", "LNM Institute", "DA-IICT", "Dhirubhai Ambani", "Nirma University", 
-      "Jaypee Institute", "JIIT"
-    ];
-    // Medical (NEET)
-    const neetKeywords = ["AIIMS", "All India Institute", "CMC", "Christian Medical", "JIPMER", "AFMC", "Armed Forces", "MAMC", "Maulana Azad", "KEM", "King Edward", "Lady Hardinge", "Grant Medical", "Madras Medical", "VMMC", "Safdarjung"];
-    // Management (CAT/GMAT)
-    const catKeywords = ["IIM", "Indian Institute of Management", "FMS", "Faculty of Management", "XLRI", "SPJIMR", "MDI", "Gurgaon", "JBIMS", "Jamnalal Bajaj", "ISB", "Indian School of Business", "NMIMS", "Symbiosis", "SIBM", "TISS"];
-    // Law (CLAT)
-    const lawKeywords = ["NLSIU", "National Law School", "NALSAR", "NLU", "National Law University", "NLIU", "NUJS", "Symbiosis Law", "Jindal Global Law"];
-    // Architecture (NATA/JEE Paper 2)
-    const archKeywords = ["SPA", "School of Planning and Architecture", "CEPT", "Sir JJ", "NIT Architecture", "IIT Architecture"];
-    // International Tier 1 (SAT/ACT/GRE)
-    const intlKeywords = ["MIT", "Massachusetts Institute", "Harvard", "Stanford", "Oxford", "Cambridge", "Caltech", "Princeton", "Yale", "Imperial College", "ETH Zurich", "UCL", "University College London", "Columbia", "Cornell", "UPenn", "Berkeley", "UCLA"];
-    
+    // --- GROUND TRUTH VALIDATOR: STOP AI HALLUCINATIONS ACROSS ALL DISCIPLINES ---
     let groundTruthExam = candidate.requiredExam;
     const lowerName = candidate.name.toLowerCase();
 
-    if (jeeKeywords.some(kw => lowerName.includes(kw.toLowerCase()))) groundTruthExam = "JEE Main";
-    if (neetKeywords.some(kw => lowerName.includes(kw.toLowerCase()))) groundTruthExam = "NEET";
-    if (catKeywords.some(kw => lowerName.includes(kw.toLowerCase()))) groundTruthExam = "CAT";
-    if (lawKeywords.some(kw => lowerName.includes(kw.toLowerCase()))) groundTruthExam = "CLAT";
-    if (archKeywords.some(kw => lowerName.includes(kw.toLowerCase()))) groundTruthExam = "NATA";
-    if (intlKeywords.some(kw => lowerName.includes(kw.toLowerCase()))) groundTruthExam = "SAT"; // Or GRE, just needs a top-tier international exam
+    // 1. Engineering (JEE Main / JEE Advanced / BITSAT / State CETs)
+    const jeeKeywords = [
+      "iit", "indian institute of technology", "nit", "national institute of technology", 
+      "iiit", "indian institute of information technology", "dtu", "delhi technological", 
+      "nsut", "netaji subhas", "bits", "birla institute", "jadavpur", "vjti", "coep", "pec", 
+      "punjab engineering college", "thapar", "rvce", "bms", "anna university",
+      "maharaja agrasen", "maharaja surajmal", "bharati vidyapeeth", "ggsipu", "indraprastha university", 
+      "ip university", "lnmiit", "lnm institute", "da-iict", "dhirubhai ambani", "nirma university", 
+      "jaypee institute", "jiit", "coimbatore institute", "rv college", "bms college", "msrit"
+    ];
+    if (jeeKeywords.some(kw => lowerName.includes(kw))) {
+      groundTruthExam = "JEE Main";
+    }
+
+    // 2. Medical (NEET) - MBBS, BDS, and major medical institutes strictly require NEET
+    const neetKeywords = [
+      "aiims", "all india institute", "cmc", "christian medical", "jipmer", "afmc", "armed forces", 
+      "mamc", "maulana azad", "kem", "king edward", "lady hardinge", "grant medical", "madras medical", 
+      "vmmc", "safdarjung", "mbbs", "bds", "medical college", "medical institute", "institute of medical sciences"
+    ];
+    if (neetKeywords.some(kw => lowerName.includes(kw))) {
+      groundTruthExam = "NEET";
+    }
+
+    // 3. Management (CAT/GMAT) - Top business schools (Postgraduate MBA)
+    const catKeywords = [
+      "iim", "indian institute of management", "fms", "faculty of management", "xlri", "spjimr", 
+      "mdi", "gurgaon", "jbims", "jamnalal bajaj", "isb", "indian school of business", "nmims", 
+      "symbiosis institute of business", "sibm", "tiss", "iift"
+    ];
+    if (catKeywords.some(kw => lowerName.includes(kw))) {
+      groundTruthExam = "CAT";
+    }
+
+    // 4. Law (CLAT) - National Law Universities (NLUs) and top law schools
+    const lawKeywords = [
+      "nlsiu", "national law school", "nalsar", "nlu", "national law university", "nliu", 
+      "nujs", "symbiosis law", "jindal global law", "ils law", "government law college"
+    ];
+    if (lawKeywords.some(kw => lowerName.includes(kw))) {
+      groundTruthExam = "CLAT";
+    }
+
+    // 5. Architecture (NATA/JEE Paper 2)
+    const archKeywords = [
+      "spa", "school of planning and architecture", "cept", "sir jj", "nit architecture", 
+      "iit architecture", "nata"
+    ];
+    if (archKeywords.some(kw => lowerName.includes(kw))) {
+      groundTruthExam = "NATA";
+    }
+
+    // 6. Commerce, Arts & Humanities (CUET) - Central universities like DU, BHU, JNU, and their top colleges
+    const cuetKeywords = [
+      "du", "delhi university", "bhu", "banaras hindu", "jnu", "jawaharlal nehru", 
+      "srcc", "shri ram college", "hindu college", "st. stephen", "lady shri ram", "lsr", 
+      "hansraj", "miranda house", "ramjas", "kirori mal", "jamia millia", "aligarh muslim", "amu"
+    ];
+    if (cuetKeywords.some(kw => lowerName.includes(kw))) {
+      groundTruthExam = "CUET";
+    }
+
+    // 7. International Tier 1 (SAT/ACT/GRE)
+    const intlKeywords = [
+      "mit", "massachusetts institute", "harvard", "stanford", "oxford", "cambridge", 
+      "caltech", "princeton", "yale", "imperial college", "eth zurich", "ucl", 
+      "university college london", "columbia", "cornell", "upenn", "berkeley", "ucla"
+    ];
+    if (intlKeywords.some(kw => lowerName.includes(kw))) {
+      groundTruthExam = "SAT";
+    }
 
     // FORCE OVERRIDE if AI says "None" but Ground Truth dictates an exam
     if (groundTruthExam && groundTruthExam !== "None" && (!candidate.requiredExam || candidate.requiredExam === "None" || candidate.requiredExam.toLowerCase() === "board marks" || candidate.requiredExam.toLowerCase() === "merit")) {
