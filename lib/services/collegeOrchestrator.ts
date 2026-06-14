@@ -180,30 +180,59 @@ Return raw JSON only.`;
       
       // Build smart merit-based college list based on user's stream
       let fallbackColleges: any[] = [];
-      if (stream.includes("PCM") || stream.includes("SCIENCE")) {
-        fallbackColleges = [
-          { name: "Amity University", domain: "ENGINEERING", requiredExam: "None", feesINR: 350000, feesUSD: 4375, country: "India", officialWebsite: "https://www.amity.edu" },
-          { name: "SRM Institute of Science and Technology", domain: "ENGINEERING", requiredExam: "None", feesINR: 250000, feesUSD: 3125, country: "India", officialWebsite: "https://www.srmist.edu.in" },
-          { name: "Manipal Institute of Technology", domain: "ENGINEERING", requiredExam: "None", feesINR: 400000, feesUSD: 5000, country: "India", officialWebsite: "https://www.manipal.edu" },
-        ];
-      } else if (stream.includes("PCB")) {
-        fallbackColleges = [
-          { name: "Kasturba Medical College (Management Quota)", domain: "MEDICAL", requiredExam: "None", feesINR: 500000, feesUSD: 6250, country: "India", officialWebsite: "https://manipal.edu/kmc-manipal.html" },
-          { name: "Saveetha Medical College", domain: "MEDICAL", requiredExam: "None", feesINR: 400000, feesUSD: 5000, country: "India", officialWebsite: "https://saveethamedicalcollege.com" },
-          { name: "Amrita Institute of Medical Sciences", domain: "MEDICAL", requiredExam: "None", feesINR: 450000, feesUSD: 5625, country: "India", officialWebsite: "https://www.amrita.edu" },
-        ];
-      } else if (stream.includes("COMMERCE")) {
-        fallbackColleges = [
-          { name: "Christ University", domain: "COMMERCE", requiredExam: "None", feesINR: 150000, feesUSD: 1875, country: "India", officialWebsite: "https://christuniversity.in" },
-          { name: "Symbiosis School of Economics", domain: "COMMERCE", requiredExam: "None", feesINR: 200000, feesUSD: 2500, country: "India", officialWebsite: "https://sse.ac.in" },
-          { name: "Narsee Monjee College of Commerce", domain: "COMMERCE", requiredExam: "None", feesINR: 120000, feesUSD: 1500, country: "India", officialWebsite: "https://nmcollege.in" },
-        ];
+      
+      if (isInternational) {
+        if (stream.includes("PCM") || stream.includes("SCIENCE")) {
+          fallbackColleges = [
+            { name: "University of Toronto", domain: "ENGINEERING", requiredExam: "None", feesINR: 3500000, feesUSD: 42000, country: "Canada", officialWebsite: "https://www.utoronto.ca" },
+            { name: "Technical University of Munich", domain: "ENGINEERING", requiredExam: "None", feesINR: 250000, feesUSD: 3000, country: "Germany", officialWebsite: "https://www.tum.de" },
+            { name: "RMIT University", domain: "ENGINEERING", requiredExam: "None", feesINR: 2500000, feesUSD: 30000, country: "Australia", officialWebsite: "https://www.rmit.edu.au" },
+          ];
+        } else if (stream.includes("PCB")) {
+          fallbackColleges = [
+            { name: "University of Melbourne", domain: "MEDICAL", requiredExam: "None", feesINR: 4500000, feesUSD: 54000, country: "Australia", officialWebsite: "https://www.unimelb.edu.au" },
+            { name: "King's College London", domain: "MEDICAL", requiredExam: "None", feesINR: 4000000, feesUSD: 48000, country: "UK", officialWebsite: "https://www.kcl.ac.uk" },
+            { name: "University of Amsterdam", domain: "MEDICAL", requiredExam: "None", feesINR: 1500000, feesUSD: 18000, country: "Netherlands", officialWebsite: "https://www.uva.nl" },
+          ];
+        } else if (stream.includes("COMMERCE")) {
+          fallbackColleges = [
+            { name: "London School of Economics", domain: "COMMERCE", requiredExam: "None", feesINR: 3000000, feesUSD: 36000, country: "UK", officialWebsite: "https://www.lse.ac.uk" },
+            { name: "University of Sydney", domain: "COMMERCE", requiredExam: "None", feesINR: 2800000, feesUSD: 34000, country: "Australia", officialWebsite: "https://www.sydney.edu.au" },
+            { name: "National University of Singapore", domain: "COMMERCE", requiredExam: "None", feesINR: 2000000, feesUSD: 24000, country: "Singapore", officialWebsite: "https://nus.edu.sg" },
+          ];
+        } else {
+          fallbackColleges = [
+            { name: "University of Auckland", domain: "GENERAL", requiredExam: "None", feesINR: 2000000, feesUSD: 24000, country: "New Zealand", officialWebsite: "https://www.auckland.ac.nz" },
+            { name: "Trinity College Dublin", domain: "GENERAL", requiredExam: "None", feesINR: 1800000, feesUSD: 21000, country: "Ireland", officialWebsite: "https://www.tcd.ie" },
+            { name: "University of British Columbia", domain: "GENERAL", requiredExam: "None", feesINR: 3000000, feesUSD: 36000, country: "Canada", officialWebsite: "https://www.ubc.ca" },
+          ];
+        }
       } else {
-        fallbackColleges = [
-          { name: "Indira Gandhi National Open University (IGNOU)", domain: "GENERAL", requiredExam: "None", feesINR: 15000, feesUSD: 200, country: "India", officialWebsite: "https://www.ignou.ac.in" },
-          { name: "Lovely Professional University", domain: "GENERAL", requiredExam: "None", feesINR: 200000, feesUSD: 2500, country: "India", officialWebsite: "https://www.lpu.in" },
-          { name: "Chandigarh University", domain: "GENERAL", requiredExam: "None", feesINR: 180000, feesUSD: 2250, country: "India", officialWebsite: "https://www.cuchd.in" },
-        ];
+        if (stream.includes("PCM") || stream.includes("SCIENCE")) {
+          fallbackColleges = [
+            { name: "Amity University", domain: "ENGINEERING", requiredExam: "None", feesINR: 350000, feesUSD: 4375, country: "India", officialWebsite: "https://www.amity.edu" },
+            { name: "SRM Institute of Science and Technology", domain: "ENGINEERING", requiredExam: "None", feesINR: 250000, feesUSD: 3125, country: "India", officialWebsite: "https://www.srmist.edu.in" },
+            { name: "Manipal Institute of Technology", domain: "ENGINEERING", requiredExam: "None", feesINR: 400000, feesUSD: 5000, country: "India", officialWebsite: "https://www.manipal.edu" },
+          ];
+        } else if (stream.includes("PCB")) {
+          fallbackColleges = [
+            { name: "Kasturba Medical College (Management Quota)", domain: "MEDICAL", requiredExam: "None", feesINR: 500000, feesUSD: 6250, country: "India", officialWebsite: "https://manipal.edu/kmc-manipal.html" },
+            { name: "Saveetha Medical College", domain: "MEDICAL", requiredExam: "None", feesINR: 400000, feesUSD: 5000, country: "India", officialWebsite: "https://saveethamedicalcollege.com" },
+            { name: "Amrita Institute of Medical Sciences", domain: "MEDICAL", requiredExam: "None", feesINR: 450000, feesUSD: 5625, country: "India", officialWebsite: "https://www.amrita.edu" },
+          ];
+        } else if (stream.includes("COMMERCE")) {
+          fallbackColleges = [
+            { name: "Christ University", domain: "COMMERCE", requiredExam: "None", feesINR: 150000, feesUSD: 1875, country: "India", officialWebsite: "https://christuniversity.in" },
+            { name: "Symbiosis School of Economics", domain: "COMMERCE", requiredExam: "None", feesINR: 200000, feesUSD: 2500, country: "India", officialWebsite: "https://sse.ac.in" },
+            { name: "Narsee Monjee College of Commerce", domain: "COMMERCE", requiredExam: "None", feesINR: 120000, feesUSD: 1500, country: "India", officialWebsite: "https://nmcollege.in" },
+          ];
+        } else {
+          fallbackColleges = [
+            { name: "Indira Gandhi National Open University (IGNOU)", domain: "GENERAL", requiredExam: "None", feesINR: 15000, feesUSD: 200, country: "India", officialWebsite: "https://www.ignou.ac.in" },
+            { name: "Lovely Professional University", domain: "GENERAL", requiredExam: "None", feesINR: 200000, feesUSD: 2500, country: "India", officialWebsite: "https://www.lpu.in" },
+            { name: "Chandigarh University", domain: "GENERAL", requiredExam: "None", feesINR: 180000, feesUSD: 2250, country: "India", officialWebsite: "https://www.cuchd.in" },
+          ];
+        }
       }
       
       passedCandidates = fallbackColleges.map(c => ({

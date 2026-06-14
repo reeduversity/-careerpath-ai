@@ -22,7 +22,12 @@ const budgets = [
 
 const internationalCountries = [
   "USA", "UK", "Canada", "Australia", "New Zealand", "Germany", "France", 
-  "Singapore", "Ireland", "Netherlands", "Sweden", "Switzerland", "Italy", "Any"
+  "Singapore", "Ireland", "Netherlands", "Sweden", "Switzerland", "Italy",
+  "Spain", "Japan", "South Korea", "China", "Russia", "UAE", "Malaysia",
+  "Austria", "Belgium", "Denmark", "Finland", "Norway", "Poland", "Portugal",
+  "Brazil", "Argentina", "Mexico", "South Africa", "Egypt", "Turkey", "Saudi Arabia",
+  "Qatar", "Oman", "Kuwait", "Bahrain", "Israel", "Philippines", "Thailand", "Vietnam",
+  "Indonesia", "Taiwan", "Hong Kong", "Any"
 ];
 
 const defaultValues = {
