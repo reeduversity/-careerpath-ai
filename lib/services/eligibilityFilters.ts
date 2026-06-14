@@ -61,6 +61,37 @@ export function enforceCollegeCutoffs(candidates: any[], profile: any): any[] {
       }
     }
 
+    // --- GROUND TRUTH VALIDATOR: STOP AI HALLUCINATIONS ---
+    // Engineering (JEE/State Exams)
+    const jeeKeywords = ["IIT", "Indian Institute of Technology", "NIT", "National Institute of Technology", "IIIT", "Indian Institute of Information Technology", "DTU", "Delhi Technological", "NSUT", "Netaji Subhas", "BITS", "Birla Institute", "Jadavpur", "VJTI", "COEP", "PEC", "Punjab Engineering College", "Thapar", "RVCE", "BMS", "Anna University"];
+    // Medical (NEET)
+    const neetKeywords = ["AIIMS", "All India Institute", "CMC", "Christian Medical", "JIPMER", "AFMC", "Armed Forces", "MAMC", "Maulana Azad", "KEM", "King Edward", "Lady Hardinge", "Grant Medical", "Madras Medical", "VMMC", "Safdarjung"];
+    // Management (CAT/GMAT)
+    const catKeywords = ["IIM", "Indian Institute of Management", "FMS", "Faculty of Management", "XLRI", "SPJIMR", "MDI", "Gurgaon", "JBIMS", "Jamnalal Bajaj", "ISB", "Indian School of Business", "NMIMS", "Symbiosis", "SIBM", "TISS"];
+    // Law (CLAT)
+    const lawKeywords = ["NLSIU", "National Law School", "NALSAR", "NLU", "National Law University", "NLIU", "NUJS", "Symbiosis Law", "Jindal Global Law"];
+    // Architecture (NATA/JEE Paper 2)
+    const archKeywords = ["SPA", "School of Planning and Architecture", "CEPT", "Sir JJ", "NIT Architecture", "IIT Architecture"];
+    // International Tier 1 (SAT/ACT/GRE)
+    const intlKeywords = ["MIT", "Massachusetts Institute", "Harvard", "Stanford", "Oxford", "Cambridge", "Caltech", "Princeton", "Yale", "Imperial College", "ETH Zurich", "UCL", "University College London", "Columbia", "Cornell", "UPenn", "Berkeley", "UCLA"];
+    
+    let groundTruthExam = candidate.requiredExam;
+    const lowerName = candidate.name.toLowerCase();
+
+    if (jeeKeywords.some(kw => lowerName.includes(kw.toLowerCase()))) groundTruthExam = "JEE Main";
+    if (neetKeywords.some(kw => lowerName.includes(kw.toLowerCase()))) groundTruthExam = "NEET";
+    if (catKeywords.some(kw => lowerName.includes(kw.toLowerCase()))) groundTruthExam = "CAT";
+    if (lawKeywords.some(kw => lowerName.includes(kw.toLowerCase()))) groundTruthExam = "CLAT";
+    if (archKeywords.some(kw => lowerName.includes(kw.toLowerCase()))) groundTruthExam = "NATA";
+    if (intlKeywords.some(kw => lowerName.includes(kw.toLowerCase()))) groundTruthExam = "SAT"; // Or GRE, just needs a top-tier international exam
+
+    // FORCE OVERRIDE if AI says "None" but Ground Truth dictates an exam
+    if (groundTruthExam && groundTruthExam !== "None" && (!candidate.requiredExam || candidate.requiredExam === "None" || candidate.requiredExam.toLowerCase() === "board marks" || candidate.requiredExam.toLowerCase() === "merit")) {
+       console.log(`[Ground Truth Override] AI hallucinated 'None' for ${candidate.name}. Forcing exam requirement to '${groundTruthExam}'.`);
+       candidate.requiredExam = groundTruthExam;
+    }
+    // --- END GROUND TRUTH VALIDATOR ---
+
     return { ...candidate, passedCutoff: passed, cutoffBlockReason: blockReason };
   });
 }
