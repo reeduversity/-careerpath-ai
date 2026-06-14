@@ -22,7 +22,20 @@ export async function orchestrateExamPrep(
     "gate": "GATE",
     "ibps": "IBPS PO",
     "sbi": "SBI PO",
-    "rbi": "RBI Grade B"
+    "rbi": "RBI Grade B",
+    "nda": "NDA",
+    "cds": "CDS",
+    "afcat": "AFCAT",
+    "chsl": "SSC CHSL",
+    "net": "UGC NET",
+    "ctet": "CTET",
+    "rrb": "RRB NTPC",
+    "group d": "RRB Group D",
+    "alp": "RRB ALP",
+    "capf": "CAPF AC",
+    "pcs": "State PCS",
+    "us civil": "US Civil Service Exam",
+    "uk civil": "UK Civil Service Fast Stream"
   };
 
   let resolvedExamName = examName ? examName.trim() : "";
@@ -45,8 +58,16 @@ export async function orchestrateExamPrep(
     validExams = validExams.filter((e: any) => e.name.toUpperCase().includes("IBPS") || e.name.toUpperCase().includes("SBI") || e.name.toUpperCase().includes("RBI") || e.name.includes("PO"));
   } else if (sec.includes("upsc") || sec.includes("government")) {
     validExams = validExams.filter((e: any) => e.name.toUpperCase().includes("UPSC") || e.domain === "GOVERNMENT");
-  } else if (sec === "international") {
+  } else if (sec.includes("defense") || sec.includes("defence")) {
+    validExams = validExams.filter((e: any) => e.domain === "DEFENCE");
+  } else if (sec.includes("teaching") || sec.includes("academia")) {
+    validExams = validExams.filter((e: any) => e.domain === "TEACHING");
+  } else if (sec.includes("railway") || sec.includes("rrb")) {
+    validExams = validExams.filter((e: any) => e.domain === "RAILWAY" || e.name.toUpperCase().includes("RRB"));
+  } else if (sec.includes("international")) {
     validExams = validExams.filter((e: any) => e.domain.startsWith("INTERNATIONAL") || e.domain === "LANGUAGE");
+  } else if (sec.includes("undecided")) {
+    // Undecided: Recommend all valid exams for the user's educational stage
   }
 
   // Filter by Stage
@@ -106,7 +127,7 @@ You MUST return a raw JSON object exactly matching this schema:
     { "phase": "string", "duration": "string", "focusArea": "string", "milestone": "string" }
   ],
   "institutes": [
-    { "name": "string", "type": "string", "description": "string", "costEstimate": "string" }
+    { "name": "string", "type": "string", "description": "string", "costEstimate": "string", "officialWebsite": "string" }
   ],
   "studyResources": [
     { "title": "string", "type": "string", "link": "string" }
@@ -122,7 +143,7 @@ RULES:
 - "recommendedExams": ONLY include the exams I provided above. Do not hallucinate others. Explain WHY they match the user. Assign a high matchScore.
 - "roadmap": Break it down into phases based on ${hours} daily study. 
   CRITICAL: If the user is currently in 10th or 12th grade but the exam requires a Graduation (UG) degree (like UPSC, SSC CGL), you MUST build a 3-5 year "Long-term Early Prep Roadmap" that integrates their college studies with foundational exam prep. Do NOT tell them they are ineligible; encourage early preparation.
-- "institutes": Suggest real, popular, and existing coaching institutes or online platforms (e.g. Vision IAS, Vajiram & Ravi, Unacademy, Physics Wallah, Career Launcher, Testbook, etc.) fitting their ${budget} budget. Do not exceed the budget. Provide correct cost estimates.
+- "institutes": Suggest real, popular, and existing coaching institutes or online platforms (e.g. Vision IAS, Vajiram & Ravi, Unacademy, Physics Wallah, Career Launcher, Testbook, etc.) fitting their ${budget} budget. Do not exceed the budget. Provide correct cost estimates. You MUST provide the real, actual official website URL of the coaching institute/platform in the 'officialWebsite' field (e.g., https://unacademy.com, https://testbook.com).
 - "studyResources": Suggest real, official, and standard study materials (e.g. M. Laxmikanth for Indian Polity, Ramesh Singh for Economy, NCERT books, standard reference books). Provide the exact title and type. Do not hallucinate resources.
 - "futurePlan.planB": Give a solid, realistic backup career path if they don't clear the exam.
 DO NOT hallucinate formatting. Return pure JSON.`;
@@ -167,8 +188,8 @@ DO NOT hallucinate formatting. Return pure JSON.`;
         { phase: "Phase 3: Mock Tests & SSB Prep", duration: "2 Months", focusArea: "Solve previous years papers, full mock tests, and work on physical conditioning / interview psychology.", milestone: "Clear past cutoffs consistently" }
       ];
       instList = [
-        { name: "SSBCrackExams", type: "Online", description: "Popular online platform specialized in NDA, CDS, and SSB prep.", costEstimate: "₹4,000 - ₹6,000" },
-        { name: "Cavalier India", type: "Offline / Hybrid", description: "Renowned offline coaching for Defence written exams and SSB interviews.", costEstimate: "₹25,000 - ₹30,000" }
+        { name: "SSBCrackExams", type: "Online", description: "Popular online platform specialized in NDA, CDS, and SSB prep.", costEstimate: "₹4,000 - ₹6,000", officialWebsite: "https://ssbcrackexams.com" },
+        { name: "Cavalier India", type: "Offline / Hybrid", description: "Renowned offline coaching for Defence written exams and SSB interviews.", costEstimate: "₹25,000 - ₹30,000", officialWebsite: "https://www.cavalierindia.com" }
       ];
       resList = [
         { title: "Pathfinder for NDA & NA by Arihant Publications", type: "Book", link: "arihantbooks.com" },
@@ -195,8 +216,8 @@ DO NOT hallucinate formatting. Return pure JSON.`;
         { phase: "Phase 3: Prelims Mocks & CSAT", duration: "3 Months", focusArea: "Solve GS and CSAT mock test papers, revise current affairs, and practice essay writing.", milestone: "Solve 40+ full-length prelims tests" }
       ];
       instList = [
-        { name: "Vision IAS", type: "Online / Offline", description: "Top coaching known for standard study material and test series.", costEstimate: "₹45,000 - ₹90,000" },
-        { name: "StudyIQ IAS", type: "Online", description: "Affordable online learning platform with comprehensive video courses.", costEstimate: "₹15,000 - ₹20,000" }
+        { name: "Vision IAS", type: "Online / Offline", description: "Top coaching known for standard study material and test series.", costEstimate: "₹45,000 - ₹90,000", officialWebsite: "https://visionias.in" },
+        { name: "StudyIQ IAS", type: "Online", description: "Affordable online learning platform with comprehensive video courses.", costEstimate: "₹15,000 - ₹20,000", officialWebsite: "https://studyiq.com" }
       ];
       resList = [
         { title: "Indian Polity by M. Laxmikanth", type: "Book", link: "amazon.in" },
@@ -223,8 +244,8 @@ DO NOT hallucinate formatting. Return pure JSON.`;
         { phase: "Phase 3: Prelims & Mains Mocks", duration: "2 Months", focusArea: "Solve full-length prelims mocks daily. Work on general awareness and computer aptitude.", milestone: "Consistent mock scores above cutoff" }
       ];
       instList = [
-        { name: "Adda247", type: "Online", description: "Comprehensive banking preparation portal with courses, books, and mocks.", costEstimate: "₹4,000 - ₹8,000" },
-        { name: "Oliveboard", type: "Online", description: "Premium test series and study material for high-level banking exams.", costEstimate: "₹5,000 - ₹7,000" }
+        { name: "Adda247", type: "Online", description: "Comprehensive banking preparation portal with courses, books, and mocks.", costEstimate: "₹4,000 - ₹8,000", officialWebsite: "https://www.adda247.com" },
+        { name: "Oliveboard", type: "Online", description: "Premium test series and study material for high-level banking exams.", costEstimate: "₹5,000 - ₹7,000", officialWebsite: "https://www.oliveboard.in" }
       ];
       resList = [
         { title: "Fast Track Objective Arithmetic by Rajesh Verma", type: "Book", link: "arihantbooks.com" },
@@ -240,6 +261,57 @@ DO NOT hallucinate formatting. Return pure JSON.`;
         "Job security, housing loans, and banking perks",
         "Core finance exposure"
       ];
+    } else if (secLower.includes("teaching") || secLower.includes("academia")) {
+      examsList = [
+        { name: "UGC NET", difficulty: "High", eligibility: "Postgraduation (PG Degree)", attemptsLeft: "No age limit for Assistant Professor", whyRecommended: "Standard national eligibility test for university-level teaching careers.", matchScore: 95 },
+        { name: "CTET", difficulty: "Medium", eligibility: "Graduation + B.Ed/D.El.Ed", attemptsLeft: "No attempt limits", whyRecommended: "Qualifying exam for central government school teachers (KVS, NVS).", matchScore: 90 }
+      ];
+      phaseList = [
+        { phase: "Phase 1: Syllabus Core & Concepts", duration: "2 Months", focusArea: "Study Paper 1 teaching aptitude, research methodologies, and specialize in your core PG subject.", milestone: "Finish Paper 1 curriculum" },
+        { phase: "Phase 2: Mock Tests & MCQ Drill", duration: "2 Months", focusArea: "Solve previous years papers, practice mock tests, and perfect key topic summaries.", milestone: "Achieve 60%+ average in full mock tests" }
+      ];
+      instList = [
+        { name: "BYJU'S Exam Prep (Gradeup)", type: "Online", description: "Comprehensive online learning platform with courses for NET/CTET.", costEstimate: "₹5,000 - ₹9,000", officialWebsite: "https://byjusexamprep.com" },
+        { name: "Unacademy UGC NET", type: "Online", description: "Top online educator program offering interactive live classes and tests.", costEstimate: "₹8,000 - ₹12,000", officialWebsite: "https://unacademy.com" }
+      ];
+      resList = [
+        { title: "Trueman's UGC NET General Paper I", type: "Book", link: "amazon.in" },
+        { title: "CTET Success Master by Arihant Publications", type: "Book", link: "arihantbooks.com" }
+      ];
+      futurePlanData = {
+        ifSelected: "Secure Assistant Professor positions at universities/colleges, or teach at public secondary schools.",
+        planB: "Pursue teaching in private educational institutions, coordinate academic content, or prepare for State TET exams."
+      };
+      positiveList = [
+        "Favorable work-life balance and respected career",
+        "Continuous intellectual growth and learning",
+        "Direct contribution to youth education"
+      ];
+    } else if (secLower.includes("railway") || secLower.includes("rrb")) {
+      examsList = [
+        { name: "RRB NTPC (Non-Technical)", difficulty: "Medium", eligibility: "12th Pass / Graduation", attemptsLeft: "Age limit 18-33 years", whyRecommended: "Highly popular entry to non-technical roles in Indian Railways.", matchScore: 95 }
+      ];
+      phaseList = [
+        { phase: "Phase 1: General Awareness & Math", duration: "2 Months", focusArea: "Master basic arithmetic, logical reasoning, and static general knowledge.", milestone: "Complete core quantitative concepts" },
+        { phase: "Phase 2: Mocks & Speed Practice", duration: "2 Months", focusArea: "Solve daily speed quizzes, practice typing tests, and analyze full mock exams.", milestone: "Solve 30+ mock exams" }
+      ];
+      instList = [
+        { name: "Testbook", type: "Online", description: "Extremely popular and affordable platform for practice questions & mocks.", costEstimate: "₹1,500 - ₹3,000", officialWebsite: "https://testbook.com" },
+        { name: "Adda247 Railways", type: "Online", description: "Well-structured railway exam study plans and test series.", costEstimate: "₹3,000 - ₹5,000", officialWebsite: "https://www.adda247.com" }
+      ];
+      resList = [
+        { title: "General Knowledge by Lucent Publications", type: "Book", link: "lucentbooks.com" },
+        { title: "Fast Track Objective Arithmetic by Rajesh Verma", type: "Book", link: "arihantbooks.com" }
+      ];
+      futurePlanData = {
+        ifSelected: "Join Indian Railways as Station Master, Goods Guard, or Commercial Apprentice.",
+        planB: "Prepare for SSC CHSL or state government department administrative clerk posts."
+      };
+      positiveList = [
+        "Excellent job security and stable central government benefits",
+        "Exciting travel privileges and railway passes",
+        "Clear and structured promotional pathways"
+      ];
     } else {
       // General/SSC Fallback
       examsList = [
@@ -252,8 +324,8 @@ DO NOT hallucinate formatting. Return pure JSON.`;
         { phase: "Phase 3: Final Mocks", duration: "2 Months", focusArea: "Solve full-length mocks and analyze mistakes. Revise history, polity, geography.", milestone: "Average score 140+ in mocks" }
       ];
       instList = [
-        { name: "KD Campus", type: "Online / Offline", description: "Famous coaching institute specializing in SSC, CGL, and CHSL.", costEstimate: "₹8,000 - ₹15,000" },
-        { name: "Testbook", type: "Online", description: "Extremely popular and affordable platform for practice questions & mocks.", costEstimate: "₹1,500 - ₹3,000" }
+        { name: "KD Campus", type: "Online / Offline", description: "Famous coaching institute specializing in SSC, CGL, and CHSL.", costEstimate: "₹8,000 - ₹15,000", officialWebsite: "https://www.kdcampus.org" },
+        { name: "Testbook", type: "Online", description: "Extremely popular and affordable platform for practice questions & mocks.", costEstimate: "₹1,500 - ₹3,000", officialWebsite: "https://testbook.com" }
       ];
       resList = [
         { title: "General Knowledge by Lucent Publications", type: "Book", link: "lucentbooks.com" },

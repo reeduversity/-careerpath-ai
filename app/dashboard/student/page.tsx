@@ -64,6 +64,23 @@ function StudentDashboardContent() {
 
   if (!data) return null;
 
+  if (data.hasContradiction) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-amber-400 space-y-4 px-6 text-center">
+        <div className="text-6xl mb-4">⚠️</div>
+        <h1 className="text-3xl font-bold text-white">Profile Contradiction Detected</h1>
+        <div className="max-w-md text-slate-300 space-y-2">
+          {(data.contradictions || []).map((c: string, idx: number) => (
+            <p key={idx}>{c}</p>
+          ))}
+        </div>
+        <Link href="/higher-education/form" className="mt-8 px-6 py-3 rounded-lg bg-slate-800 text-white hover:bg-slate-700 transition-colors">
+          Return to Input Form
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-50 px-6 py-12">
       <div className="max-w-6xl mx-auto space-y-8">
@@ -157,7 +174,18 @@ function StudentDashboardContent() {
                       <p className="text-sm font-medium text-amber-400 flex items-center gap-1 mt-2">
                         <span>💰</span> Est. Fees: {college.fees}
                       </p>
-                      <div className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
+                      {college.officialWebsite && college.officialWebsite !== "N/A" && (
+                        <a 
+                          href={college.officialWebsite.startsWith('http') ? college.officialWebsite : `https://${college.officialWebsite}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="text-xs text-sky-400 hover:text-sky-300 hover:underline cursor-pointer inline-flex items-center gap-1 mt-2 relative z-20"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          🔗 Visit Official Website
+                        </a>
+                      )}
+                      <div className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity block w-fit">
                         View Deep Insights →
                       </div>
                     </div>

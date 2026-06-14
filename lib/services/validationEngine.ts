@@ -9,6 +9,7 @@ export interface Candidate {
   feesINR?: number;
   feesUSD?: number;
   country: string;
+  officialWebsite?: string;
   metadata?: any;
 }
 

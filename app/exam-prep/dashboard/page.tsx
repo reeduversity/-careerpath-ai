@@ -64,6 +64,23 @@ function ExamDashboardContent() {
 
   if (!data) return null;
 
+  if (data.hasContradiction) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-amber-400 space-y-4 px-6 text-center">
+        <div className="text-6xl mb-4">⚠️</div>
+        <h1 className="text-3xl font-bold text-white">Input Contradiction Detected</h1>
+        <div className="max-w-md text-slate-300 space-y-2">
+          {(data.contradictions || []).map((c: string, idx: number) => (
+            <p key={idx}>{c}</p>
+          ))}
+        </div>
+        <Link href="/exam-prep/form" className="mt-8 px-6 py-3 rounded-lg bg-slate-800 text-white hover:bg-slate-700 transition-colors">
+          Return to Form
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-50 px-6 py-12 overflow-x-hidden">
       <div className="max-w-7xl mx-auto space-y-12">
@@ -81,7 +98,7 @@ function ExamDashboardContent() {
             {stage} • {sector}
           </div>
           <h1 className="text-5xl md:text-7xl font-black text-white drop-shadow-xl">Your <span className="text-amber-500">Master Blueprint</span></h1>
-          <p className="text-xl text-slate-400 max-w-3xl mx-auto">AI-generated roadmap perfectly calibrated to your ${hours} availability and ${budget} budget.</p>
+          <p className="text-xl text-slate-400 max-w-3xl mx-auto">AI-generated roadmap perfectly calibrated to your {hours} availability and {budget} budget.</p>
         </div>
 
         {/* Recommended Exams */}
@@ -136,7 +153,17 @@ function ExamDashboardContent() {
                     <span className="text-xs font-bold px-2 py-1 rounded bg-slate-700 text-slate-300">{inst.type}</span>
                   </div>
                   <p className="text-sm text-slate-400 mb-3">{inst.description}</p>
-                  <p className="text-sm font-semibold text-rose-400">💰 {inst.costEstimate}</p>
+                  <p className="text-sm font-semibold text-rose-400 mb-2">💰 {inst.costEstimate}</p>
+                  {inst.officialWebsite && inst.officialWebsite !== "N/A" && (
+                    <a 
+                      href={inst.officialWebsite.startsWith('http') ? inst.officialWebsite : `https://${inst.officialWebsite}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-xs text-sky-400 hover:text-sky-300 hover:underline cursor-pointer inline-flex items-center gap-1"
+                    >
+                      🔗 Official Website
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>

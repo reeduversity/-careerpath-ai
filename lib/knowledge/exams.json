@@ -125,5 +125,122 @@
     "requiredStream": "ANY",
     "countries": ["India"],
     "description": "Reserve Bank of India - Grade B Officer"
+  },
+  {
+    "id": "nda",
+    "name": "NDA",
+    "domain": "DEFENCE",
+    "minQualification": "12th",
+    "requiredStream": "ANY",
+    "countries": ["India"],
+    "description": "National Defence Academy Examination"
+  },
+  {
+    "id": "cds",
+    "name": "CDS",
+    "domain": "DEFENCE",
+    "minQualification": "UG",
+    "requiredStream": "ANY",
+    "countries": ["India"],
+    "description": "Combined Defence Services Examination"
+  },
+  {
+    "id": "afcat",
+    "name": "AFCAT",
+    "domain": "DEFENCE",
+    "minQualification": "UG",
+    "requiredStream": "ANY",
+    "countries": ["India"],
+    "description": "Air Force Common Admission Test"
+  },
+  {
+    "id": "ssc_chsl",
+    "name": "SSC CHSL",
+    "domain": "GOVERNMENT",
+    "minQualification": "12th",
+    "requiredStream": "ANY",
+    "countries": ["India"],
+    "description": "Staff Selection Commission - Combined Higher Secondary Level"
+  },
+  {
+    "id": "ugc_net",
+    "name": "UGC NET",
+    "domain": "TEACHING",
+    "minQualification": "PG",
+    "requiredStream": "ANY",
+    "countries": ["India"],
+    "description": "University Grants Commission National Eligibility Test"
+  },
+  {
+    "id": "ctet",
+    "name": "CTET",
+    "domain": "TEACHING",
+    "minQualification": "UG",
+    "requiredStream": "ANY",
+    "countries": ["India"],
+    "description": "Central Teacher Eligibility Test"
+  },
+  {
+    "id": "rrb_ntpc",
+    "name": "RRB NTPC",
+    "domain": "RAILWAY",
+    "minQualification": "12th",
+    "requiredStream": "ANY",
+    "countries": ["India"],
+    "description": "Railway Recruitment Board Non-Technical Popular Categories"
+  },
+  {
+    "id": "rrb_group_d",
+    "name": "RRB Group D",
+    "domain": "RAILWAY",
+    "minQualification": "10th",
+    "requiredStream": "ANY",
+    "countries": ["India"],
+    "description": "Railway Recruitment Board Level 1 Group D Posts"
+  },
+  {
+    "id": "rrb_alp",
+    "name": "RRB ALP",
+    "domain": "RAILWAY",
+    "minQualification": "10th",
+    "requiredStream": "ANY",
+    "countries": ["India"],
+    "description": "Railway Recruitment Board Assistant Loco Pilot"
+  },
+  {
+    "id": "capf_ac",
+    "name": "CAPF AC",
+    "domain": "DEFENCE",
+    "minQualification": "UG",
+    "requiredStream": "ANY",
+    "countries": ["India"],
+    "description": "Central Armed Police Forces Assistant Commandant"
+  },
+  {
+    "id": "state_pcs",
+    "name": "State PCS",
+    "domain": "GOVERNMENT",
+    "minQualification": "UG",
+    "requiredStream": "ANY",
+    "countries": ["India"],
+    "description": "State Public Service Commission Examination"
+  },
+  {
+    "id": "us_civil_service",
+    "name": "US Civil Service Exam",
+    "domain": "INTERNATIONAL_GOVT",
+    "minQualification": "UG",
+    "requiredStream": "ANY",
+    "countries": ["USA"],
+    "description": "United States Civil Service Examination"
+  },
+  {
+    "id": "uk_civil_service",
+    "name": "UK Civil Service Fast Stream",
+    "domain": "INTERNATIONAL_GOVT",
+    "minQualification": "UG",
+    "requiredStream": "ANY",
+    "countries": ["UK"],
+    "description": "United Kingdom Civil Service Fast Stream Leadership Development"
   }
 ]

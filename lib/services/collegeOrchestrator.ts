@@ -81,17 +81,19 @@ CRITICAL RULES:
 3. STRICT BUDGET MATCHING: Ensure the fees fit the budget limit. If the budget is too low for the Target Location, suggest the cheapest possible valid options in that exact location.
 4. MULTIPLE ENTRANCE EXAMS: If "Entrance Exams Taken" contains multiple exams (e.g. "JEE Main: 98 percentile | JEE Advanced: 5000 Rank | CUET: 750 Score"), you MUST recommend a balanced, high-quality mix of colleges matching ANY of the competitive exams they have taken (e.g., IITs for JEE Advanced, NITs/DTU for JEE Main, and Delhi University/Central Universities for CUET). Do not ignore any of the provided exams.
 5. REAL-WORLD ACCURACY: Only recommend real, actual, existing institutions (e.g. Delhi Technological University, Indian Institute of Technology Delhi, Netaji Subhas University of Technology, etc. in Delhi). Do not generate generic, fictional, or placeholder college names. Ensure fees are realistically estimated.
+6. DISTANCE & LOW BUDGET OPTIONS: If the user's budget is extremely low (e.g. Below 2 Lakhs) or they seek flexibility/distance learning, you MUST recommend Indira Gandhi National Open University (IGNOU) or similar public open universities in India. IGNOU has a domestic budget fit for almost all courses.
 
 Output a JSON array under "candidates" with fields:
 {
   "candidates": [
     {
       "name": "string",
-      "domain": "string (e.g. ENGINEERING, MEDICAL, MANAGEMENT)",
+      "domain": "string (e.g. ENGINEERING, MEDICAL, MANAGEMENT, GENERAL)",
       "requiredExam": "string (e.g. JEE Main, NEET, None)",
       "feesINR": number,
       "feesUSD": number,
-      "country": "string"
+      "country": "string",
+      "officialWebsite": "string (The official website URL of the college, e.g. https://www.iitd.ac.in, https://www.ignou.ac.in)"
     }
   ]
 }
@@ -180,27 +182,27 @@ Return raw JSON only.`;
       let fallbackColleges: any[] = [];
       if (stream.includes("PCM") || stream.includes("SCIENCE")) {
         fallbackColleges = [
-          { name: "Amity University", domain: "ENGINEERING", requiredExam: "None", feesINR: 350000, feesUSD: 4375, country: "India" },
-          { name: "SRM Institute of Science and Technology", domain: "ENGINEERING", requiredExam: "None", feesINR: 250000, feesUSD: 3125, country: "India" },
-          { name: "Manipal Institute of Technology", domain: "ENGINEERING", requiredExam: "None", feesINR: 400000, feesUSD: 5000, country: "India" },
+          { name: "Amity University", domain: "ENGINEERING", requiredExam: "None", feesINR: 350000, feesUSD: 4375, country: "India", officialWebsite: "https://www.amity.edu" },
+          { name: "SRM Institute of Science and Technology", domain: "ENGINEERING", requiredExam: "None", feesINR: 250000, feesUSD: 3125, country: "India", officialWebsite: "https://www.srmist.edu.in" },
+          { name: "Manipal Institute of Technology", domain: "ENGINEERING", requiredExam: "None", feesINR: 400000, feesUSD: 5000, country: "India", officialWebsite: "https://www.manipal.edu" },
         ];
       } else if (stream.includes("PCB")) {
         fallbackColleges = [
-          { name: "Kasturba Medical College (Management Quota)", domain: "MEDICAL", requiredExam: "None", feesINR: 500000, feesUSD: 6250, country: "India" },
-          { name: "Saveetha Medical College", domain: "MEDICAL", requiredExam: "None", feesINR: 400000, feesUSD: 5000, country: "India" },
-          { name: "Amrita Institute of Medical Sciences", domain: "MEDICAL", requiredExam: "None", feesINR: 450000, feesUSD: 5625, country: "India" },
+          { name: "Kasturba Medical College (Management Quota)", domain: "MEDICAL", requiredExam: "None", feesINR: 500000, feesUSD: 6250, country: "India", officialWebsite: "https://manipal.edu/kmc-manipal.html" },
+          { name: "Saveetha Medical College", domain: "MEDICAL", requiredExam: "None", feesINR: 400000, feesUSD: 5000, country: "India", officialWebsite: "https://saveethamedicalcollege.com" },
+          { name: "Amrita Institute of Medical Sciences", domain: "MEDICAL", requiredExam: "None", feesINR: 450000, feesUSD: 5625, country: "India", officialWebsite: "https://www.amrita.edu" },
         ];
       } else if (stream.includes("COMMERCE")) {
         fallbackColleges = [
-          { name: "Christ University", domain: "COMMERCE", requiredExam: "None", feesINR: 150000, feesUSD: 1875, country: "India" },
-          { name: "Symbiosis School of Economics", domain: "COMMERCE", requiredExam: "None", feesINR: 200000, feesUSD: 2500, country: "India" },
-          { name: "Narsee Monjee College of Commerce", domain: "COMMERCE", requiredExam: "None", feesINR: 120000, feesUSD: 1500, country: "India" },
+          { name: "Christ University", domain: "COMMERCE", requiredExam: "None", feesINR: 150000, feesUSD: 1875, country: "India", officialWebsite: "https://christuniversity.in" },
+          { name: "Symbiosis School of Economics", domain: "COMMERCE", requiredExam: "None", feesINR: 200000, feesUSD: 2500, country: "India", officialWebsite: "https://sse.ac.in" },
+          { name: "Narsee Monjee College of Commerce", domain: "COMMERCE", requiredExam: "None", feesINR: 120000, feesUSD: 1500, country: "India", officialWebsite: "https://nmcollege.in" },
         ];
       } else {
         fallbackColleges = [
-          { name: "Lovely Professional University", domain: "GENERAL", requiredExam: "None", feesINR: 200000, feesUSD: 2500, country: "India" },
-          { name: "Chandigarh University", domain: "GENERAL", requiredExam: "None", feesINR: 180000, feesUSD: 2250, country: "India" },
-          { name: "Sharda University", domain: "GENERAL", requiredExam: "None", feesINR: 250000, feesUSD: 3125, country: "India" },
+          { name: "Indira Gandhi National Open University (IGNOU)", domain: "GENERAL", requiredExam: "None", feesINR: 15000, feesUSD: 200, country: "India", officialWebsite: "https://www.ignou.ac.in" },
+          { name: "Lovely Professional University", domain: "GENERAL", requiredExam: "None", feesINR: 200000, feesUSD: 2500, country: "India", officialWebsite: "https://www.lpu.in" },
+          { name: "Chandigarh University", domain: "GENERAL", requiredExam: "None", feesINR: 180000, feesUSD: 2250, country: "India", officialWebsite: "https://www.cuchd.in" },
         ];
       }
       
@@ -255,6 +257,7 @@ Your job is to generate the final detailed JSON response matching this schema:
       "riskFactors": "string (Any risks like high fees or tough admission)",
       "matchPercentage": number,
       "admissionProbability": number,
+      "officialWebsite": "string (The official website URL of the college, e.g. https://www.iitd.ac.in, https://www.ignou.ac.in)",
       "deepDetails": {
         "averagePackage": "string",
         "highestPackage": "string",
@@ -270,6 +273,7 @@ Your job is to generate the final detailed JSON response matching this schema:
 }
 
 Inject the exact "matchScore" and "eligibilityScore" from the provided list into the respective college objects as "matchPercentage" and "admissionProbability".
+Inject the exact "officialWebsite" from the provided candidate list into each college object under "officialWebsite". If not present in candidates list, provide the actual real official website URL of the college.
 Provide realistic and accurate estimates for "averagePackage", "highestPackage", "placementPercentage", "topRecruiters", and "curriculumHighlights" based on your general knowledge of these institutions. Do NOT output "Not available" unless the institution is completely unknown.`;
 
   console.log(`[Groq] Explaining validated candidates for ${profile.fullName}...`);
@@ -352,6 +356,7 @@ Provide realistic and accurate estimates for "averagePackage", "highestPackage",
           riskFactors: "Admission strictly subject to cutoffs/counseling.",
           matchPercentage: p.matchScore,
           admissionProbability: p.eligibilityScore,
+          officialWebsite: p.candidate.officialWebsite || "https://www.google.com/search?q=" + encodeURIComponent(p.candidate.name),
           deepDetails: {
             averagePackage: avgPkg,
             highestPackage: maxPkg,
