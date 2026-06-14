@@ -25,11 +25,10 @@ export async function POST(req: Request) {
     if (preferredStudyLocation) {
       const normalized = preferredStudyLocation.trim().toLowerCase().replace(/\s+/g, ' ');
       if (formType === "international") {
-        // Validate against global countries
-        const countriesDB = require("@/lib/knowledge/countries.json");
-        const exactMatch = countriesDB.find((c: any) => c.name.toLowerCase().replace(/\s+/g, ' ') === normalized);
-        if (!exactMatch) {
-          return NextResponse.json({ success: false, message: "You are currently on the International page; please only search for international locations." }, { status: 400 });
+        // Simple check to ensure they didn't type an Indian state or 'India'
+        const isIndia = normalized === "india" || normalized.includes("delhi") || normalized.includes("maharashtra");
+        if (isIndia) {
+          return NextResponse.json({ success: false, message: "You are currently on the International page; please only search for international locations (not India)." }, { status: 400 });
         }
       } else {
         const indianStates = [

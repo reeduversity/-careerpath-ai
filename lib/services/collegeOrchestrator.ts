@@ -76,9 +76,9 @@ Profile:
 - Entrance Exams Taken: ${entranceExams}
 
 CRITICAL RULES:
-1. STRICT LOCATION ISOLATION: The Form Context is ${contextType}. You MUST ONLY suggest institutions that match this Form Context. If DOMESTIC, suggest ONLY Indian colleges. If INTERNATIONAL, suggest ONLY non-Indian colleges. If the user's Typed Target Location contradicts the Form Context (e.g. they typed 'USA' on a DOMESTIC form), IGNORE their typed location and strictly follow the Form Context.
+1. STRICT LOCATION MATCHING: The Form Context is ${contextType}. You MUST strictly suggest colleges located EXACTLY in the "User's Typed Target Location". Do NOT suggest colleges from other states/countries unless it's impossible. If the Typed Target Location contradicts the Form Context (e.g. they typed 'USA' on a DOMESTIC form), IGNORE their typed location and strictly follow the Form Context.
 2. If "Entrance Exams Taken" says "None" or "Board Marks", you MUST NOT recommend colleges that mandate strict competitive exams. CRITICAL: Top institutes like IITs, NITs, IIITs, Delhi Technological University (DTU), NSUT, BITS Pilani, Jadavpur University, AIIMS, CMC, etc. STRICTLY REQUIRE ENTRANCE EXAMS. NEVER suggest them if "Entrance Exams" is "None". Instead, recommend local private universities or state colleges that have direct merit-based admissions (e.g. Amity, LPU, SRM, Manipal, or state-specific merit colleges).
-3. Ensure the fees fit the budget limit.
+3. STRICT BUDGET MATCHING: Ensure the fees fit the budget limit. If the budget is too low for the Target Location, suggest the cheapest possible valid options in that exact location.
 
 Output a JSON array under "candidates" with fields:
 {

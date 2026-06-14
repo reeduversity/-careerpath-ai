@@ -58,10 +58,16 @@ export function resolveDomains(eligibility: EligibilityResult): ResolvedConstrai
     }
   }
 
+  // Always explicitly allow the user's target location so the validation engine does not drop unknown locations (like Germany)
+  if (eligibility.criteria.targetLocation) {
+    constraints.allowedCountries.push(eligibility.criteria.targetLocation);
+  }
+
   // Determine allowed countries based on exam/budget
   for (const country of countriesDB) {
     // If international, check budget and exams
-    if (eligibility.eligibleDomains.includes("INTERNATIONAL")) {
+    // If international, check budget and exams against known DB if it exists
+    if (eligibility.eligibleDomains.some(d => d.includes("INTERNATIONAL"))) {
       if (constraints.budgetLimitUSD >= country.minBudgetUSD) {
         constraints.allowedCountries.push(country.name);
       }
