@@ -122,8 +122,8 @@ RULES:
 - "recommendedExams": ONLY include the exams I provided above. Do not hallucinate others. Explain WHY they match the user. Assign a high matchScore.
 - "roadmap": Break it down into phases based on ${hours} daily study. 
   CRITICAL: If the user is currently in 10th or 12th grade but the exam requires a Graduation (UG) degree (like UPSC, SSC CGL), you MUST build a 3-5 year "Long-term Early Prep Roadmap" that integrates their college studies with foundational exam prep. Do NOT tell them they are ineligible; encourage early preparation.
-- "institutes": Suggest real coaching institutes/online platforms fitting their ${budget} budget. Do not exceed the budget.
-- "studyResources": Specific books, NCERTs, or standard resources.
+- "institutes": Suggest real, popular, and existing coaching institutes or online platforms (e.g. Vision IAS, Vajiram & Ravi, Unacademy, Physics Wallah, Career Launcher, Testbook, etc.) fitting their ${budget} budget. Do not exceed the budget. Provide correct cost estimates.
+- "studyResources": Suggest real, official, and standard study materials (e.g. M. Laxmikanth for Indian Polity, Ramesh Singh for Economy, NCERT books, standard reference books). Provide the exact title and type. Do not hallucinate resources.
 - "futurePlan.planB": Give a solid, realistic backup career path if they don't clear the exam.
 DO NOT hallucinate formatting. Return pure JSON.`;
 

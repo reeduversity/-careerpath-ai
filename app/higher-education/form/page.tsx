@@ -75,6 +75,42 @@ function HigherEducationFormContent() {
     category: "General",
   });
 
+  const [exams, setExams] = useState<Array<{ name: string; score: string }>>([
+    { name: "", score: "" }
+  ]);
+
+  const handleAddExam = () => {
+    setExams([...exams, { name: "", score: "" }]);
+  };
+
+  const handleRemoveExam = (index: number) => {
+    setExams(exams.filter((_, i) => i !== index));
+  };
+
+  const handleExamChange = (index: number, field: 'name' | 'score', value: string) => {
+    const newExams = [...exams];
+    newExams[index][field] = value;
+    setExams(newExams);
+  };
+
+  const examOptions = [
+    { value: "None (Applying via Board Marks)", label: "None (Applying via Board Marks)" },
+    { value: "JEE Main", label: "JEE Main" },
+    { value: "JEE Advanced", label: "JEE Advanced" },
+    { value: "NEET", label: "NEET" },
+    { value: "CUET", label: "CUET" },
+    { value: "SAT", label: "SAT" },
+    { value: "BITSAT", label: "BITSAT" },
+    { value: "CAT", label: "CAT" },
+    { value: "GATE", label: "GATE" },
+    { value: "GRE", label: "GRE" },
+    { value: "GMAT", label: "GMAT" },
+    { value: "IELTS", label: "IELTS" },
+    { value: "TOEFL", label: "TOEFL" },
+    { value: "State CET", label: "State CET" },
+    { value: "Other", label: "Other Exam" }
+  ];
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     
@@ -143,13 +179,10 @@ function HigherEducationFormContent() {
     }
     setLoading(true);
     try {
-      let examsCombined = "";
-      if (formData.exam1Name && formData.exam1Score) {
-        examsCombined += `${formData.exam1Name}: ${formData.exam1Score}`;
-      }
-      if (formData.exam2Name && formData.exam2Score) {
-        examsCombined += examsCombined ? ` | ${formData.exam2Name}: ${formData.exam2Score}` : `${formData.exam2Name}: ${formData.exam2Score}`;
-      }
+      const examsCombined = exams
+        .filter(e => e.name && e.score)
+        .map(e => `${e.name}: ${e.score}`)
+        .join(" | ");
 
       const qualificationData = examsCombined 
         ? `${formData.currentQualification} (Exams: ${examsCombined})` 
@@ -309,50 +342,57 @@ function HigherEducationFormContent() {
 
               {["12th", "Diploma", "UG", "PG"].includes(formData.educationLevel) && (
                 <div className="space-y-4 bg-slate-800/30 p-4 rounded-2xl border border-slate-700/50">
-                  <label className="block text-sm font-semibold text-sky-400 mb-2">Competitive Entrance Exams (Optional)</label>
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="block text-sm font-semibold text-sky-400">Competitive Entrance Exams (Optional)</label>
+                    <button
+                      type="button"
+                      onClick={handleAddExam}
+                      className="text-xs bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 border border-sky-500/30 px-3 py-1.5 rounded-lg transition-colors font-semibold"
+                    >
+                      + Add Exam
+                    </button>
+                  </div>
                   
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Exam 1 Name</label>
-                      <select className="w-full bg-slate-800/80 border border-slate-600 focus:border-sky-500 rounded-xl p-3 outline-none transition-all placeholder-slate-500 text-sm appearance-none" name="exam1Name" onChange={handleChange} value={formData.exam1Name}>
-                        <option value="">Select Exam</option>
-                        <option value="None (Applying via Board Marks)">None (Applying via Board Marks)</option>
-                        <option value="JEE Main">JEE Main</option>
-                        <option value="JEE Advanced">JEE Advanced</option>
-                        <option value="NEET">NEET</option>
-                        <option value="CUET">CUET</option>
-                        <option value="SAT">SAT</option>
-                        <option value="BITSAT">BITSAT</option>
-                        <option value="CAT">CAT</option>
-                        <option value="GATE">GATE</option>
-                        <option value="GRE">GRE</option>
-                        <option value="GMAT">GMAT</option>
-                        <option value="Other">Other Exam</option>
-                      </select>
+                  {exams.map((exam, index) => (
+                    <div key={index} className="grid grid-cols-[1fr_1fr_auto] gap-4 items-end bg-slate-800/20 p-3 rounded-xl border border-slate-800 relative group/row animate-in fade-in slide-in-from-top-2 duration-300">
+                      <div>
+                        <label className="block text-[10px] font-medium text-slate-400 mb-1 ml-1">Exam Name</label>
+                        <select 
+                          className="w-full bg-slate-800/80 border border-slate-600 focus:border-sky-500 rounded-xl p-3 outline-none transition-all text-sm appearance-none" 
+                          value={exam.name}
+                          onChange={(e) => handleExamChange(index, 'name', e.target.value)}
+                        >
+                          <option value="">Select Exam</option>
+                          {examOptions.map((opt) => (
+                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-medium text-slate-400 mb-1 ml-1">Score / Rank / %ile</label>
+                        <input 
+                          className="w-full bg-slate-800/80 border border-slate-600 focus:border-sky-500 rounded-xl p-3 outline-none transition-all text-sm" 
+                          placeholder="e.g. 45000 Rank" 
+                          value={exam.score}
+                          onChange={(e) => handleExamChange(index, 'score', e.target.value)}
+                        />
+                      </div>
+                      <div className="flex items-center justify-center">
+                        {exams.length > 1 ? (
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveExam(index)}
+                            className="text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 border border-slate-700/50 hover:border-rose-500/20 p-2.5 rounded-xl transition-all"
+                            title="Remove exam"
+                          >
+                            🗑️
+                          </button>
+                        ) : (
+                          <div className="w-[38px]"></div>
+                        )}
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Score / Rank / %ile</label>
-                      <input className="w-full bg-slate-800/80 border border-slate-600 focus:border-sky-500 rounded-xl p-3 outline-none transition-all placeholder-slate-500 text-sm" name="exam1Score" placeholder="e.g. 45000 Rank" onChange={handleChange} value={formData.exam1Score} />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Exam 2 Name</label>
-                      <select className="w-full bg-slate-800/80 border border-slate-600 focus:border-sky-500 rounded-xl p-3 outline-none transition-all placeholder-slate-500 text-sm appearance-none" name="exam2Name" onChange={handleChange} value={formData.exam2Name}>
-                        <option value="">Select Exam</option>
-                        <option value="None (Applying via Board Marks)">None (Applying via Board Marks)</option>
-                        <option value="JEE Advanced">JEE Advanced</option>
-                        <option value="CUET">CUET</option>
-                        <option value="State CET">State CET</option>
-                        <option value="Other">Other Exam</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Score / Rank / %ile</label>
-                      <input className="w-full bg-slate-800/80 border border-slate-600 focus:border-sky-500 rounded-xl p-3 outline-none transition-all placeholder-slate-500 text-sm" name="exam2Score" placeholder="e.g. 750 Score" onChange={handleChange} value={formData.exam2Score} />
-                    </div>
-                  </div>
+                  ))}
                 </div>
               )}
 

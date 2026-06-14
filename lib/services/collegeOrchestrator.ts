@@ -79,6 +79,8 @@ CRITICAL RULES:
 1. STRICT LOCATION MATCHING: The Form Context is ${contextType}. You MUST strictly suggest colleges located EXACTLY in the "User's Typed Target Location". Do NOT suggest colleges from other states/countries unless it's impossible. If the Typed Target Location contradicts the Form Context (e.g. they typed 'USA' on a DOMESTIC form), IGNORE their typed location and strictly follow the Form Context.
 2. If "Entrance Exams Taken" says "None" or "Board Marks", you MUST NOT recommend colleges that mandate strict competitive exams. CRITICAL: Top institutes like IITs, NITs, IIITs, Delhi Technological University (DTU), NSUT, BITS Pilani, Jadavpur University, AIIMS, CMC, etc. STRICTLY REQUIRE ENTRANCE EXAMS. NEVER suggest them if "Entrance Exams" is "None". Instead, recommend local private universities or state colleges that have direct merit-based admissions (e.g. Amity, LPU, SRM, Manipal, or state-specific merit colleges).
 3. STRICT BUDGET MATCHING: Ensure the fees fit the budget limit. If the budget is too low for the Target Location, suggest the cheapest possible valid options in that exact location.
+4. MULTIPLE ENTRANCE EXAMS: If "Entrance Exams Taken" contains multiple exams (e.g. "JEE Main: 98 percentile | JEE Advanced: 5000 Rank | CUET: 750 Score"), you MUST recommend a balanced, high-quality mix of colleges matching ANY of the competitive exams they have taken (e.g., IITs for JEE Advanced, NITs/DTU for JEE Main, and Delhi University/Central Universities for CUET). Do not ignore any of the provided exams.
+5. REAL-WORLD ACCURACY: Only recommend real, actual, existing institutions (e.g. Delhi Technological University, Indian Institute of Technology Delhi, Netaji Subhas University of Technology, etc. in Delhi). Do not generate generic, fictional, or placeholder college names. Ensure fees are realistically estimated.
 
 Output a JSON array under "candidates" with fields:
 {
@@ -133,8 +135,23 @@ Return raw JSON only.`;
     
     // Location fit (10%)
     const targetLocation = isInternational ? profile.internationalProfile?.preferredCountry : profile.domesticProfile?.preferredStudyLocation;
-    if (targetLocation && c.country && targetLocation.trim().toLowerCase() === c.country.trim().toLowerCase()) score += 10;
-    else if (!isInternational && c.country === "India") score += 5; // General country match
+    if (targetLocation) {
+      const normTarget = targetLocation.trim().toLowerCase();
+      const normCountry = (c.country || "").trim().toLowerCase();
+      const normName = (c.name || "").trim().toLowerCase();
+      
+      if (normTarget === "anywhere in india" || normTarget === "any" || normTarget === "india") {
+        score += 10;
+      } else if (normName.includes(normTarget) || normTarget.includes(normName) || normTarget.includes(normCountry)) {
+        score += 10;
+      } else if (normTarget.includes("delhi") && (normName.includes("delhi") || normName.includes("ncr") || normName.includes("dtu") || normName.includes("nsut"))) {
+        score += 10;
+      } else {
+        score += 5; // fallback
+      }
+    } else {
+      score += 10;
+    }
     
     r.matchScore = score;
   });
