@@ -43,8 +43,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ profileI
     doc.font('Helvetica-Bold').fontSize(24).fillColor('#0f172a').text(analysis.fullName || "Professional Resume", { align: 'center' });
     doc.moveDown(0.3);
     
-    const contacts = [analysis.email, analysis.phone, analysis.location, analysis.linkedin, analysis.github, analysis.portfolio]
-      .filter(Boolean);
+    const contacts = [analysis.email, analysis.phone, analysis.location].filter(Boolean);
     doc.font('Helvetica').fontSize(10).fillColor('#475569').text(contacts.join("  |  "), { align: 'center' });
     doc.fillColor('#0f172a');
     doc.moveDown(0.5);
