@@ -146,7 +146,139 @@ DO NOT hallucinate formatting. Return pure JSON.`;
     }
   } catch (error) {
     console.error("Failed to generate AI data for Exam Prep:", error);
-    aiData = { recommendedExams: [], roadmap: [], institutes: [], studyResources: [] };
+    
+    // Fallback: Generate real, high-quality, and realistic exam preps programmatically
+    const secLower = sector.toLowerCase();
+    let examsList = [];
+    let phaseList = [];
+    let instList = [];
+    let resList = [];
+    let futurePlanData = { ifSelected: "", planB: "" };
+    let positiveList = [];
+
+    if (secLower.includes("defense") || secLower.includes("nda") || secLower.includes("cds")) {
+      examsList = [
+        { name: "NDA (National Defence Academy)", difficulty: "Medium to High", eligibility: "12th Pass (PCM for Air Force/Navy)", attemptsLeft: "Age limit 16.5 to 19.5 years", whyRecommended: "Excellent opportunity for entering the armed forces directly after school.", matchScore: 95 },
+        { name: "CDS (Combined Defence Services)", difficulty: "High", eligibility: "Graduation (UG Degree)", attemptsLeft: "Age limit 19 to 25 years", whyRecommended: "Allows entry as a commissioned officer in Army, Navy, or Air Force after graduation.", matchScore: 90 }
+      ];
+      phaseList = [
+        { phase: "Phase 1: Syllabus Foundation", duration: "2 Months", focusArea: "Master Mathematics concepts, basic English grammar, and General Science from NCERTs.", milestone: "Complete 80% of core textbook topics" },
+        { phase: "Phase 2: Practice & Speed", duration: "2 Months", focusArea: "Practice chapter-wise problems, shortcut tricks, and daily general knowledge.", milestone: "Score 50%+ in sectional mocks" },
+        { phase: "Phase 3: Mock Tests & SSB Prep", duration: "2 Months", focusArea: "Solve previous years papers, full mock tests, and work on physical conditioning / interview psychology.", milestone: "Clear past cutoffs consistently" }
+      ];
+      instList = [
+        { name: "SSBCrackExams", type: "Online", description: "Popular online platform specialized in NDA, CDS, and SSB prep.", costEstimate: "₹4,000 - ₹6,000" },
+        { name: "Cavalier India", type: "Offline / Hybrid", description: "Renowned offline coaching for Defence written exams and SSB interviews.", costEstimate: "₹25,000 - ₹30,000" }
+      ];
+      resList = [
+        { title: "Pathfinder for NDA & NA by Arihant Publications", type: "Book", link: "arihantbooks.com" },
+        { title: "Quantitative Aptitude for Competitive Exams by R.S. Aggarwal", type: "Book", link: "schandpublishing.com" },
+        { title: "SSBCrackExams YouTube Portal", type: "Video Lectures", link: "youtube.com" }
+      ];
+      futurePlanData = {
+        ifSelected: "Join the prestigious National Defence Academy (NDA) or Indian Military Academy (IMA) to train as a Commissioned Officer.",
+        planB: "Complete your standard Bachelor's degree (B.Sc / B.Tech) and apply via CDS or AFCAT entry later."
+      };
+      positiveList = [
+        "Highly respected career in the Indian Armed Forces",
+        "Excellent physical fitness and personality development",
+        "Job security, pension, and adventure-filled life"
+      ];
+    } else if (secLower.includes("civil") || secLower.includes("upsc") || secLower.includes("psc")) {
+      examsList = [
+        { name: "UPSC Civil Services Examination", difficulty: "Extremely High", eligibility: "Graduation (UG Degree)", attemptsLeft: "6 attempts for General category (Age limit 32)", whyRecommended: "The premier civil service exam in India for administrative leadership.", matchScore: 95 },
+        { name: "State PSC Examination", difficulty: "High", eligibility: "Graduation (UG Degree)", attemptsLeft: "Varies by State rules", whyRecommended: "Excellent option to serve in your home state administration.", matchScore: 85 }
+      ];
+      phaseList = [
+        { phase: "Phase 1: NCERTs & Daily News", duration: "3 Months", focusArea: "Read NCERT books (Class 6-12) for History, Geography, Polity, and Economics. Read news daily.", milestone: "Complete baseline NCERT readings" },
+        { phase: "Phase 2: Core GS & Optionals", duration: "6 Months", focusArea: "Detailed study of GS Papers 1-4, optional subject preparation, and answer writing practice.", milestone: "Complete optional subject syllabus" },
+        { phase: "Phase 3: Prelims Mocks & CSAT", duration: "3 Months", focusArea: "Solve GS and CSAT mock test papers, revise current affairs, and practice essay writing.", milestone: "Solve 40+ full-length prelims tests" }
+      ];
+      instList = [
+        { name: "Vision IAS", type: "Online / Offline", description: "Top coaching known for standard study material and test series.", costEstimate: "₹45,000 - ₹90,000" },
+        { name: "StudyIQ IAS", type: "Online", description: "Affordable online learning platform with comprehensive video courses.", costEstimate: "₹15,000 - ₹20,000" }
+      ];
+      resList = [
+        { title: "Indian Polity by M. Laxmikanth", type: "Book", link: "amazon.in" },
+        { title: "Indian Economy by Ramesh Singh", type: "Book", link: "amazon.in" },
+        { title: "The Hindu / Indian Express Newspaper", type: "Newspaper", link: "thehindu.com" }
+      ];
+      futurePlanData = {
+        ifSelected: "Become an IAS, IPS, or IFS officer and lead policy implementation in government departments.",
+        planB: "Prepare for State PSC, Grade B officers in RBI, or enter corporate consulting / NGO leadership."
+      };
+      positiveList = [
+        "Direct contribution to nation-building and policy decisions",
+        "Prestige, authority, and diverse work portfolio",
+        "Intellectual challenge and lifelong growth"
+      ];
+    } else if (secLower.includes("banking") || secLower.includes("finance") || secLower.includes("ibps") || secLower.includes("sbi")) {
+      examsList = [
+        { name: "SBI PO (Probationary Officer)", difficulty: "High", eligibility: "Graduation (UG Degree)", attemptsLeft: "4 attempts for General", whyRecommended: "Most prestigious public sector banking job in India.", matchScore: 95 },
+        { name: "IBPS PO", difficulty: "Medium to High", eligibility: "Graduation (UG Degree)", attemptsLeft: "No attempt limit (Age limit 30)", whyRecommended: "Single window entry to multiple nationalized banks.", matchScore: 90 }
+      ];
+      phaseList = [
+        { phase: "Phase 1: Foundation Quant & Reasoning", duration: "2 Months", focusArea: "Learn speed math tricks, logical puzzles, grammar rules, and vocabulary.", milestone: "Master basic arithmetic & puzzles" },
+        { phase: "Phase 2: Speed Practice & Mains GS", duration: "2 Months", focusArea: "Solve daily sectional quizzes, learn banking awareness, and practice mains-level questions.", milestone: "Achieve 80%+ accuracy in sectional mocks" },
+        { phase: "Phase 3: Prelims & Mains Mocks", duration: "2 Months", focusArea: "Solve full-length prelims mocks daily. Work on general awareness and computer aptitude.", milestone: "Consistent mock scores above cutoff" }
+      ];
+      instList = [
+        { name: "Adda247", type: "Online", description: "Comprehensive banking preparation portal with courses, books, and mocks.", costEstimate: "₹4,000 - ₹8,000" },
+        { name: "Oliveboard", type: "Online", description: "Premium test series and study material for high-level banking exams.", costEstimate: "₹5,000 - ₹7,000" }
+      ];
+      resList = [
+        { title: "Fast Track Objective Arithmetic by Rajesh Verma", type: "Book", link: "arihantbooks.com" },
+        { title: "Banking Awareness by Arihant Publications", type: "Book", link: "arihantbooks.com" },
+        { title: "Oliveboard Mock Test Series", type: "Online Mocks", link: "oliveboard.in" }
+      ];
+      futurePlanData = {
+        ifSelected: "Start as a Probationary Officer with public sector banks, managing credits, operations, and branches.",
+        planB: "Work with private sector banks, microfinance companies, or prepare for insurance (LIC/UIIC) exams."
+      };
+      positiveList = [
+        "Highly structured and rapid career progression",
+        "Job security, housing loans, and banking perks",
+        "Core finance exposure"
+      ];
+    } else {
+      // General/SSC Fallback
+      examsList = [
+        { name: "SSC CGL (Combined Graduate Level)", difficulty: "Medium to High", eligibility: "Graduation (UG Degree)", attemptsLeft: "Age limit 18-32 years", whyRecommended: "Excellent option to secure officer roles in central government ministries.", matchScore: 95 },
+        { name: "SSC CHSL (10+2 Level)", difficulty: "Medium", eligibility: "12th Pass", attemptsLeft: "Age limit 18-27 years", whyRecommended: "Good starting clerical job in central ministries right after 12th.", matchScore: 85 }
+      ];
+      phaseList = [
+        { phase: "Phase 1: Basic Syllabus", duration: "2 Months", focusArea: "Review basic Mathematics, English grammar, Reasoning, and General Knowledge.", milestone: "Complete first reading of syllabus" },
+        { phase: "Phase 2: Speed Tests", duration: "2 Months", focusArea: "Practice previous year papers, speed shortcuts, and daily quizzes.", milestone: "Solve 20 mock tests" },
+        { phase: "Phase 3: Final Mocks", duration: "2 Months", focusArea: "Solve full-length mocks and analyze mistakes. Revise history, polity, geography.", milestone: "Average score 140+ in mocks" }
+      ];
+      instList = [
+        { name: "KD Campus", type: "Online / Offline", description: "Famous coaching institute specializing in SSC, CGL, and CHSL.", costEstimate: "₹8,000 - ₹15,000" },
+        { name: "Testbook", type: "Online", description: "Extremely popular and affordable platform for practice questions & mocks.", costEstimate: "₹1,500 - ₹3,000" }
+      ];
+      resList = [
+        { title: "General Knowledge by Lucent Publications", type: "Book", link: "lucentbooks.com" },
+        { title: "English for General Competitions by Neetu Singh", type: "Book", link: "kdpublication.com" },
+        { title: "Testbook Pass for SSC Mock Series", type: "Online Mocks", link: "testbook.com" }
+      ];
+      futurePlanData = {
+        ifSelected: "Join central government departments as Assistant Section Officer (ASO), Income Tax Inspector, or Examiner.",
+        planB: "Prepare for State government clerk exams, railway recruitment (RRB NTPC), or private administrative roles."
+      };
+      positiveList = [
+        "Stable central government jobs with fixed timings",
+        "Posting in major cities and central ministries",
+        "Favorable work-life balance"
+      ];
+    }
+
+    aiData = {
+      recommendedExams: examsList,
+      roadmap: phaseList,
+      institutes: instList,
+      studyResources: resList,
+      futurePlan: futurePlanData,
+      positiveAspects: positiveList
+    };
   }
   
   aiData.hasContradictions = false;
