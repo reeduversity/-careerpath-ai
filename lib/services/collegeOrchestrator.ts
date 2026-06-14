@@ -90,8 +90,8 @@ Output a JSON array under "candidates" with fields:
       "name": "string",
       "domain": "string (e.g. ENGINEERING, MEDICAL, MANAGEMENT, GENERAL)",
       "requiredExam": "string (e.g. JEE Main, NEET, None)",
-      "feesINR": number,
-      "feesUSD": number,
+      "feesINR": number (The full total annual fees in Indian Rupees as a complete integer, e.g. 120000 or 150000. DO NOT use decimal shorthands like 1.2 or 1.5),
+      "feesUSD": number (The full total annual fees in USD as a complete integer, e.g. 15000 or 2500. DO NOT use decimal shorthands like 15 or 2.5),
       "country": "string",
       "officialWebsite": "string (The official website URL of the college, e.g. https://www.iitd.ac.in, https://www.ignou.ac.in)"
     }

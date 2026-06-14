@@ -63,7 +63,15 @@ export function enforceCollegeCutoffs(candidates: any[], profile: any): any[] {
 
     // --- GROUND TRUTH VALIDATOR: STOP AI HALLUCINATIONS ---
     // Engineering (JEE/State Exams)
-    const jeeKeywords = ["IIT", "Indian Institute of Technology", "NIT", "National Institute of Technology", "IIIT", "Indian Institute of Information Technology", "DTU", "Delhi Technological", "NSUT", "Netaji Subhas", "BITS", "Birla Institute", "Jadavpur", "VJTI", "COEP", "PEC", "Punjab Engineering College", "Thapar", "RVCE", "BMS", "Anna University"];
+    const jeeKeywords = [
+      "IIT", "Indian Institute of Technology", "NIT", "National Institute of Technology", 
+      "IIIT", "Indian Institute of Information Technology", "DTU", "Delhi Technological", 
+      "NSUT", "Netaji Subhas", "BITS", "Birla Institute", "Jadavpur", "VJTI", "COEP", "PEC", 
+      "Punjab Engineering College", "Thapar", "RVCE", "BMS", "Anna University",
+      "Maharaja Agrasen", "Maharaja Surajmal", "Bharati Vidyapeeth", "GGSIPU", "Indraprastha University", 
+      "IP University", "LNMIIT", "LNM Institute", "DA-IICT", "Dhirubhai Ambani", "Nirma University", 
+      "Jaypee Institute", "JIIT"
+    ];
     // Medical (NEET)
     const neetKeywords = ["AIIMS", "All India Institute", "CMC", "Christian Medical", "JIPMER", "AFMC", "Armed Forces", "MAMC", "Maulana Azad", "KEM", "King Edward", "Lady Hardinge", "Grant Medical", "Madras Medical", "VMMC", "Safdarjung"];
     // Management (CAT/GMAT)
