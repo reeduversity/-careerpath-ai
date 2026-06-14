@@ -96,6 +96,35 @@ Return raw JSON only.`;
 
   const validationResults = validateCandidates(filteredRawCandidates, constraints);
   
+  // Custom Deterministic Scoring (Marks 30%, Budget 25%, Goals 20%, Exam 15%, Location 10%)
+  validationResults.forEach(r => {
+    const c = r.candidate;
+    let score = 0;
+    
+    // Marks (30%) - Since it passed the cutoff filter, we grant full marks score
+    score += 30;
+    
+    // Budget (25%)
+    let fees = isInternational ? (c.feesUSD || 0) : (c.feesINR || 0);
+    let budgetLimit = isInternational ? constraints.budgetLimitUSD : constraints.budgetLimitINR;
+    if (fees <= budgetLimit) score += 25;
+    else if (fees <= budgetLimit * 1.2) score += 10; // Within 20% stretch
+    
+    // Professional goals (20%)
+    if (profile.careerGoal && c.domain.toLowerCase() === profile.careerGoal.goalName.toLowerCase()) score += 20;
+    else if (c.domain === constraints.targetDomains[0]) score += 10;
+    
+    // Entrance exam (15%)
+    if (!c.requiredExam || c.requiredExam === "None" || constraints.allowedExams.includes(c.requiredExam)) score += 15;
+    
+    // Location fit (10%)
+    const targetLocation = isInternational ? profile.internationalProfile?.preferredCountry : profile.domesticProfile?.preferredStudyLocation;
+    if (targetLocation && c.country && targetLocation.trim().toLowerCase() === c.country.trim().toLowerCase()) score += 10;
+    else if (!isInternational && c.country === "India") score += 5; // General country match
+    
+    r.matchScore = score;
+  });
+
   // Filter passed candidates and sort by match score
   let passedCandidates = validationResults.filter(r => r.passed).sort((a, b) => b.matchScore - a.matchScore).slice(0, 3);
   let isFallback = false;
@@ -137,13 +166,15 @@ USER PROFILE:
 - Education Level: ${profile.educationLevel}
 - Current Qualification/Stream: ${profile.currentQualification}
 - Academic Performance: ${profile.twelfthPercentage ? profile.twelfthPercentage + '% in 12th' : (profile.cgpa ? profile.cgpa + ' CGPA' : 'Not specified')}
-- Budget Limit: INR ${profile.budget}
+- Budget Limit: ${profile.budget} (Approx INR ${constraints.budgetLimitINR})
 - Entrance Exams Taken: ${entranceExams}
 
 CRITICAL RULES:
 1. STRICT LOCATION ISOLATION: The Form Context is ${contextType}. If DOMESTIC, you must ONLY recommend Indian colleges. If the user typed an international city (like London, USA) in their Typed Target Location on a DOMESTIC form, IGNORE their typed location. Tell them in 'whyRecommended': "Since you applied through the Domestic form, I am recommending top options in India." NEVER mix domestic and international!
 2. If the user is a Science/Engineering student (PCM/PCB), DO NOT recommend Arts or Humanities paths unless specifically asked. Align 'recommendedStreams' exactly with their past 'Stream/Major' and 'Current Qualification'.
 3. Only use the colleges from the provided list. Do not hallucinate.
+4. RANKING CRITERIA: When determining category (Dream|Target|Safe) and 'whyRecommended', analyze Affordability, Eligibility match, Career alignment, Placement strength, and ROI.
+5. BUDGET INTELLIGENCE: If the student's budget is slightly below stronger opportunities, you MUST explicitly mention in 'whyRecommended': How much extra budget is needed, what better colleges become accessible, and why increasing budget improves chances. (e.g. "Increasing your budget by ₹2–3 lakhs could unlock Tier-1 private colleges with stronger placements and better ROI.")
 
 ${isFallback ? "WARNING: None of the generated colleges perfectly matched the user's strict criteria (e.g. budget, country, exam). These are FALLBACK recommendations. In 'whyRecommended' or 'riskFactors', clearly explain why they are being shown despite failing some constraints (e.g., 'Exceeds budget', 'Different country'). You MUST still generate all other required fields (streams, scholarships, careers)." : "You MUST generate all required fields."}
 

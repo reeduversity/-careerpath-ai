@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { FieldWrapper, Input, RadioGroup, Select } from "@/components/ui/form";
+import { FieldWrapper, Input, RadioGroup, Select, TypeaheadInput } from "@/components/ui/form";
 
 const educationLevels = ["Class 10", "Class 12", "Diploma", "Undergraduate", "Postgraduate"];
 const boards = ["CBSE", "ICSE", "State Board", "IB", "Other"];
@@ -105,6 +105,34 @@ const defaultValues = {
   examScores: {} as Record<string, string>
 };
 
+const getNearestMatch = (input: string, options: string[]) => {
+  const normalizedInput = input.trim().toLowerCase().replace(/\s+/g, ' ');
+  if (!normalizedInput) return "";
+  
+  for (const option of options) {
+    const normalizedOption = option.trim().toLowerCase().replace(/\s+/g, ' ');
+    if (normalizedOption.includes(normalizedInput)) return option;
+  }
+  
+  let bestMatch = "";
+  let highestScore = 0;
+  for (const option of options) {
+    const normalizedOption = option.trim().toLowerCase().replace(/\s+/g, ' ');
+    let matchCount = 0;
+    let i = 0, j = 0;
+    while (i < normalizedInput.length && j < normalizedOption.length) {
+      if (normalizedInput[i] === normalizedOption[j]) { matchCount++; i++; j++; }
+      else { j++; }
+    }
+    const score = matchCount / normalizedInput.length;
+    if (score > highestScore && score >= 0.6) {
+      highestScore = score;
+      bestMatch = option;
+    }
+  }
+  return bestMatch;
+};
+
 export default function DomesticEducation() {
   const [values, setValues] = useState(defaultValues);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -114,6 +142,33 @@ export default function DomesticEducation() {
     setValues((current) => ({ ...current, [field]: value }));
     setErrors((current) => ({ ...current, [field]: "" }));
     setSubmitMessage("");
+    
+    if (field === "preferredStudyLocation" && value) {
+      const normalized = value.trim().toLowerCase().replace(/\s+/g, ' ');
+      const exactMatch = indianStates.find(state => state.trim().toLowerCase().replace(/\s+/g, ' ') === normalized);
+      if (!exactMatch && value.length > 3) {
+        const nearest = getNearestMatch(value, indianStates);
+        if (!nearest) {
+          setErrors((current) => ({ ...current, preferredStudyLocation: "You are currently on the Domestic page; please only search for Indian locations." }));
+        }
+      }
+    }
+  };
+
+  const handleLocationBlur = () => {
+    if (!values.preferredStudyLocation) return;
+    const normalized = values.preferredStudyLocation.trim().toLowerCase().replace(/\s+/g, ' ');
+    const exactMatch = indianStates.find(state => state.trim().toLowerCase().replace(/\s+/g, ' ') === normalized);
+    
+    if (!exactMatch) {
+      const nearest = getNearestMatch(values.preferredStudyLocation, indianStates);
+      if (nearest) {
+        setValues(prev => ({ ...prev, preferredStudyLocation: nearest }));
+        setErrors(prev => ({ ...prev, preferredStudyLocation: "" }));
+      } else {
+        setErrors(prev => ({ ...prev, preferredStudyLocation: "You are currently on the Domestic page; please only search for Indian locations." }));
+      }
+    }
   };
 
   const handleExamScoreChange = (key: string, value: string) => {
@@ -141,7 +196,15 @@ export default function DomesticEducation() {
     if (!values.gender.trim()) nextErrors.gender = "Gender is required.";
     if (!values.state.trim()) nextErrors.state = "State is required.";
     if (!values.city.trim()) nextErrors.city = "City is required.";
-    if (!values.preferredStudyLocation.trim()) nextErrors.preferredStudyLocation = "Preferred study location is required.";
+    if (!values.preferredStudyLocation.trim()) {
+      nextErrors.preferredStudyLocation = "Preferred study location is required.";
+    } else {
+      const normalized = values.preferredStudyLocation.trim().toLowerCase().replace(/\s+/g, ' ');
+      const exactMatch = indianStates.find(state => state.trim().toLowerCase().replace(/\s+/g, ' ') === normalized);
+      if (!exactMatch) {
+        nextErrors.preferredStudyLocation = "You are currently on the Domestic page; please only search for Indian locations.";
+      }
+    }
 
     if (!values.currentEducation) nextErrors.currentEducation = "Current education is required.";
     if (!values.board) nextErrors.board = "Board is required.";
@@ -281,16 +344,15 @@ export default function DomesticEducation() {
                   />
                 </FieldWrapper>
                 <FieldWrapper label="Preferred Study Location" htmlFor="preferredStudyLocation" error={errors.preferredStudyLocation}>
-                  <Select
+                  <TypeaheadInput
                     id="preferredStudyLocation"
                     value={values.preferredStudyLocation}
-                    onChange={(event) => handleChange("preferredStudyLocation", event.target.value)}
-                  >
-                    <option value="">Select Indian State / Region</option>
-                    {indianStates.map((state) => (
-                      <option key={state} value={state}>{state}</option>
-                    ))}
-                  </Select>
+                    onChange={(val) => handleChange("preferredStudyLocation", val)}
+                    onBlur={handleLocationBlur}
+                    options={indianStates}
+                    placeholder="Enter preferred city, region or state"
+                    error={errors.preferredStudyLocation}
+                  />
                 </FieldWrapper>
               </div>
 

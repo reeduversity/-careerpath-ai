@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { FieldWrapper, Input, RadioGroup, Select } from "@/components/ui/form";
+import { FieldWrapper, Input, RadioGroup, Select, TypeaheadInput } from "@/components/ui/form";
 
 const genders = ["Male", "Female", "Other"];
 const qualifications = ["High School", "Diploma", "Undergraduate", "Postgraduate", "Professional Certificate", "Other"];
@@ -50,6 +50,34 @@ const defaultValues = {
   budget: ""
 };
 
+const getNearestMatch = (input: string, options: string[]) => {
+  const normalizedInput = input.trim().toLowerCase().replace(/\s+/g, ' ');
+  if (!normalizedInput) return "";
+  
+  for (const option of options) {
+    const normalizedOption = option.trim().toLowerCase().replace(/\s+/g, ' ');
+    if (normalizedOption.includes(normalizedInput)) return option;
+  }
+  
+  let bestMatch = "";
+  let highestScore = 0;
+  for (const option of options) {
+    const normalizedOption = option.trim().toLowerCase().replace(/\s+/g, ' ');
+    let matchCount = 0;
+    let i = 0, j = 0;
+    while (i < normalizedInput.length && j < normalizedOption.length) {
+      if (normalizedInput[i] === normalizedOption[j]) { matchCount++; i++; j++; }
+      else { j++; }
+    }
+    const score = matchCount / normalizedInput.length;
+    if (score > highestScore && score >= 0.6) {
+      highestScore = score;
+      bestMatch = option;
+    }
+  }
+  return bestMatch;
+};
+
 export default function InternationalEducation() {
   const [values, setValues] = useState(defaultValues);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -59,6 +87,33 @@ export default function InternationalEducation() {
     setValues((current) => ({ ...current, [field]: value }));
     setErrors((current) => ({ ...current, [field]: "" }));
     setSubmitMessage("");
+    
+    if (field === "preferredCountry" && value) {
+      const normalized = value.trim().toLowerCase().replace(/\s+/g, ' ');
+      const exactMatch = internationalCountries.find(country => country.trim().toLowerCase().replace(/\s+/g, ' ') === normalized);
+      if (!exactMatch && value.length > 2) {
+        const nearest = getNearestMatch(value, internationalCountries);
+        if (!nearest) {
+          setErrors((current) => ({ ...current, preferredCountry: "You are currently on the International page; please only search for global locations." }));
+        }
+      }
+    }
+  };
+
+  const handleLocationBlur = () => {
+    if (!values.preferredCountry) return;
+    const normalized = values.preferredCountry.trim().toLowerCase().replace(/\s+/g, ' ');
+    const exactMatch = internationalCountries.find(country => country.trim().toLowerCase().replace(/\s+/g, ' ') === normalized);
+    
+    if (!exactMatch) {
+      const nearest = getNearestMatch(values.preferredCountry, internationalCountries);
+      if (nearest) {
+        setValues(prev => ({ ...prev, preferredCountry: nearest }));
+        setErrors(prev => ({ ...prev, preferredCountry: "" }));
+      } else {
+        setErrors(prev => ({ ...prev, preferredCountry: "You are currently on the International page; please only search for global locations." }));
+      }
+    }
   };
 
   const validate = () => {
@@ -81,7 +136,15 @@ export default function InternationalEducation() {
     if (!values.passingYear.trim()) nextErrors.passingYear = "Passing year is required.";
     else if (!/^[0-9]{4}$/.test(values.passingYear)) nextErrors.passingYear = "Enter a valid year.";
 
-    if (!values.preferredCountry.trim()) nextErrors.preferredCountry = "Preferred country is required.";
+    if (!values.preferredCountry.trim()) {
+      nextErrors.preferredCountry = "Preferred country is required.";
+    } else {
+      const normalized = values.preferredCountry.trim().toLowerCase().replace(/\s+/g, ' ');
+      const exactMatch = internationalCountries.find(country => country.trim().toLowerCase().replace(/\s+/g, ' ') === normalized);
+      if (!exactMatch) {
+        nextErrors.preferredCountry = "You are currently on the International page; please only search for global locations.";
+      }
+    }
     if (!values.preferredCourse.trim()) nextErrors.preferredCourse = "Preferred course is required.";
     if (!values.preferredIntake) nextErrors.preferredIntake = "Preferred intake is required.";
 
@@ -269,16 +332,15 @@ export default function InternationalEducation() {
                 <h3 className="text-xl font-semibold text-white">Section 3: Study Abroad Preferences</h3>
                 <div className="grid gap-6 lg:grid-cols-2">
                   <FieldWrapper label="Preferred Country" htmlFor="preferredCountry" error={errors.preferredCountry}>
-                  <Select
+                  <TypeaheadInput
                     id="preferredCountry"
                     value={values.preferredCountry}
-                    onChange={(event) => handleChange("preferredCountry", event.target.value)}
-                  >
-                    <option value="">Select Country</option>
-                    {internationalCountries.map((country) => (
-                      <option key={country} value={country}>{country}</option>
-                    ))}
-                  </Select>
+                    onChange={(val) => handleChange("preferredCountry", val)}
+                    onBlur={handleLocationBlur}
+                    options={internationalCountries}
+                    placeholder="Enter country preference"
+                    error={errors.preferredCountry}
+                  />
                   </FieldWrapper>
                   <FieldWrapper label="Preferred University (Optional)" htmlFor="preferredUniversity" error={errors.preferredUniversity}>
                     <Input
