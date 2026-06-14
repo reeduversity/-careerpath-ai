@@ -1,12 +1,56 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useRef, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function HigherEducationForm() {
+const indianStates = [
+  "Andaman and Nicobar Islands", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", 
+  "Chandigarh", "Chhattisgarh", "Dadra and Nagar Haveli", "Daman and Diu", "Delhi NCR", 
+  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jammu and Kashmir", "Jharkhand", 
+  "Karnataka", "Kerala", "Ladakh", "Lakshadweep", "Madhya Pradesh", "Maharashtra", 
+  "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Puducherry", "Punjab", 
+  "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", 
+  "Uttarakhand", "West Bengal", "Anywhere in India"
+];
+
+const internationalCountries = [
+  "USA", "UK", "Canada", "Australia", "New Zealand", "Germany", "France", 
+  "Singapore", "Ireland", "Netherlands", "Sweden", "Switzerland", "Italy", "Any"
+];
+
+const getNearestMatch = (input: string, options: string[]) => {
+  const normalizedInput = input.trim().toLowerCase().replace(/\s+/g, ' ');
+  if (!normalizedInput) return "";
+  for (const option of options) {
+    if (option.trim().toLowerCase().replace(/\s+/g, ' ').includes(normalizedInput)) return option;
+  }
+  let bestMatch = "";
+  let highestScore = 0;
+  for (const option of options) {
+    const normalizedOption = option.trim().toLowerCase().replace(/\s+/g, ' ');
+    let matchCount = 0;
+    for (let i = 0, j = 0; i < normalizedInput.length && j < normalizedOption.length;) {
+      if (normalizedInput[i] === normalizedOption[j]) { matchCount++; i++; j++; } else { j++; }
+    }
+    const score = matchCount / normalizedInput.length;
+    if (score > highestScore && score >= 0.6) {
+      highestScore = score;
+      bestMatch = option;
+    }
+  }
+  return bestMatch;
+};
+
+function HigherEducationFormContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const formType = searchParams.get("type") || "domestic"; // default to domestic if not specified
+
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [locationError, setLocationError] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const locationContainerRef = useRef<HTMLDivElement>(null);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -33,7 +77,55 @@ export default function HigherEducationForm() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    
+    if (e.target.name === "preferredStudyLocation") {
+      setLocationError("");
+      const val = e.target.value;
+      const options = formType === "international" ? internationalCountries : indianStates;
+      const normalized = val.trim().toLowerCase().replace(/\s+/g, ' ');
+      const exactMatch = options.find(o => o.trim().toLowerCase().replace(/\s+/g, ' ') === normalized);
+      
+      if (!exactMatch && val.length > 3) {
+        const nearest = getNearestMatch(val, options);
+        if (!nearest) {
+          setLocationError(formType === "international" 
+            ? "You are currently on the International page; please only search for global locations."
+            : "You are currently on the Domestic page; please only search for Indian locations.");
+        }
+      }
+    }
   };
+
+  const handleLocationBlur = () => {
+    // Delay hiding suggestions to allow click
+    setTimeout(() => setShowSuggestions(false), 200);
+    
+    if (!formData.preferredStudyLocation) return;
+    const options = formType === "international" ? internationalCountries : indianStates;
+    const normalized = formData.preferredStudyLocation.trim().toLowerCase().replace(/\s+/g, ' ');
+    const exactMatch = options.find(o => o.trim().toLowerCase().replace(/\s+/g, ' ') === normalized);
+    
+    if (!exactMatch) {
+      const nearest = getNearestMatch(formData.preferredStudyLocation, options);
+      if (nearest) {
+        setFormData(prev => ({ ...prev, preferredStudyLocation: nearest }));
+        setLocationError("");
+      } else {
+        setLocationError(formType === "international" 
+          ? "You are currently on the International page; please only search for global locations."
+          : "You are currently on the Domestic page; please only search for Indian locations.");
+      }
+    }
+  };
+
+  const activeOptions = formType === "international" ? internationalCountries : indianStates;
+  const filteredOptions = activeOptions.filter(opt => {
+    const val = formData.preferredStudyLocation;
+    if (!val) return true;
+    const normalized = val.trim().toLowerCase().replace(/\s+/g, ' ');
+    const normOpt = opt.trim().toLowerCase().replace(/\s+/g, ' ');
+    return normOpt.includes(normalized);
+  });
 
   const handleEducationLevelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData({ 
@@ -45,6 +137,10 @@ export default function HigherEducationForm() {
   };
 
   const handleSubmit = async () => {
+    if (locationError) {
+      alert("Please fix the location error before submitting.");
+      return;
+    }
     setLoading(true);
     try {
       let examsCombined = "";
@@ -272,20 +368,46 @@ export default function HigherEducationForm() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Global Target Location</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                    <span className="text-slate-400 text-lg">🌍</span>
+                <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">
+                  {formType === "international" ? "Global Target Location" : "Domestic Target Location"}
+                </label>
+                <div className="relative" ref={locationContainerRef}>
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none z-10">
+                    <span className="text-slate-400 text-lg">{formType === "international" ? "🌍" : "🇮🇳"}</span>
                   </div>
                   <input 
                     type="text" 
-                    className="w-full pl-11 bg-slate-800/50 border border-slate-600 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded-xl p-3.5 outline-none transition-all placeholder-slate-500" 
+                    className={`w-full pl-11 bg-slate-800/50 border ${locationError ? 'border-rose-500 focus:ring-rose-500' : 'border-slate-600 focus:border-sky-500 focus:ring-sky-500'} focus:ring-1 rounded-xl p-3.5 outline-none transition-all placeholder-slate-500`}
                     name="preferredStudyLocation" 
-                    placeholder="Type any city, state, or country (e.g. London, UK)" 
-                    onChange={handleChange} 
-                    value={formData.preferredStudyLocation} 
+                    placeholder={formType === "international" ? "Type any country (e.g. USA, UK)" : "Type any Indian state (e.g. Delhi NCR)"}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setShowSuggestions(true);
+                    }}
+                    onFocus={() => setShowSuggestions(true)}
+                    onBlur={handleLocationBlur}
+                    value={formData.preferredStudyLocation}
+                    autoComplete="off"
                   />
+                  {showSuggestions && filteredOptions.length > 0 && (
+                    <ul className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-xl border border-slate-700 bg-slate-800 shadow-xl p-1">
+                      {filteredOptions.map((option) => (
+                        <li
+                          key={option}
+                          className="cursor-pointer rounded-lg px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 hover:text-white"
+                          onClick={() => {
+                            setFormData(prev => ({ ...prev, preferredStudyLocation: option }));
+                            setLocationError("");
+                            setShowSuggestions(false);
+                          }}
+                        >
+                          {option}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
+                {locationError && <p className="text-xs text-rose-400 mt-2 ml-1">{locationError}</p>}
               </div>
             </div>
 
@@ -310,5 +432,13 @@ export default function HigherEducationForm() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function HigherEducationForm() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-950 flex items-center justify-center"><p className="text-white text-xl">Loading...</p></div>}>
+      <HigherEducationFormContent />
+    </Suspense>
   );
 }

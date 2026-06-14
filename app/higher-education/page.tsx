@@ -13,7 +13,7 @@ export default function HigherEducation() {
         "Scholarship Guidance",
         "Entrance Exam Prep"
       ],
-      href: "/higher-education/form"
+      href: "/higher-education/form?type=domestic"
     },
     {
       id: "international",
@@ -26,7 +26,7 @@ export default function HigherEducation() {
         "Scholarship Opportunities",
         "Career Pathways"
       ],
-      href: "/higher-education/form"
+      href: "/higher-education/form?type=international"
     },
     {
       id: "exam-prep",
