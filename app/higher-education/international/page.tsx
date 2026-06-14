@@ -20,6 +20,11 @@ const budgets = [
   { value: "above-60-lakhs", label: "Above ₹60 Lakhs" }
 ];
 
+const internationalCountries = [
+  "USA", "UK", "Canada", "Australia", "New Zealand", "Germany", "France", 
+  "Singapore", "Ireland", "Netherlands", "Sweden", "Switzerland", "Italy", "Any"
+];
+
 const defaultValues = {
   fullName: "",
   age: "",
@@ -264,12 +269,16 @@ export default function InternationalEducation() {
                 <h3 className="text-xl font-semibold text-white">Section 3: Study Abroad Preferences</h3>
                 <div className="grid gap-6 lg:grid-cols-2">
                   <FieldWrapper label="Preferred Country" htmlFor="preferredCountry" error={errors.preferredCountry}>
-                    <Input
-                      id="preferredCountry"
-                      value={values.preferredCountry}
-                      onChange={(event) => handleChange("preferredCountry", event.target.value)}
-                      placeholder="Enter country preference"
-                    />
+                  <Select
+                    id="preferredCountry"
+                    value={values.preferredCountry}
+                    onChange={(event) => handleChange("preferredCountry", event.target.value)}
+                  >
+                    <option value="">Select Country</option>
+                    {internationalCountries.map((country) => (
+                      <option key={country} value={country}>{country}</option>
+                    ))}
+                  </Select>
                   </FieldWrapper>
                   <FieldWrapper label="Preferred University (Optional)" htmlFor="preferredUniversity" error={errors.preferredUniversity}>
                     <Input

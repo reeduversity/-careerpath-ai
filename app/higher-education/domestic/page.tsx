@@ -42,6 +42,16 @@ const budgets = [
   { value: "above-20-lakhs", label: "Above 20 Lakhs" }
 ];
 
+const indianStates = [
+  "Andaman and Nicobar Islands", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", 
+  "Chandigarh", "Chhattisgarh", "Dadra and Nagar Haveli", "Daman and Diu", "Delhi NCR", 
+  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jammu and Kashmir", "Jharkhand", 
+  "Karnataka", "Kerala", "Ladakh", "Lakshadweep", "Madhya Pradesh", "Maharashtra", 
+  "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Puducherry", "Punjab", 
+  "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", 
+  "Uttarakhand", "West Bengal", "Anywhere in India"
+];
+
 const examFieldMap: Record<string, Array<{ key: string; label: string; placeholder: string }>> = {
   Engineering: [
     { key: "jeeMainRank", label: "JEE Main Rank", placeholder: "Enter JEE Main rank" },
@@ -271,12 +281,16 @@ export default function DomesticEducation() {
                   />
                 </FieldWrapper>
                 <FieldWrapper label="Preferred Study Location" htmlFor="preferredStudyLocation" error={errors.preferredStudyLocation}>
-                  <Input
+                  <Select
                     id="preferredStudyLocation"
                     value={values.preferredStudyLocation}
                     onChange={(event) => handleChange("preferredStudyLocation", event.target.value)}
-                    placeholder="Enter preferred city, region or state"
-                  />
+                  >
+                    <option value="">Select Indian State / Region</option>
+                    {indianStates.map((state) => (
+                      <option key={state} value={state}>{state}</option>
+                    ))}
+                  </Select>
                 </FieldWrapper>
               </div>
 
