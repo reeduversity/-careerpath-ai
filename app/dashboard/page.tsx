@@ -32,6 +32,8 @@ function DashboardContent() {
     }
 
     async function loadData() {
+      setLoading(true);
+      setError("");
       try {
         const result = await orchestrateCareer(
           resumeProfileId as string, 
@@ -51,6 +53,15 @@ function DashboardContent() {
 
     loadData();
   }, [resumeProfileId, careerRoleId, jobInterest, examName, profileType, jobSeekerProfileId]);
+
+  const handleRetry = () => {
+    setData(null);
+    setLoading(true);
+    // Force re-trigger of useEffect loadData by toggling a state if we wanted, 
+    // but we can just call the async function directly here since we have it defined outside or can just reload the page as last resort, 
+    // OR we can just use router.refresh(). Wait, window.location.reload() is easier.
+    window.location.reload();
+  };
 
   if (loading) {
     return <DashboardSkeleton />;
@@ -95,7 +106,17 @@ function DashboardContent() {
             atsScore={data.atsScore}
             resumeFeedback={data.resumeFeedback}
           />
-          {omni.gamification && (
+          {data.resumeFeedback === "We could not generate detailed feedback at this time. Please try again later." && (
+            <div className="bg-rose-500/10 border border-rose-500/30 rounded-2xl p-6 text-center shadow-lg relative z-20 mb-8 mx-auto max-w-2xl">
+              <span className="text-4xl block mb-3">🐌</span>
+              <h3 className="text-lg font-bold text-rose-400 mb-2">AI Server is extremely busy!</h3>
+              <p className="text-sm text-slate-300 mb-4">Because millions of users are using the Groq AI servers right now, your request timed out. We showed you an empty template to prevent a crash.</p>
+              <button onClick={handleRetry} className="bg-rose-600 hover:bg-rose-500 text-white px-6 py-2 rounded-full font-bold transition-all shadow-lg shadow-rose-500/20 active:scale-95">
+                Retry Generation
+              </button>
+            </div>
+          )}
+          {omni.gamification && data.resumeFeedback !== "We could not generate detailed feedback at this time. Please try again later." && (
             <div className="flex justify-center -mt-12 relative z-20 mb-8">
               <div className="bg-slate-800 border border-slate-700 rounded-full px-6 py-3 shadow-xl shadow-slate-950/50 flex items-center gap-6">
                 <div className="text-amber-400 font-bold flex items-center gap-2">
