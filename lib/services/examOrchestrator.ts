@@ -74,8 +74,10 @@ export async function orchestrateExamPrep(
   // Filter by Stage
   if (stage.includes("10th") || stage.includes("12th")) {
     validExams = validExams.filter((e: any) => e.minQualification === "12th" || e.minQualification === "10th" || e.minQualification === "ANY" || e.minQualification === "UG");
-  } else if (stage.includes("Graduate") || stage.includes("Diploma") || stage.includes("PG") || stage.includes("UG") || stage.includes("Technical")) {
-    validExams = validExams.filter((e: any) => e.minQualification === "UG" || e.minQualification === "ANY");
+  } else if (stage.includes("PG") || stage.includes("Post")) {
+    validExams = validExams.filter((e: any) => ["PG", "UG", "12th", "10th", "ANY"].includes(e.minQualification));
+  } else if (stage.includes("Graduate") || stage.includes("Diploma") || stage.includes("UG") || stage.includes("Technical")) {
+    validExams = validExams.filter((e: any) => ["UG", "12th", "10th", "ANY"].includes(e.minQualification));
   }
 
   // PHASE 4: TARGET EXAM EXACT MATCH

@@ -304,7 +304,7 @@ function HigherEducationFormContent() {
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Passing Year</label>
-                  <input className="w-full bg-slate-800/50 border border-slate-600 focus:border-sky-500 rounded-xl p-3.5 outline-none" name="passingYear" type="number" placeholder="2024" onChange={handleChange} value={formData.passingYear} />
+                  <input className="w-full bg-slate-800/50 border border-slate-600 focus:border-sky-500 rounded-xl p-3.5 outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" name="passingYear" type="number" placeholder="2024" onChange={handleChange} value={formData.passingYear} />
                 </div>
               </div>
             </div>
