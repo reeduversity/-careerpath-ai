@@ -201,13 +201,13 @@ export function analyzeResumeTextFallback(text: string) {
   // Heuristic Extraction for specific fields
   const fullTextLower = text.toLowerCase();
   
-  const tenthMatch = fullTextLower.match(/(?:10th|ssc|secondary|matriculation|class 10).*?(?:cgpa|%|percentage|score).*?([\d.]+)/i) || 
-                     fullTextLower.match(/([\d.]+)(?:\s*%|\s*cgpa).*?(?:10th|ssc|secondary|matriculation|class 10)/i);
-  if (tenthMatch && parseFloat(tenthMatch[1]) <= 100) result.tenthPercentage = tenthMatch[1];
+  const tenthMatch = fullTextLower.match(/(?:10th|ssc|secondary|matriculation|class 10)[\s\S]{0,40}?(?:cgpa|%|percentage|score|marks|board|:|-)?[\s]*([\d]{2}(?:\.\d{1,2})?)/i) || 
+                     fullTextLower.match(/([\d]{2}(?:\.\d{1,2})?)(?:\s*%|\s*cgpa)[\s\S]{0,40}?(?:10th|ssc|secondary|matriculation|class 10)/i);
+  if (tenthMatch && parseFloat(tenthMatch[1]) <= 100 && parseFloat(tenthMatch[1]) >= 35) result.tenthPercentage = tenthMatch[1];
 
-  const twelfthMatch = fullTextLower.match(/(?:12th|hsc|higher secondary|intermediate|class 12).*?(?:cgpa|%|percentage|score).*?([\d.]+)/i) || 
-                       fullTextLower.match(/([\d.]+)(?:\s*%|\s*cgpa).*?(?:12th|hsc|higher secondary|intermediate|class 12)/i);
-  if (twelfthMatch && parseFloat(twelfthMatch[1]) <= 100) result.twelfthPercentage = twelfthMatch[1];
+  const twelfthMatch = fullTextLower.match(/(?:12th|hsc|higher secondary|intermediate|class 12)[\s\S]{0,40}?(?:cgpa|%|percentage|score|marks|board|:|-)?[\s]*([\d]{2}(?:\.\d{1,2})?)/i) || 
+                       fullTextLower.match(/([\d]{2}(?:\.\d{1,2})?)(?:\s*%|\s*cgpa)[\s\S]{0,40}?(?:12th|hsc|higher secondary|intermediate|class 12)/i);
+  if (twelfthMatch && parseFloat(twelfthMatch[1]) <= 100 && parseFloat(twelfthMatch[1]) >= 35) result.twelfthPercentage = twelfthMatch[1];
 
   const degreeMatch = fullTextLower.match(/\b(b\.?tech|b\.?e|b\.?c\.?a|b\.?s\.?c|m\.?tech|m\.?c\.?a|m\.?s\.?c|b\.?a|m\.?a|m\.?b\.?a|b\.?b\.?a)\b/i);
   if (degreeMatch) result.degree = degreeMatch[1].replace(/\./g, '').toUpperCase();
@@ -319,19 +319,19 @@ Return ONLY valid JSON matching the schema.`;
       email: aiResult.email || fallback.email,
       phone: aiResult.phone || fallback.phone,
       location: aiResult.location || fallback.location,
-      currentCity: aiResult.currentCity || null,
-      currentState: aiResult.currentState || null,
-      degree: aiResult.degree || null,
-      institute: aiResult.institute || null,
-      cgpa: aiResult.cgpa || null,
-      passingYear: aiResult.passingYear || null,
-      tenthPercentage: aiResult.tenthPercentage || null,
-      twelfthPercentage: aiResult.twelfthPercentage || null,
-      experienceLevel: aiResult.experienceLevel || null,
-      profileType: aiResult.profileType || null,
-      careerGoal: aiResult.careerGoal || null,
-      targetJobRole: aiResult.targetJobRole || null,
-      industry: aiResult.industry || null,
+      currentCity: aiResult.currentCity || fallback.currentCity || null,
+      currentState: aiResult.currentState || fallback.currentState || null,
+      degree: aiResult.degree || fallback.degree || null,
+      institute: aiResult.institute || fallback.institute || null,
+      cgpa: aiResult.cgpa || fallback.cgpa || null,
+      passingYear: aiResult.passingYear || fallback.passingYear || null,
+      tenthPercentage: aiResult.tenthPercentage || fallback.tenthPercentage || null,
+      twelfthPercentage: aiResult.twelfthPercentage || fallback.twelfthPercentage || null,
+      experienceLevel: aiResult.experienceLevel || fallback.experienceLevel || null,
+      profileType: aiResult.profileType || fallback.profileType || null,
+      careerGoal: aiResult.careerGoal || fallback.careerGoal || null,
+      targetJobRole: aiResult.targetJobRole || fallback.targetJobRole || null,
+      industry: aiResult.industry || fallback.industry || null,
       linkedin: aiResult.linkedin || fallback.linkedin,
       github: aiResult.github || fallback.github,
       portfolio: aiResult.portfolio || fallback.portfolio,
