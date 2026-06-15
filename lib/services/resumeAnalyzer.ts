@@ -212,6 +212,18 @@ export function analyzeResumeTextFallback(text: string) {
   const degreeMatch = fullTextLower.match(/\b(b\.?tech|b\.?e|b\.?c\.?a|b\.?s\.?c|m\.?tech|m\.?c\.?a|m\.?s\.?c|b\.?a|m\.?a|m\.?b\.?a|b\.?b\.?a)\b/i);
   if (degreeMatch) result.degree = degreeMatch[1].replace(/\./g, '').toUpperCase();
 
+  const cgpaMatch = fullTextLower.match(/(?:b\.?tech|b\.?e|b\.?c\.?a|b\.?s\.?c|m\.?tech|m\.?c\.?a|m\.?s\.?c|b\.?a|m\.?a|m\.?b\.?a|b\.?b\.?a|graduation|degree)[\s\S]{0,60}?(?:cgpa|%|percentage|score|marks|:|-)?[\s]*([\d]{1,2}(?:\.\d{1,2})?)/i);
+  if (cgpaMatch && parseFloat(cgpaMatch[1]) <= 100) result.cgpa = cgpaMatch[1];
+
+  const instMatch = text.match(/([a-zA-Z\s,\.]+?(?:University|Institute|College|Tech|School))/i);
+  if (instMatch && instMatch[1].length < 60) result.institute = instMatch[1].trim();
+
+  const passingYearMatch = text.match(/\b(20[0-3]\d)\b/g);
+  if (passingYearMatch) {
+     const validYears = passingYearMatch.map(Number).filter(y => y > 2000 && y <= new Date().getFullYear() + 6);
+     if (validYears.length > 0) result.passingYear = Math.max(...validYears).toString();
+  }
+
   const expWordCount = result.experience.join(' ').split(/\s+/).length;
   if (result.experience.length === 0) {
     result.experienceLevel = "Fresher";
