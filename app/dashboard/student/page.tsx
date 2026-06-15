@@ -70,9 +70,11 @@ function StudentDashboardContent() {
         <div className="text-6xl mb-4">⚠️</div>
         <h1 className="text-3xl font-bold text-white">Profile Contradiction Detected</h1>
         <div className="max-w-md text-slate-300 space-y-2">
-          {(data.contradictions || []).map((c: string, idx: number) => (
-            <p key={idx}>{c}</p>
-          ))}
+          {(data.contradictions || []).map((c: any, idx: number) => {
+            const cStr = typeof c === 'string' ? c : (c.contradiction || c.reason || c.name || JSON.stringify(c));
+            return (
+            <p key={idx}>{cStr}</p>
+          )})}
         </div>
         <Link href="/higher-education/form" className="mt-8 px-6 py-3 rounded-lg bg-slate-800 text-white hover:bg-slate-700 transition-colors">
           Return to Input Form
@@ -129,12 +131,14 @@ function StudentDashboardContent() {
                   <span>🎯</span> Future Careers
                 </h3>
                 <ul className="space-y-3">
-                  {data.careerPathways.map((career: string, idx: number) => (
+                  {data.careerPathways.map((career: any, idx: number) => {
+                    const careerName = typeof career === 'string' ? career : (career.career || career.name || JSON.stringify(career));
+                    return (
                     <li key={idx} className="flex items-start gap-3 text-sm text-slate-300">
                       <span className="mt-0.5 text-emerald-500">→</span>
-                      <span>{career}</span>
+                      <span>{careerName}</span>
                     </li>
-                  ))}
+                  )})}
                 </ul>
               </div>
             )}

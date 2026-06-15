@@ -100,11 +100,11 @@ function DashboardContent() {
         {/* Master AI Header with Gamification */}
         <div>
           <CareerHeader 
-            role={data.careerRole} 
-            salary={data.salaryRange} 
+            role={typeof data.careerRole === 'object' ? JSON.stringify(data.careerRole) : data.careerRole} 
+            salary={typeof data.salaryRange === 'object' ? JSON.stringify(data.salaryRange) : data.salaryRange} 
             resumeProfileId={resumeProfileId as string} 
-            atsScore={data.atsScore}
-            resumeFeedback={data.resumeFeedback}
+            atsScore={typeof data.atsScore === 'object' ? 0 : Number(data.atsScore) || 0}
+            resumeFeedback={typeof data.resumeFeedback === 'object' ? JSON.stringify(data.resumeFeedback) : data.resumeFeedback}
           />
           {data.resumeFeedback === "We could not generate detailed feedback at this time. Please try again later." && (
             <div className="bg-rose-500/10 border border-rose-500/30 rounded-2xl p-6 text-center shadow-lg relative z-20 mb-8 mx-auto max-w-2xl">
@@ -120,15 +120,17 @@ function DashboardContent() {
             <div className="flex justify-center -mt-12 relative z-20 mb-8">
               <div className="bg-slate-800 border border-slate-700 rounded-full px-6 py-3 shadow-xl shadow-slate-950/50 flex items-center gap-6">
                 <div className="text-amber-400 font-bold flex items-center gap-2">
-                  <span className="text-2xl">⚡</span> {omni.gamification.xp || 500} XP
+                  <span className="text-2xl">⚡</span> {typeof omni.gamification.xp === 'object' ? 500 : (Number(omni.gamification.xp) || 500)} XP
                 </div>
                 <div className="h-6 w-px bg-slate-600"></div>
                 <div className="flex gap-2">
-                  {safeArray(omni.gamification.badges || ["Beginner"]).map((badge: string, idx: number) => (
+                  {safeArray(omni.gamification.badges || ["Beginner"]).map((badge: any, idx: number) => {
+                    const badgeName = typeof badge === 'string' ? badge : (badge.badge || badge.name || JSON.stringify(badge));
+                    return (
                     <span key={idx} className="bg-sky-500/20 text-sky-300 text-xs px-3 py-1 rounded-full border border-sky-500/30">
-                      🏅 {badge}
+                      🏅 {badgeName}
                     </span>
-                  ))}
+                  )})}
                 </div>
               </div>
             </div>
@@ -141,10 +143,10 @@ function DashboardContent() {
             <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 blur-3xl rounded-full"></div>
             <h3 className="text-2xl font-bold text-white mb-6 relative z-10">Job Readiness Score</h3>
             <div className="flex items-center gap-6 relative z-10">
-              <div className="text-7xl font-black text-indigo-400 drop-shadow-md">{omni.readinessScore?.score || 40}%</div>
+              <div className="text-7xl font-black text-indigo-400 drop-shadow-md">{typeof omni.readinessScore?.score === 'object' ? JSON.stringify(omni.readinessScore?.score) : (omni.readinessScore?.score || 40)}%</div>
               <div>
                 <p className="text-slate-300 text-sm mb-2"><strong>Weak Areas:</strong> {safeArray(omni.readinessScore?.weakAreas).join(", ") || "None"}</p>
-                <p className="text-indigo-200 text-sm bg-indigo-950/50 p-3 rounded-lg border border-indigo-500/20">{omni.readinessScore?.improvementPlan}</p>
+                <p className="text-indigo-200 text-sm bg-indigo-950/50 p-3 rounded-lg border border-indigo-500/20">{typeof omni.readinessScore?.improvementPlan === 'object' ? JSON.stringify(omni.readinessScore?.improvementPlan) : omni.readinessScore?.improvementPlan}</p>
               </div>
             </div>
           </div>
@@ -152,7 +154,7 @@ function DashboardContent() {
             <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/20 blur-3xl rounded-full"></div>
             <h3 className="text-2xl font-bold text-white mb-6 relative z-10">Market Intelligence (2026+)</h3>
             <div className="space-y-4 relative z-10">
-              <p className="text-slate-300 text-sm bg-slate-950/50 p-4 rounded-xl border border-slate-700">{omni.marketIntelligence?.futureDemand}</p>
+              <p className="text-slate-300 text-sm bg-slate-950/50 p-4 rounded-xl border border-slate-700">{typeof omni.marketIntelligence?.futureDemand === 'object' ? JSON.stringify(omni.marketIntelligence?.futureDemand) : omni.marketIntelligence?.futureDemand}</p>
               <div>
                 <span className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-2 block">Trending Skills</span>
                 <div className="flex flex-wrap gap-2">
@@ -195,7 +197,7 @@ function DashboardContent() {
                 </div>
                 <div className="bg-slate-950 rounded-xl p-5 border border-slate-800">
                   <h4 className="text-sm uppercase tracking-widest text-slate-500 font-bold mb-1">Expected Salary</h4>
-                  <p className="text-xl text-emerald-400 font-bold">{omni.privateJobPath?.salaryEstimate || data.salaryRange}</p>
+                  <p className="text-xl text-emerald-400 font-bold">{typeof (omni.privateJobPath?.salaryEstimate || data.salaryRange) === 'object' ? JSON.stringify(omni.privateJobPath?.salaryEstimate || data.salaryRange) : (omni.privateJobPath?.salaryEstimate || data.salaryRange)}</p>
                 </div>
                 <div>
                   <h4 className="text-sm uppercase tracking-widest text-slate-500 font-bold mb-3">Top Hiring Companies</h4>
@@ -225,14 +227,16 @@ function DashboardContent() {
                     {series?.title || (typeof series === 'string' ? series : `Series ${i+1}`)} <span className="text-rose-500 text-sm">Series {i+1}</span>
                   </h3>
                   <div className="space-y-3 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar-y">
-                    {safeArray(series?.episodes || (typeof series === 'string' ? [series] : [])).map((ep: string, j: number) => (
-                      <a key={j} href={`https://www.youtube.com/results?search_query=${encodeURIComponent(ep + ' tutorial')}`} target="_blank" rel="noopener noreferrer" className="flex gap-4 items-start group cursor-pointer hover:bg-slate-800/50 p-2 rounded-lg transition-colors -ml-2">
+                    {safeArray(series?.episodes || (typeof series === 'string' ? [series] : [])).map((ep: any, j: number) => {
+                      const epName = typeof ep === 'string' ? ep : (ep.title || ep.name || ep.episode || JSON.stringify(ep));
+                      return (
+                      <a key={j} href={`https://www.youtube.com/results?search_query=${encodeURIComponent(epName + ' tutorial')}`} target="_blank" rel="noopener noreferrer" className="flex gap-4 items-start group cursor-pointer hover:bg-slate-800/50 p-2 rounded-lg transition-colors -ml-2">
                         <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-400 group-hover:bg-rose-500 group-hover:text-white transition-colors shrink-0">
                           {j+1}
                         </div>
-                        <p className="text-sm text-slate-300 mt-1 leading-relaxed group-hover:text-white group-hover:underline transition-colors">{ep}</p>
+                        <p className="text-sm text-slate-300 mt-1 leading-relaxed group-hover:text-white group-hover:underline transition-colors">{epName}</p>
                       </a>
-                    ))}
+                    )})}
                   </div>
                 </div>
               ))}
