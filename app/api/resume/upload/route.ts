@@ -61,8 +61,7 @@ export async function POST(req: Request) {
         extractedText = data.text || "";
         
         if (extractedText.trim().length < 50) {
-          console.log("[OCR] PDF text extraction empty. Using mock OCR fallback...");
-          extractedText = "Simulated OCR Extracted Text: Software Engineer with React and Node.js experience.";
+          throw new Error("We couldn't read the text from your resume. Please ensure it is a standard text-based PDF or DOCX (not a scanned image) and try again.");
         }
       } else if (extension === ".docx") {
         const result = await mammoth.extractRawText({ path: filePath });
