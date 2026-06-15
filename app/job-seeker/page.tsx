@@ -197,9 +197,9 @@ export default function JobSeeker() {
         }));
 
         const newSkills = new Set(skills);
-        if (Array.isArray(analysis.skills)) analysis.skills.forEach((s: string) => newSkills.add(s));
-        if (Array.isArray(analysis.technicalSkills)) analysis.technicalSkills.forEach((s: string) => newSkills.add(s));
-        if (Array.isArray(analysis.softSkills)) analysis.softSkills.forEach((s: string) => newSkills.add(s));
+        if (Array.isArray(analysis.skills)) analysis.skills.forEach((s: any) => newSkills.add(typeof s === 'string' ? s : (s.skill || s.name || JSON.stringify(s))));
+        if (Array.isArray(analysis.technicalSkills)) analysis.technicalSkills.forEach((s: any) => newSkills.add(typeof s === 'string' ? s : (s.skill || s.name || JSON.stringify(s))));
+        if (Array.isArray(analysis.softSkills)) analysis.softSkills.forEach((s: any) => newSkills.add(typeof s === 'string' ? s : (s.skill || s.name || JSON.stringify(s))));
         setSkills(Array.from(newSkills));
 
         const extractedCount = Object.values(analysis).filter(v => v !== null && v !== "").length;
