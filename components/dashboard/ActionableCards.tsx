@@ -58,14 +58,16 @@ const ActionableCards = React.memo(function ActionableCards({
           </div>
         ) : (
           <ul className="space-y-4 relative z-10">
-            {projects.map((proj, idx) => (
-              <a key={idx} href={`https://github.com/search?q=${encodeURIComponent(proj)}&type=repositories`} target="_blank" rel="noopener noreferrer" className="bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-sky-500/30 rounded-xl p-4 text-sm text-slate-200 transition-all shadow-inner cursor-pointer block">
+            {projects.map((proj: any, idx) => {
+              const projName = typeof proj === 'string' ? proj : (proj.name || proj.title || JSON.stringify(proj));
+              return (
+              <a key={idx} href={`https://github.com/search?q=${encodeURIComponent(projName)}&type=repositories`} target="_blank" rel="noopener noreferrer" className="bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-sky-500/30 rounded-xl p-4 text-sm text-slate-200 transition-all shadow-inner cursor-pointer block">
                 <div className="flex items-start gap-3">
                   <span className="text-sky-500 mt-0.5">🚀</span>
-                  <span className="font-medium tracking-wide leading-relaxed hover:text-sky-400 hover:underline">{proj}</span>
+                  <span className="font-medium tracking-wide leading-relaxed hover:text-sky-400 hover:underline">{projName}</span>
                 </div>
               </a>
-            ))}
+            )})}
           </ul>
         )}
       </div>
@@ -84,14 +86,16 @@ const ActionableCards = React.memo(function ActionableCards({
           </div>
         ) : (
           <ul className="space-y-4 relative z-10">
-            {jobRoles.map((role, idx) => (
-              <a key={idx} href={`https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(role)}`} target="_blank" rel="noopener noreferrer" className="bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-emerald-500/30 rounded-xl p-4 text-sm text-slate-200 transition-all shadow-inner group/item cursor-pointer block">
+            {jobRoles.map((role: any, idx) => {
+              const roleName = typeof role === 'string' ? role : (role.role || role.title || role.name || JSON.stringify(role));
+              return (
+              <a key={idx} href={`https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(roleName)}`} target="_blank" rel="noopener noreferrer" className="bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-emerald-500/30 rounded-xl p-4 text-sm text-slate-200 transition-all shadow-inner group/item cursor-pointer block">
                 <div className="flex items-center gap-3">
                   <span className="text-emerald-500 font-bold group-hover/item:translate-x-1 transition-transform">→</span>
-                  <span className="font-semibold tracking-wide hover:text-emerald-400 hover:underline">{role}</span>
+                  <span className="font-semibold tracking-wide hover:text-emerald-400 hover:underline">{roleName}</span>
                 </div>
               </a>
-            ))}
+            )})}
           </ul>
         )}
       </div>

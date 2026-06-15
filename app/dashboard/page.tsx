@@ -135,9 +135,11 @@ function DashboardContent() {
               <div>
                 <span className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-2 block">Trending Skills</span>
                 <div className="flex flex-wrap gap-2">
-                  {safeArray(omni.marketIntelligence?.trendingSkills).map((s: string, i: number) => (
-                    <span key={i} className="bg-emerald-500/20 text-emerald-300 text-xs px-3 py-1 rounded-full border border-emerald-500/30">🔥 {s}</span>
-                  ))}
+                  {safeArray(omni.marketIntelligence?.trendingSkills).map((s: any, i: number) => {
+                    const skillName = typeof s === 'string' ? s : (s.skill || s.name || JSON.stringify(s));
+                    return (
+                    <span key={i} className="bg-emerald-500/20 text-emerald-300 text-xs px-3 py-1 rounded-full border border-emerald-500/30">🔥 {skillName}</span>
+                  )})}
                 </div>
               </div>
             </div>
@@ -161,11 +163,13 @@ function DashboardContent() {
                 <div>
                   <h4 className="text-sm uppercase tracking-widest text-slate-500 font-bold mb-3">Top Matching Roles</h4>
                   <ul className="space-y-2">
-                    {safeArray(omni.privateJobPath?.roles || data.jobRoles).map((r: string, i: number) => (
+                    {safeArray(omni.privateJobPath?.roles || data.jobRoles).map((r: any, i: number) => {
+                      const roleName = typeof r === 'string' ? r : (r.role || r.title || r.name || JSON.stringify(r));
+                      return (
                       <li key={i} className="bg-slate-800/50 px-4 py-3 rounded-lg text-slate-200 font-medium border border-slate-700/50 flex items-center gap-3">
-                        <span className="text-sky-500">→</span> {r}
+                        <span className="text-sky-500">→</span> {roleName}
                       </li>
-                    ))}
+                    )})}
                   </ul>
                 </div>
                 <div className="bg-slate-950 rounded-xl p-5 border border-slate-800">
@@ -175,9 +179,11 @@ function DashboardContent() {
                 <div>
                   <h4 className="text-sm uppercase tracking-widest text-slate-500 font-bold mb-3">Top Hiring Companies</h4>
                   <div className="flex flex-wrap gap-2">
-                    {safeArray(omni.privateJobPath?.topCompanies).map((c: string, i: number) => (
-                      <span key={i} className="bg-slate-800 text-slate-300 text-sm px-4 py-2 rounded-lg border border-slate-700">{c}</span>
-                    ))}
+                    {safeArray(omni.privateJobPath?.topCompanies).map((c: any, i: number) => {
+                      const compName = typeof c === 'string' ? c : (c.company || c.name || JSON.stringify(c));
+                      return (
+                      <span key={i} className="bg-slate-800 text-slate-300 text-sm px-4 py-2 rounded-lg border border-slate-700">{compName}</span>
+                    )})}
                   </div>
                 </div>
               </div>
