@@ -19,11 +19,13 @@ const SkillGapCard = React.memo(function SkillGapCard({ existing, missing }: { e
                 <p className="text-slate-500 text-sm mt-1">Upload a more detailed resume to let our AI discover your existing skills.</p>
               </div>
             )}
-            {existing.map(skill => (
-              <span key={skill} className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-3 py-1 rounded-full text-sm">
-                {skill}
+            {existing.map((skill: any, idx) => {
+              const skillName = typeof skill === 'string' ? skill : (skill.skill || skill.name || JSON.stringify(skill));
+              return (
+              <span key={idx} className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-3 py-1 rounded-full text-sm">
+                {skillName}
               </span>
-            ))}
+            )})}
           </div>
         </div>
 
@@ -40,11 +42,13 @@ const SkillGapCard = React.memo(function SkillGapCard({ existing, missing }: { e
                 <p className="text-slate-500 text-sm mt-1">Your profile perfectly matches the requirements for this career role.</p>
               </div>
             )}
-            {missing.map(skill => (
-              <span key={skill} className="bg-rose-500/10 border border-rose-500/30 text-rose-300 px-3 py-1 rounded-full text-sm">
-                {skill}
+            {missing.map((skill: any, idx) => {
+              const skillName = typeof skill === 'string' ? skill : (skill.skill || skill.name || JSON.stringify(skill));
+              return (
+              <span key={idx} className="bg-rose-500/10 border border-rose-500/30 text-rose-300 px-3 py-1 rounded-full text-sm">
+                {skillName}
               </span>
-            ))}
+            )})}
           </div>
         </div>
       </div>
