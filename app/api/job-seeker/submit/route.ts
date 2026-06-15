@@ -27,11 +27,12 @@ export async function POST(req: Request) {
       linkedin,
       github,
       portfolio,
-      jobSearchType,
-      preferredCountry,
-    } = body;
+        jobSearchType,
+        preferredCountry,
+        skills,
+      } = body;
 
-    if (!resumeProfileId) {
+      if (!resumeProfileId) {
       return NextResponse.json({ error: "Missing resumeProfileId" }, { status: 400 });
     }
 
@@ -61,6 +62,7 @@ export async function POST(req: Request) {
         currentState,
         preferredLocation: jobSearchType === 'international' ? preferredCountry || 'International' : preferredLocation,
         workPreference,
+        workPreference,
         salaryExpectation,
         linkedin,
         github,
@@ -72,6 +74,20 @@ export async function POST(req: Request) {
         }
       }
     });
+
+    if (skills && Array.isArray(skills)) {
+      try {
+        await prisma.resumeAnalysis.update({
+          where: { resumeProfileId },
+          data: {
+            skills: skills,
+            technicalSkills: skills
+          }
+        });
+      } catch (err) {
+        console.error("Could not update ResumeAnalysis with skills", err);
+      }
+    }
 
     return NextResponse.json({ success: true, data: profile });
   } catch (error: any) {
