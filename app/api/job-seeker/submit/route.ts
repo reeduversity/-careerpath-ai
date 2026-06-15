@@ -62,7 +62,6 @@ export async function POST(req: Request) {
         currentState,
         preferredLocation: jobSearchType === 'international' ? preferredCountry || 'International' : preferredLocation,
         workPreference,
-        workPreference,
         salaryExpectation,
         linkedin,
         github,
