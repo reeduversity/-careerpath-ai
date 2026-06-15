@@ -24,7 +24,7 @@ export async function orchestrateCareerPlan(
     console.log(`Fallback: Using raw string '${careerRoleId}' as career role title.`);
   }
 
-  if (!careerRoleTitle || careerRoleTitle.trim() === "") {
+  if (!careerRoleTitle || careerRoleTitle.trim() === "" || careerRoleTitle === "undefined") {
     careerRoleTitle = "Software Engineer"; 
   }
 

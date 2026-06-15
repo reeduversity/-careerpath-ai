@@ -72,7 +72,7 @@ function DashboardContent() {
   if (!data) return null;
 
   const omni = data.omniData || {};
-  const safeArray = (val: any) => Array.isArray(val) ? val : (typeof val === 'string' ? [val] : []);
+  const safeArray = (val: any) => (Array.isArray(val) ? val : (typeof val === 'string' ? [val] : [])).filter(Boolean);
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-50 px-6 py-12 overflow-x-hidden">
@@ -195,10 +195,10 @@ function DashboardContent() {
               {safeArray(omni.netflixLearningPath?.series).map((series: any, i: number) => (
                 <div key={i} className="min-w-[300px] sm:min-w-[400px] bg-slate-900 rounded-2xl border border-slate-700 p-6 snap-center hover:scale-[1.02] transition-transform shadow-xl">
                   <h3 className="text-xl font-bold text-white mb-4 flex items-center justify-between">
-                    {series.title} <span className="text-rose-500 text-sm">Series {i+1}</span>
+                    {series?.title || (typeof series === 'string' ? series : `Series ${i+1}`)} <span className="text-rose-500 text-sm">Series {i+1}</span>
                   </h3>
                   <div className="space-y-3 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar-y">
-                    {safeArray(series.episodes).map((ep: string, j: number) => (
+                    {safeArray(series?.episodes || (typeof series === 'string' ? [series] : [])).map((ep: string, j: number) => (
                       <a key={j} href={`https://www.youtube.com/results?search_query=${encodeURIComponent(ep + ' tutorial')}`} target="_blank" rel="noopener noreferrer" className="flex gap-4 items-start group cursor-pointer hover:bg-slate-800/50 p-2 rounded-lg transition-colors -ml-2">
                         <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-400 group-hover:bg-rose-500 group-hover:text-white transition-colors shrink-0">
                           {j+1}
