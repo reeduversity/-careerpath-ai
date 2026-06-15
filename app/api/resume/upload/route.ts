@@ -6,7 +6,9 @@ import path from 'path';
 import pdfParse from 'pdf-parse/lib/pdf-parse.js';
 import * as mammoth from 'mammoth';
 
-const UPLOAD_DIR = path.join(process.cwd(), "uploads", "resumes");
+import os from 'os';
+
+const UPLOAD_DIR = path.join(os.tmpdir(), "careerpath-resumes");
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 function parseSections(text: string) {

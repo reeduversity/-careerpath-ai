@@ -135,7 +135,13 @@ export default function JobSeeker() {
         method: "POST",
         body: formData,
       });
-      const uploadJson = await uploadRes.json();
+      const uploadText = await uploadRes.text();
+      let uploadJson;
+      try {
+        uploadJson = JSON.parse(uploadText);
+      } catch (e) {
+        throw new Error(`Server error during upload. Please try again. Response: ${uploadText.substring(0, 50)}...`);
+      }
       if (!uploadRes.ok) throw new Error(uploadJson.error || "Upload failed");
 
       // Save the uploaded resume globally so we don't have to re-upload on Submit
