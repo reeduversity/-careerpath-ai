@@ -171,6 +171,10 @@ export default function JobSeeker() {
       if (analysis) {
         setValues((prev) => ({
           ...prev,
+          profileType: analysis.profileType || prev.profileType,
+          careerGoal: analysis.careerGoal || prev.careerGoal,
+          targetJobRole: analysis.targetJobRole || prev.targetJobRole,
+          industry: analysis.industry || prev.industry,
           degree: analysis.degree || prev.degree,
           institute: analysis.institute || prev.institute,
           cgpa: analysis.cgpa || prev.cgpa,
@@ -190,7 +194,12 @@ export default function JobSeeker() {
         if (Array.isArray(analysis.softSkills)) analysis.softSkills.forEach((s: string) => newSkills.add(s));
         setSkills(Array.from(newSkills));
 
-        setAutofillStatus("✨ Autofill complete! Review your details below.");
+        const extractedCount = Object.values(analysis).filter(v => v !== null && v !== "").length;
+        if (extractedCount < 12) {
+          setAutofillStatus("✨ Resume processed successfully. Some fields need manual review. Could not extract complete information.");
+        } else {
+          setAutofillStatus("✨ Resume processed successfully. Review your details below.");
+        }
       }
     } catch (error) {
       setAutofillStatus(`Autofill failed: ${String(error)}`);

@@ -15,7 +15,7 @@ const RoadmapChart = React.memo(function RoadmapChart({ roadmap }: { roadmap: an
             </div>
             <h3 className="text-white font-semibold">{step.stage}</h3>
             <p className="text-emerald-400 text-sm font-medium mt-1">{step.focus}</p>
-            <p className="text-slate-400 text-xs mt-2 max-w-[150px] mx-auto">{step.details}</p>
+            <p className="text-slate-400 text-xs mt-2 px-4 mx-auto">{step.details}</p>
           </div>
         ))}
       </div>

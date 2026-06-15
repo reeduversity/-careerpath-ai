@@ -124,7 +124,7 @@ RULES:
 - "netflixLearningPath": Create a 3-4 series "Binge Learning" plan.
 - "readinessScore": Job/Interview readiness score out of 100 based on their profile.
 - "marketIntelligence": Provide REAL data. What are the trending skills in this exact role?
-- "roadmap": Highly granular 0-3 months, 3-6 months, 6-12 months action plan.
+- "roadmap": Make it highly meaningful, role-specific, skill-gap based, and actionable. Use exact stages: "Step 1: Foundation", "Step 2: Core Skills", "Step 3: Projects", "Step 4: Interview Prep", "Step 5: Job Strategy". For "details", you MUST strictly include: What to do, Why it matters, and Expected Outcome. Do not use generic text.
 - "certifications": Real, 100% genuine certifications only. You MUST provide a 100% real, active URL to the official platform (e.g. Coursera, Udemy, AWS, edX). Do NOT hallucinate links!
 
 DO NOT hallucinate formatting. Return pure JSON.`;

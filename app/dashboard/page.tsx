@@ -196,7 +196,7 @@ function DashboardContent() {
                   <h3 className="text-xl font-bold text-white mb-4 flex items-center justify-between">
                     {series.title} <span className="text-rose-500 text-sm">Series {i+1}</span>
                   </h3>
-                  <div className="space-y-3 max-h-[250px] overflow-y-auto pr-2">
+                  <div className="space-y-3 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar-y">
                     {(series.episodes || []).map((ep: string, j: number) => (
                       <a key={j} href={`https://www.youtube.com/results?search_query=${encodeURIComponent(ep + ' tutorial')}`} target="_blank" rel="noopener noreferrer" className="flex gap-4 items-start group cursor-pointer hover:bg-slate-800/50 p-2 rounded-lg transition-colors -ml-2">
                         <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-400 group-hover:bg-rose-500 group-hover:text-white transition-colors shrink-0">
@@ -246,6 +246,19 @@ function DashboardContent() {
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #f43f5e; 
+        }
+        .custom-scrollbar-y::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar-y::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar-y::-webkit-scrollbar-thumb {
+          background: #334155; 
+          border-radius: 10px;
+        }
+        .custom-scrollbar-y::-webkit-scrollbar-thumb:hover {
           background: #f43f5e; 
         }
       `}} />
