@@ -198,6 +198,33 @@ export function analyzeResumeTextFallback(text: string) {
   result.technicalSkills = Array.from(new Set(result.technicalSkills));
   result.softSkills = Array.from(new Set(result.softSkills));
 
+  // Heuristic Extraction for specific fields
+  const fullTextLower = text.toLowerCase();
+  
+  const tenthMatch = fullTextLower.match(/(?:10th|ssc|secondary|matriculation|class 10).*?(?:cgpa|%|percentage|score).*?([\d.]+)/i) || 
+                     fullTextLower.match(/([\d.]+)(?:\s*%|\s*cgpa).*?(?:10th|ssc|secondary|matriculation|class 10)/i);
+  if (tenthMatch && parseFloat(tenthMatch[1]) <= 100) result.tenthPercentage = tenthMatch[1];
+
+  const twelfthMatch = fullTextLower.match(/(?:12th|hsc|higher secondary|intermediate|class 12).*?(?:cgpa|%|percentage|score).*?([\d.]+)/i) || 
+                       fullTextLower.match(/([\d.]+)(?:\s*%|\s*cgpa).*?(?:12th|hsc|higher secondary|intermediate|class 12)/i);
+  if (twelfthMatch && parseFloat(twelfthMatch[1]) <= 100) result.twelfthPercentage = twelfthMatch[1];
+
+  const degreeMatch = fullTextLower.match(/\b(b\.?tech|b\.?e|b\.?c\.?a|b\.?s\.?c|m\.?tech|m\.?c\.?a|m\.?s\.?c|b\.?a|m\.?a|m\.?b\.?a|b\.?b\.?a)\b/i);
+  if (degreeMatch) result.degree = degreeMatch[1].replace(/\./g, '').toUpperCase();
+
+  const expWordCount = result.experience.join(' ').split(/\s+/).length;
+  if (result.experience.length === 0) {
+    result.experienceLevel = "Fresher";
+  } else if (expWordCount < 50) {
+    result.experienceLevel = "0-1 Years";
+  } else if (expWordCount < 150) {
+    result.experienceLevel = "1-3 Years";
+  } else if (expWordCount < 300) {
+    result.experienceLevel = "3-5 Years";
+  } else {
+    result.experienceLevel = "5+ Years";
+  }
+
   // 5. Dynamic Scoring
   let completeness = 0;
   if (result.fullName) completeness += 10;
@@ -209,7 +236,6 @@ export function analyzeResumeTextFallback(text: string) {
   result.completenessScore = completeness;
 
   let quality = 0;
-  const expWordCount = result.experience.join(' ').split(/\s+/).length;
   if (expWordCount > 200) quality += 35;
   else if (expWordCount > 100) quality += 25;
   else if (expWordCount > 50) quality += 15;
@@ -277,9 +303,9 @@ Return ONLY valid JSON matching the schema.`;
 
   try {
     const aiPromise = generateGroqResponse(prompt, "Extract resume JSON", true);
-    // 8-second strict timeout to prevent AWS/Vercel serverless function 504 timeouts
+    // 14-second strict timeout to allow LLM more time before fallback
     const timeoutPromise = new Promise<any>((_, reject) => 
-      setTimeout(() => reject(new Error("Groq API Timeout (took longer than 8s)")), 8000)
+      setTimeout(() => reject(new Error("Groq API Timeout (took longer than 14s)")), 14000)
     );
     
     const aiResult = await Promise.race([aiPromise, timeoutPromise]);
