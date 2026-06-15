@@ -283,7 +283,7 @@ Schema:
   "phone": "string | null",
   "location": "string | null",
   "currentCity": "string | null",
-  "currentState": "string | null",
+  "currentState": "string | null (extract State/Province only e.g. Maharashtra, Delhi. DO NOT output 'India' or country names)",
   "profileType": "string | null (e.g. Technical/IT, Healthcare/Medical, Finance/Banking, Legal/Law, Engineering/Core, Arts/Design, Sales/Marketing, Management/HR, Education/Teaching, Media/Journalism, Other Non-Technical)",
   "careerGoal": "string | null (meaningful career objective)",
   "targetJobRole": "string | null (infer from skills + projects)",
