@@ -72,6 +72,7 @@ function DashboardContent() {
   if (!data) return null;
 
   const omni = data.omniData || {};
+  const safeArray = (val: any) => Array.isArray(val) ? val : (typeof val === 'string' ? [val] : []);
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-50 px-6 py-12 overflow-x-hidden">
@@ -102,7 +103,7 @@ function DashboardContent() {
                 </div>
                 <div className="h-6 w-px bg-slate-600"></div>
                 <div className="flex gap-2">
-                  {(omni.gamification.badges || ["Beginner"]).map((badge: string, idx: number) => (
+                  {safeArray(omni.gamification.badges || ["Beginner"]).map((badge: string, idx: number) => (
                     <span key={idx} className="bg-sky-500/20 text-sky-300 text-xs px-3 py-1 rounded-full border border-sky-500/30">
                       🏅 {badge}
                     </span>
@@ -121,7 +122,7 @@ function DashboardContent() {
             <div className="flex items-center gap-6 relative z-10">
               <div className="text-7xl font-black text-indigo-400 drop-shadow-md">{omni.readinessScore?.score || 40}%</div>
               <div>
-                <p className="text-slate-300 text-sm mb-2"><strong>Weak Areas:</strong> {(omni.readinessScore?.weakAreas || []).join(", ")}</p>
+                <p className="text-slate-300 text-sm mb-2"><strong>Weak Areas:</strong> {safeArray(omni.readinessScore?.weakAreas).join(", ") || "None"}</p>
                 <p className="text-indigo-200 text-sm bg-indigo-950/50 p-3 rounded-lg border border-indigo-500/20">{omni.readinessScore?.improvementPlan}</p>
               </div>
             </div>
@@ -134,7 +135,7 @@ function DashboardContent() {
               <div>
                 <span className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-2 block">Trending Skills</span>
                 <div className="flex flex-wrap gap-2">
-                  {(omni.marketIntelligence?.trendingSkills || []).map((s: string, i: number) => (
+                  {safeArray(omni.marketIntelligence?.trendingSkills).map((s: string, i: number) => (
                     <span key={i} className="bg-emerald-500/20 text-emerald-300 text-xs px-3 py-1 rounded-full border border-emerald-500/30">🔥 {s}</span>
                   ))}
                 </div>
@@ -160,7 +161,7 @@ function DashboardContent() {
                 <div>
                   <h4 className="text-sm uppercase tracking-widest text-slate-500 font-bold mb-3">Top Matching Roles</h4>
                   <ul className="space-y-2">
-                    {(omni.privateJobPath?.roles || data.jobRoles || []).map((r: string, i: number) => (
+                    {safeArray(omni.privateJobPath?.roles || data.jobRoles).map((r: string, i: number) => (
                       <li key={i} className="bg-slate-800/50 px-4 py-3 rounded-lg text-slate-200 font-medium border border-slate-700/50 flex items-center gap-3">
                         <span className="text-sky-500">→</span> {r}
                       </li>
@@ -174,7 +175,7 @@ function DashboardContent() {
                 <div>
                   <h4 className="text-sm uppercase tracking-widest text-slate-500 font-bold mb-3">Top Hiring Companies</h4>
                   <div className="flex flex-wrap gap-2">
-                    {(omni.privateJobPath?.topCompanies || []).map((c: string, i: number) => (
+                    {safeArray(omni.privateJobPath?.topCompanies).map((c: string, i: number) => (
                       <span key={i} className="bg-slate-800 text-slate-300 text-sm px-4 py-2 rounded-lg border border-slate-700">{c}</span>
                     ))}
                   </div>
@@ -185,19 +186,19 @@ function DashboardContent() {
         </div>
 
         {/* Netflix-Style Learning Path */}
-        {(omni.netflixLearningPath?.series && omni.netflixLearningPath.series.length > 0) && (
+        {safeArray(omni.netflixLearningPath?.series).length > 0 && (
           <div className="bg-slate-950 py-10 px-8 rounded-3xl border border-slate-800 shadow-2xl relative overflow-hidden">
             <div className="absolute -top-40 -left-40 w-96 h-96 bg-rose-500/10 blur-3xl rounded-full"></div>
             <h2 className="text-3xl font-black text-white tracking-wider mb-8 relative z-10">BINGE LEARNING SERIES <span className="text-rose-500 ml-2">▶</span></h2>
             
             <div className="flex overflow-x-auto pb-8 gap-6 snap-x relative z-10 custom-scrollbar">
-              {omni.netflixLearningPath.series.map((series: any, i: number) => (
+              {safeArray(omni.netflixLearningPath?.series).map((series: any, i: number) => (
                 <div key={i} className="min-w-[300px] sm:min-w-[400px] bg-slate-900 rounded-2xl border border-slate-700 p-6 snap-center hover:scale-[1.02] transition-transform shadow-xl">
                   <h3 className="text-xl font-bold text-white mb-4 flex items-center justify-between">
                     {series.title} <span className="text-rose-500 text-sm">Series {i+1}</span>
                   </h3>
                   <div className="space-y-3 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar-y">
-                    {(series.episodes || []).map((ep: string, j: number) => (
+                    {safeArray(series.episodes).map((ep: string, j: number) => (
                       <a key={j} href={`https://www.youtube.com/results?search_query=${encodeURIComponent(ep + ' tutorial')}`} target="_blank" rel="noopener noreferrer" className="flex gap-4 items-start group cursor-pointer hover:bg-slate-800/50 p-2 rounded-lg transition-colors -ml-2">
                         <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-400 group-hover:bg-rose-500 group-hover:text-white transition-colors shrink-0">
                           {j+1}
@@ -213,23 +214,23 @@ function DashboardContent() {
         )}
 
         {/* Skill Gap & Actions */}
-        {(data.skillGap?.missingSkills?.length > 0 || data.skillGap?.existingSkills?.length > 0) && (
+        {(safeArray(data.skillGap?.missingSkills).length > 0 || safeArray(data.skillGap?.existingSkills).length > 0) && (
           <SkillGapCard 
-            existing={data.skillGap.existingSkills || []} 
-            missing={data.skillGap.missingSkills || []} 
+            existing={safeArray(data.skillGap?.existingSkills)} 
+            missing={safeArray(data.skillGap?.missingSkills)} 
           />
         )}
-        {(data.certifications?.length > 0 || data.projects?.length > 0 || data.jobRoles?.length > 0) && (
+        {(safeArray(data.certifications).length > 0 || safeArray(data.projects).length > 0 || safeArray(data.jobRoles).length > 0) && (
           <ActionableCards 
-            certifications={data.certifications || []} 
-            projects={data.projects || []} 
-            jobRoles={data.jobRoles || []} 
+            certifications={safeArray(data.certifications)} 
+            projects={safeArray(data.projects)} 
+            jobRoles={safeArray(data.jobRoles)} 
           />
         )}
 
         {/* High Level Roadmap */}
-        {(data.roadmap && data.roadmap.length > 0) && (
-          <RoadmapChart roadmap={data.roadmap} />
+        {safeArray(data.roadmap).length > 0 && (
+          <RoadmapChart roadmap={safeArray(data.roadmap)} />
         )}
       </div>
       
