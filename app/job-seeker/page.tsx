@@ -187,6 +187,7 @@ export default function JobSeeker() {
           passingYear: analysis.passingYear || prev.passingYear,
           tenthPercentage: analysis.tenthPercentage || prev.tenthPercentage,
           twelfthPercentage: analysis.twelfthPercentage || prev.twelfthPercentage,
+          category: analysis.category || prev.category,
           experienceLevel: analysis.experienceLevel || prev.experienceLevel,
           currentCity: analysis.currentCity || prev.currentCity,
           currentState: analysis.currentState || prev.currentState,
