@@ -160,7 +160,7 @@ function DashboardContent() {
                 <div>
                   <h4 className="text-sm uppercase tracking-widest text-slate-500 font-bold mb-3">Top Matching Roles</h4>
                   <ul className="space-y-2">
-                    {(omni.privateJobPath?.roles || data.jobRoles).map((r: string, i: number) => (
+                    {(omni.privateJobPath?.roles || data.jobRoles || []).map((r: string, i: number) => (
                       <li key={i} className="bg-slate-800/50 px-4 py-3 rounded-lg text-slate-200 font-medium border border-slate-700/50 flex items-center gap-3">
                         <span className="text-sky-500">→</span> {r}
                       </li>
@@ -215,15 +215,15 @@ function DashboardContent() {
         {/* Skill Gap & Actions */}
         {(data.skillGap?.missingSkills?.length > 0 || data.skillGap?.existingSkills?.length > 0) && (
           <SkillGapCard 
-            existing={data.skillGap.existingSkills} 
-            missing={data.skillGap.missingSkills} 
+            existing={data.skillGap.existingSkills || []} 
+            missing={data.skillGap.missingSkills || []} 
           />
         )}
         {(data.certifications?.length > 0 || data.projects?.length > 0 || data.jobRoles?.length > 0) && (
           <ActionableCards 
-            certifications={data.certifications} 
-            projects={data.projects} 
-            jobRoles={data.jobRoles} 
+            certifications={data.certifications || []} 
+            projects={data.projects || []} 
+            jobRoles={data.jobRoles || []} 
           />
         )}
 
