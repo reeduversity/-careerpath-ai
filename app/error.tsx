@@ -27,10 +27,10 @@ export default function Error({
       </p>
       <div className="flex gap-4 pt-4">
         <Button 
-          onClick={() => reset()}
+          onClick={() => window.location.reload()}
           className="bg-sky-500 hover:bg-sky-600 text-white font-medium px-6 py-2 rounded-xl transition-all"
         >
-          Try again
+          Reload
         </Button>
         <Link href="/">
           <Button 

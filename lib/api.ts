@@ -16,13 +16,24 @@ export async function orchestrateCareer(
   profileType?: string,
   jobSeekerProfileId?: string
 ) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
+
   const res = await fetch(`${API_BASE}/career/orchestrate`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ resumeProfileId, careerRoleId, jobInterest, examName, profileType, jobSeekerProfileId }),
+    signal: controller.signal,
+  }).catch(err => {
+    if (err.name === 'AbortError') {
+      throw new Error("Slow connection, retry?");
+    }
+    throw err;
   });
+  
+  clearTimeout(timeoutId);
   
   if (!res.ok) throw new Error("Failed to orchestrate career");
   const json = await res.json();
