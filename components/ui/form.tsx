@@ -10,10 +10,10 @@ interface FieldWrapperProps {
 
 export function FieldWrapper({ label, htmlFor, error, children }: FieldWrapperProps) {
   return (
-    <label className="space-y-2 block text-sm text-slate-300" htmlFor={htmlFor}>
-      <span className="font-medium text-slate-100">{label}</span>
+    <label className="space-y-2.5 block text-sm text-slate-300 relative group" htmlFor={htmlFor}>
+      <span className="font-semibold tracking-wide text-slate-200 group-focus-within:text-sky-400 transition-colors">{label}</span>
       {children}
-      {error ? <p className="text-xs text-rose-400">{error}</p> : null}
+      {error ? <p className="text-xs font-medium text-rose-400 absolute -bottom-5 left-0">{error}</p> : null}
     </label>
   );
 }
@@ -24,7 +24,7 @@ export function Input({ className, ...props }: InputProps) {
   return (
     <input
       className={cn(
-        "w-full rounded-2xl border border-slate-700 bg-slate-950/90 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20",
+        "w-full rounded-2xl border border-slate-700/60 bg-slate-900/40 backdrop-blur-md px-4 py-3.5 text-sm text-slate-100 outline-none transition-all duration-300 hover:border-slate-500/60 hover:bg-slate-900/60 focus:border-sky-400 focus:bg-slate-900/80 focus:ring-4 focus:ring-sky-500/10 shadow-inner placeholder:text-slate-500",
         props.type === 'number' ? "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" : undefined,
         className
       )}
@@ -39,7 +39,7 @@ export function Select({ className, children, ...props }: SelectProps) {
   return (
     <select
       className={cn(
-        "w-full rounded-2xl border border-slate-700 bg-slate-950/90 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20",
+        "w-full rounded-2xl border border-slate-700/60 bg-slate-900/40 backdrop-blur-md px-4 py-3.5 text-sm text-slate-100 outline-none transition-all duration-300 hover:border-slate-500/60 hover:bg-slate-900/60 focus:border-sky-400 focus:bg-slate-900/80 focus:ring-4 focus:ring-sky-500/10 shadow-inner appearance-none",
         className
       )}
       {...props}
@@ -55,16 +55,21 @@ interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 export function Checkbox({ label, className, ...props }: CheckboxProps) {
   return (
-    <label className="inline-flex items-center gap-3 text-sm text-slate-300">
-      <input
-        type="checkbox"
-        className={cn(
-          "h-4 w-4 rounded border-slate-700 bg-slate-950 text-sky-500 focus:ring-sky-500",
-          className
-        )}
-        {...props}
-      />
-      <span>{label}</span>
+    <label className="inline-flex items-center gap-3 text-sm text-slate-300 cursor-pointer group">
+      <div className="relative flex items-center justify-center">
+        <input
+          type="checkbox"
+          className={cn(
+            "peer h-5 w-5 cursor-pointer appearance-none rounded-md border-2 border-slate-600 bg-slate-900/50 transition-all checked:border-sky-500 checked:bg-sky-500 hover:border-sky-400 focus:outline-none focus:ring-4 focus:ring-sky-500/20",
+            className
+          )}
+          {...props}
+        />
+        <span className="pointer-events-none absolute text-white opacity-0 transition-opacity peer-checked:opacity-100">
+          <svg className="h-3 w-3" fill="none" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.667 3.5L5.25 9.917l-2.917-2.917"/></svg>
+        </span>
+      </div>
+      <span className="group-hover:text-slate-100 transition-colors">{label}</span>
     </label>
   );
 }
@@ -85,16 +90,19 @@ export function RadioGroup({ name, options, value, onChange }: RadioGroupProps) 
   return (
     <div className="grid gap-3">
       {options.map((option) => (
-        <label key={option.value} className="inline-flex items-center gap-3 rounded-2xl border border-slate-700 bg-slate-950/90 px-4 py-3 text-sm text-slate-300 transition hover:border-sky-400">
-          <input
-            type="radio"
-            name={name}
-            value={option.value}
-            checked={value === option.value}
-            onChange={onChange}
-            className="h-4 w-4 rounded-full border-slate-700 bg-slate-950 text-sky-500 focus:ring-sky-500"
-          />
-          <span>{option.label}</span>
+        <label key={option.value} className={cn("inline-flex items-center gap-4 rounded-2xl border bg-slate-900/40 backdrop-blur-sm px-5 py-4 text-sm transition-all duration-300 cursor-pointer hover:bg-slate-800/60 shadow-sm", value === option.value ? "border-sky-500 bg-sky-950/20 text-sky-100" : "border-slate-700/60 text-slate-300 hover:border-slate-500")}>
+          <div className="relative flex items-center justify-center">
+            <input
+              type="radio"
+              name={name}
+              value={option.value}
+              checked={value === option.value}
+              onChange={onChange}
+              className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-slate-600 bg-slate-900 transition-all checked:border-sky-500 focus:outline-none focus:ring-4 focus:ring-sky-500/20"
+            />
+            <span className="pointer-events-none absolute h-2.5 w-2.5 rounded-full bg-sky-500 opacity-0 transition-opacity peer-checked:opacity-100" />
+          </div>
+          <span className="font-medium">{option.label}</span>
         </label>
       ))}
     </div>
@@ -116,7 +124,6 @@ export function TypeaheadInput({ id, value, onChange, options, placeholder, erro
   const [filteredOptions, setFilteredOptions] = React.useState<string[]>([]);
   const containerRef = React.useRef<HTMLDivElement>(null);
 
-  // Normalize helper
   const normalize = (str: string) => str.trim().toLowerCase().replace(/\s+/g, ' ');
 
   React.useEffect(() => {
@@ -126,10 +133,7 @@ export function TypeaheadInput({ id, value, onChange, options, placeholder, erro
     }
     const normalizedValue = normalize(value);
     
-    // Exact or starts-with match
     const exactMatches = options.filter(opt => normalize(opt).startsWith(normalizedValue));
-    
-    // Fuzzy matching (includes)
     const fuzzyMatches = options.filter(opt => 
       normalize(opt).includes(normalizedValue) && !exactMatches.includes(opt)
     );
@@ -158,8 +162,8 @@ export function TypeaheadInput({ id, value, onChange, options, placeholder, erro
         id={id}
         type="text"
         className={cn(
-          "w-full rounded-2xl border bg-slate-950/90 px-4 py-3 text-sm text-slate-100 outline-none transition",
-          error ? "border-rose-500 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20" : "border-slate-700 focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20"
+          "w-full rounded-2xl border border-slate-700/60 bg-slate-900/40 backdrop-blur-md px-4 py-3.5 text-sm text-slate-100 outline-none transition-all duration-300 hover:border-slate-500/60 hover:bg-slate-900/60 focus:bg-slate-900/80 shadow-inner placeholder:text-slate-500",
+          error ? "border-rose-500 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10" : "focus:border-sky-400 focus:ring-4 focus:ring-sky-500/10"
         )}
         value={value}
         onChange={(e) => {
@@ -172,11 +176,11 @@ export function TypeaheadInput({ id, value, onChange, options, placeholder, erro
         autoComplete="off"
       />
       {isOpen && filteredOptions.length > 0 && (
-        <ul className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-xl border border-slate-700 bg-slate-900 shadow-lg p-1">
+        <ul className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-2xl border border-slate-700/80 bg-slate-900/95 backdrop-blur-xl shadow-2xl p-2 custom-scrollbar">
           {filteredOptions.map((option) => (
             <li
               key={option}
-              className="cursor-pointer rounded-lg px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 hover:text-white"
+              className="cursor-pointer rounded-xl px-4 py-2.5 text-sm text-slate-300 font-medium hover:bg-sky-500/20 hover:text-sky-300 transition-colors"
               onClick={() => handleSelect(option)}
             >
               {option}
@@ -185,7 +189,7 @@ export function TypeaheadInput({ id, value, onChange, options, placeholder, erro
         </ul>
       )}
       {isOpen && value && filteredOptions.length === 0 && (
-        <div className="absolute z-50 mt-1 w-full rounded-xl border border-slate-700 bg-slate-900 p-4 text-sm text-slate-400">
+        <div className="absolute z-50 mt-2 w-full rounded-2xl border border-slate-700/80 bg-slate-900/95 backdrop-blur-xl p-4 text-sm text-slate-400 shadow-2xl text-center">
           No matches found.
         </div>
       )}

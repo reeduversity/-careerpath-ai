@@ -3,7 +3,7 @@ import React from "react";
 const SkillGapCard = React.memo(function SkillGapCard({ existing, missing }: { existing: string[]; missing: string[] }) {
   console.log("Rendered: SkillGapCard");
   return (
-    <div className="w-full rounded-3xl border border-slate-700 bg-slate-900/90 p-8 shadow-xl">
+    <div className="w-full rounded-3xl border border-slate-700/50 bg-slate-900/60 backdrop-blur-xl p-8 shadow-2xl shadow-slate-950/50 hover:bg-slate-900/80 transition-colors duration-500">
       <h2 className="text-2xl font-semibold text-white mb-6">Skill Gap Analysis</h2>
       <div className="grid md:grid-cols-2 gap-8">
         {/* Existing Skills */}

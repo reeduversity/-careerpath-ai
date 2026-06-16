@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { FieldWrapper, Input, RadioGroup } from "@/components/ui/form";
+import { FieldWrapper, Input, RadioGroup, Select } from "@/components/ui/form";
 
 const experienceOptions = [
   "Fresher",
@@ -379,11 +379,10 @@ export default function JobSeeker() {
 
               <div className="grid gap-6 lg:grid-cols-2">
                 <FieldWrapper label="Profile Type" htmlFor="profileType" error={errors.profileType}>
-                  <select 
+                  <Select 
                     id="profileType" 
                     value={values.profileType} 
                     onChange={(e) => handleChange("profileType", e.target.value)}
-                    className="flex h-10 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 ring-offset-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
                   >
                     <option value="">Select Profile/Industry Type</option>
                     <option value="Technical/IT">Technical & IT</option>
@@ -397,7 +396,7 @@ export default function JobSeeker() {
                     <option value="Education/Teaching">Education & Teaching</option>
                     <option value="Media/Journalism">Media & Journalism</option>
                     <option value="Other Non-Technical">Other Non-Technical</option>
-                  </select>
+                  </Select>
                 </FieldWrapper>
                 <div />
               </div>
@@ -450,33 +449,31 @@ export default function JobSeeker() {
                   <Input id="twelfthPercentage" value={values.twelfthPercentage} onChange={(e) => handleChange("twelfthPercentage", e.target.value)} placeholder="e.g., 80" type="number" />
                 </FieldWrapper>
                 <FieldWrapper label="Category" htmlFor="category" error={errors.category}>
-                  <select 
+                  <Select 
                     id="category" 
                     value={values.category} 
                     onChange={(e) => handleChange("category", e.target.value)}
-                    className="flex h-10 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
                   >
                     <option value="General">General</option>
                     <option value="OBC">OBC</option>
                     <option value="SC">SC</option>
                     <option value="ST">ST</option>
-                  </select>
+                  </Select>
                 </FieldWrapper>
               </div>
 
               <div className="grid gap-6 lg:grid-cols-2">
                 <FieldWrapper label="Experience Level" htmlFor="experienceLevel" error={errors.experienceLevel}>
-                  <select 
+                  <Select 
                     id="experienceLevel" 
                     value={values.experienceLevel} 
                     onChange={(e) => handleChange("experienceLevel", e.target.value)}
-                    className="flex h-10 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 ring-offset-slate-950 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <option value="">Select experience</option>
                     {experienceOptions.map((opt) => (
                       <option key={opt} value={opt}>{opt}</option>
                     ))}
-                  </select>
+                  </Select>
                 </FieldWrapper>
                 <div />
               </div>

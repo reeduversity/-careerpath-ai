@@ -5,7 +5,7 @@ const RoadmapChart = React.memo(function RoadmapChart({ roadmap }: { roadmap: an
   if (!roadmap || roadmap.length === 0) return null;
 
   return (
-    <div className="w-full rounded-3xl border border-slate-700 bg-slate-900/90 p-8 shadow-xl">
+    <div className="w-full rounded-3xl border border-slate-700/50 bg-slate-900/60 backdrop-blur-xl p-8 shadow-2xl shadow-slate-950/50 hover:bg-slate-900/80 transition-colors duration-500">
       <h2 className="text-2xl font-semibold text-white mb-8">Career Roadmap</h2>
       <div className="flex flex-col md:flex-row justify-between relative before:hidden md:before:block before:absolute before:top-[20px] before:left-0 before:w-full before:h-0.5 before:bg-slate-800">
         {roadmap.map((step, idx) => {

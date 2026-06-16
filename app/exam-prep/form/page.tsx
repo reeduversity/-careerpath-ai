@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { FieldWrapper, Input, RadioGroup } from "@/components/ui/form";
+import { FieldWrapper, Input, RadioGroup, Select } from "@/components/ui/form";
 
 export default function ExamPrepForm() {
   const router = useRouter();
@@ -60,11 +60,10 @@ export default function ExamPrepForm() {
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="grid gap-8 md:grid-cols-2">
               <FieldWrapper label="Current Education Stage" htmlFor="stage" error={errors.stage}>
-                <select 
+                <Select 
                   id="stage" 
                   value={values.stage} 
                   onChange={(e) => handleChange("stage", e.target.value)}
-                  className="flex h-12 w-full rounded-xl border border-slate-700 bg-slate-950 px-4 text-slate-100 focus:ring-2 focus:ring-amber-500"
                 >
                   <option value="">Select Stage</option>
                   <option value="After 10th">After 10th</option>
@@ -73,15 +72,14 @@ export default function ExamPrepForm() {
                   <option value="Undergraduate (UG)">Undergraduate (UG)</option>
                   <option value="Postgraduate (PG)">Postgraduate (PG)</option>
                   <option value="Technical Degree (B.Tech/MBBS)">Technical Degree (B.Tech/MBBS)</option>
-                </select>
+                </Select>
               </FieldWrapper>
 
               <FieldWrapper label="Target Sector" htmlFor="sector" error={errors.sector}>
-                <select 
+                <Select 
                   id="sector" 
                   value={values.sector} 
                   onChange={(e) => handleChange("sector", e.target.value)}
-                  className="flex h-12 w-full rounded-xl border border-slate-700 bg-slate-950 px-4 text-slate-100 focus:ring-2 focus:ring-amber-500"
                 >
                   <option value="">Select Sector</option>
                   <option value="Civil Services (UPSC/State PSC)">Civil Services (UPSC/State PSC)</option>
@@ -93,7 +91,7 @@ export default function ExamPrepForm() {
                   <option value="Railways (RRB)">Railways (RRB)</option>
                   <option value="International/Global Government Exams">International/Global Govt Exams</option>
                   <option value="Undecided (Recommend for me)">Undecided (Recommend for me)</option>
-                </select>
+                </Select>
               </FieldWrapper>
 
               <FieldWrapper label="Specific Exam Target (Optional)" htmlFor="examName" error={errors.examName}>
@@ -107,11 +105,10 @@ export default function ExamPrepForm() {
               </FieldWrapper>
 
               <FieldWrapper label="Category" htmlFor="category">
-                <select 
+                <Select 
                   id="category" 
                   value={values.category} 
                   onChange={(e) => handleChange("category", e.target.value)}
-                  className="flex h-12 w-full rounded-xl border border-slate-700 bg-slate-950 px-4 text-slate-100 focus:ring-2 focus:ring-amber-500"
                 >
                   <option value="General">General</option>
                   <option value="OBC">OBC</option>
@@ -119,7 +116,7 @@ export default function ExamPrepForm() {
                   <option value="SC">SC</option>
                   <option value="ST">ST</option>
                   <option value="PwD">PwD (Person with Disability)</option>
-                </select>
+                </Select>
               </FieldWrapper>
             </div>
 

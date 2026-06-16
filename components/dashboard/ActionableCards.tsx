@@ -12,7 +12,7 @@ const ActionableCards = React.memo(function ActionableCards({
   return (
     <div className="grid lg:grid-cols-3 gap-8 w-full">
       {/* Certifications */}
-      <div className="rounded-3xl border border-slate-700 bg-gradient-to-b from-slate-900 to-slate-950 p-8 shadow-xl shadow-slate-950/40 relative overflow-hidden group hover:border-amber-500/50 transition-all duration-300">
+      <div className="rounded-3xl border border-slate-700/50 bg-slate-900/60 backdrop-blur-xl p-8 shadow-2xl shadow-slate-950/50 relative overflow-hidden group hover:border-amber-500/50 hover:bg-slate-900/80 transition-all duration-500">
         <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-3xl rounded-full group-hover:bg-amber-500/20 transition-all"></div>
         <h3 className="text-xl font-bold text-amber-400 mb-6 flex items-center gap-3">
           <span className="bg-amber-500/10 p-2 rounded-lg border border-amber-500/20">🏆</span> 
@@ -45,7 +45,7 @@ const ActionableCards = React.memo(function ActionableCards({
       </div>
 
       {/* Projects */}
-      <div className="rounded-3xl border border-slate-700 bg-gradient-to-b from-slate-900 to-slate-950 p-8 shadow-xl shadow-slate-950/40 relative overflow-hidden group hover:border-sky-500/50 transition-all duration-300">
+      <div className="rounded-3xl border border-slate-700/50 bg-slate-900/60 backdrop-blur-xl p-8 shadow-2xl shadow-slate-950/50 relative overflow-hidden group hover:border-sky-500/50 hover:bg-slate-900/80 transition-all duration-500">
         <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/10 blur-3xl rounded-full group-hover:bg-sky-500/20 transition-all"></div>
         <h3 className="text-xl font-bold text-sky-400 mb-6 flex items-center gap-3">
           <span className="bg-sky-500/10 p-2 rounded-lg border border-sky-500/20">💻</span> 
@@ -73,7 +73,7 @@ const ActionableCards = React.memo(function ActionableCards({
       </div>
 
       {/* Job Roles */}
-      <div className="rounded-3xl border border-slate-700 bg-gradient-to-b from-slate-900 to-slate-950 p-8 shadow-xl shadow-slate-950/40 relative overflow-hidden group hover:border-emerald-500/50 transition-all duration-300">
+      <div className="rounded-3xl border border-slate-700/50 bg-slate-900/60 backdrop-blur-xl p-8 shadow-2xl shadow-slate-950/50 relative overflow-hidden group hover:border-emerald-500/50 hover:bg-slate-900/80 transition-all duration-500">
         <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-3xl rounded-full group-hover:bg-emerald-500/20 transition-all"></div>
         <h3 className="text-xl font-bold text-emerald-400 mb-6 flex items-center gap-3">
           <span className="bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20">💼</span> 
