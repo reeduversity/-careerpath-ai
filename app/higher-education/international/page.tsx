@@ -322,12 +322,12 @@ export default function InternationalEducation() {
                   <FieldWrapper label="Passing Year" htmlFor="passingYear" error={errors.passingYear}>
                     <Input
                       id="passingYear"
-                      type="number"
+                      type="text"
+                      maxLength={4}
+                      pattern="\d*"
                       value={values.passingYear}
-                      onChange={(event) => handleChange("passingYear", event.target.value)}
+                      onChange={(event) => handleChange("passingYear", event.target.value.replace(/\D/g, '').slice(0, 4))}
                       placeholder="2025"
-                      min={1900}
-                      max={2100}
                     />
                   </FieldWrapper>
                 </div>

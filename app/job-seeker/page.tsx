@@ -438,7 +438,7 @@ export default function JobSeeker() {
                   <Input id="cgpa" value={values.cgpa} onChange={(e) => handleChange("cgpa", e.target.value)} placeholder="e.g., 8.5" />
                 </FieldWrapper>
                 <FieldWrapper label="Passing Year" htmlFor="passingYear" error={errors.passingYear}>
-                  <Input id="passingYear" value={values.passingYear} type="number" onChange={(e) => handleChange("passingYear", e.target.value)} placeholder="e.g., 2024" />
+                  <Input id="passingYear" value={values.passingYear} type="text" maxLength={4} pattern="\d*" onChange={(e) => handleChange("passingYear", e.target.value.replace(/\D/g, '').slice(0, 4))} placeholder="e.g., 2024" />
                 </FieldWrapper>
               </div>
 
