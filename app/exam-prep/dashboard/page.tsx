@@ -7,6 +7,9 @@ import DashboardSkeleton from "@/components/dashboard/DashboardSkeleton";
 
 function ExamDashboardContent() {
   const searchParams = useSearchParams();
+  const fullName = searchParams.get("fullName") || "";
+  const email = searchParams.get("email") || "";
+  const phone = searchParams.get("phone") || "";
   const stage = searchParams.get("stage") || "";
   const sector = searchParams.get("sector") || "";
   const examName = searchParams.get("examName") || "";
@@ -19,7 +22,7 @@ function ExamDashboardContent() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!stage || !sector) {
+    if (!fullName || !email || !phone || !stage || !sector) {
       setError("Missing parameters. Please fill the form first.");
       setLoading(false);
       return;
@@ -30,7 +33,7 @@ function ExamDashboardContent() {
         const res = await fetch("/api/exam-prep/orchestrate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ stage, sector, examName, hours, budget, category })
+          body: JSON.stringify({ fullName, email, phone, stage, sector, examName, hours, budget, category })
         });
         
         const json = await res.json();
@@ -46,7 +49,7 @@ function ExamDashboardContent() {
     }
 
     loadData();
-  }, [stage, sector, examName, hours, budget, category]);
+  }, [fullName, email, phone, stage, sector, examName, hours, budget, category]);
 
   if (loading) return <DashboardSkeleton />;
 

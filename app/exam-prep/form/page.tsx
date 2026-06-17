@@ -11,6 +11,9 @@ export default function ExamPrepForm() {
   const [isGenerating, setIsGenerating] = useState(false);
   
   const [values, setValues] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
     stage: "",
     sector: "",
     examName: "",
@@ -28,10 +31,32 @@ export default function ExamPrepForm() {
 
   const validate = () => {
     const next: Record<string, string> = {};
+    
+    if (!values.fullName.trim()) {
+      next.fullName = "Full Name is required.";
+    } else if (values.fullName.trim().length < 2) {
+      next.fullName = "Full Name must be at least 2 characters.";
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!values.email.trim()) {
+      next.email = "Email Address is required.";
+    } else if (!emailRegex.test(values.email.trim())) {
+      next.email = "Please enter a valid email address.";
+    }
+    
+    const phoneRegex = /^(\+?\d{1,3}[- ]?)?\d{10}$/;
+    if (!values.phone.trim()) {
+      next.phone = "Phone Number is required.";
+    } else if (!phoneRegex.test(values.phone.trim().replace(/[-\s]/g, ''))) {
+      next.phone = "Please enter a valid 10-digit phone number.";
+    }
+
     if (!values.stage) next.stage = "Please select your current educational stage.";
     if (!values.sector) next.sector = "Please select your target sector.";
     if (!values.hours) next.hours = "Please select study hours.";
     if (!values.budget) next.budget = "Please select your budget.";
+    
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -58,6 +83,43 @@ export default function ExamPrepForm() {
 
         <div className="bg-slate-900/80 border border-slate-700/50 rounded-3xl p-8 shadow-2xl">
           <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Personal Details Section */}
+            <div className="space-y-6 pb-6 border-b border-slate-800">
+              <h3 className="text-xl font-semibold text-slate-100 text-left">Personal Details</h3>
+              <div className="grid gap-6 md:grid-cols-3">
+                <FieldWrapper label="Full Name *" htmlFor="fullName" error={errors.fullName}>
+                  <Input 
+                    id="fullName" 
+                    value={values.fullName} 
+                    onChange={(e) => handleChange("fullName", e.target.value)} 
+                    placeholder="Enter your full name" 
+                    className={`h-12 bg-slate-950 rounded-xl ${errors.fullName ? 'border-rose-500 focus:ring-rose-500' : ''}`}
+                  />
+                </FieldWrapper>
+
+                <FieldWrapper label="Email Address *" htmlFor="email" error={errors.email}>
+                  <Input 
+                    id="email" 
+                    type="email"
+                    value={values.email} 
+                    onChange={(e) => handleChange("email", e.target.value)} 
+                    placeholder="john@example.com" 
+                    className={`h-12 bg-slate-950 rounded-xl ${errors.email ? 'border-rose-500 focus:ring-rose-500' : ''}`}
+                  />
+                </FieldWrapper>
+
+                <FieldWrapper label="Phone Number *" htmlFor="phone" error={errors.phone}>
+                  <Input 
+                    id="phone" 
+                    value={values.phone} 
+                    onChange={(e) => handleChange("phone", e.target.value)} 
+                    placeholder="+91 9876543210" 
+                    className={`h-12 bg-slate-950 rounded-xl ${errors.phone ? 'border-rose-500 focus:ring-rose-500' : ''}`}
+                  />
+                </FieldWrapper>
+              </div>
+            </div>
+
             <div className="grid gap-8 md:grid-cols-2">
               <FieldWrapper label="Current Education Stage" htmlFor="stage" error={errors.stage}>
                 <Select 

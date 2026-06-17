@@ -51,6 +51,7 @@ function HigherEducationFormContent() {
   const [loading, setLoading] = useState(false);
   const [locationError, setLocationError] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const locationContainerRef = useRef<HTMLDivElement>(null);
 
   const [formData, setFormData] = useState({
@@ -113,11 +114,15 @@ function HigherEducationFormContent() {
   ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: "" }));
+    }
     
-    if (e.target.name === "preferredStudyLocation") {
+    if (name === "preferredStudyLocation") {
       setLocationError("");
-      const val = e.target.value;
+      const val = value;
       const options = formType === "international" ? internationalCountries : indianStates;
       const normalized = val.trim().toLowerCase().replace(/\s+/g, ' ');
       const exactMatch = options.find(o => o.trim().toLowerCase().replace(/\s+/g, ' ') === normalized);
@@ -173,15 +178,43 @@ function HigherEducationFormContent() {
     });
   };
 
-  const handleNextStep1 = () => {
-    if (!formData.fullName.trim() || !formData.email.trim() || !formData.phone.trim()) {
-      alert("Please fill in your Full Name, Email, and Phone Number to continue.");
-      return;
+  const validateStep1 = () => {
+    const newErrors: Record<string, string> = {};
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = "Full Name is required.";
+    } else if (formData.fullName.trim().length < 2) {
+      newErrors.fullName = "Full Name must be at least 2 characters.";
     }
-    setStep(2);
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email.trim()) {
+      newErrors.email = "Email Address is required.";
+    } else if (!emailRegex.test(formData.email.trim())) {
+      newErrors.email = "Please enter a valid email address.";
+    }
+    
+    const phoneRegex = /^(\+?\d{1,3}[- ]?)?\d{10}$/;
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone Number is required.";
+    } else if (!phoneRegex.test(formData.phone.trim().replace(/[-\s]/g, ''))) {
+      newErrors.phone = "Please enter a valid 10-digit phone number.";
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNextStep1 = () => {
+    if (validateStep1()) {
+      setStep(2);
+    }
   };
 
   const handleSubmit = async () => {
+    if (!validateStep1()) {
+      setStep(1);
+      return;
+    }
     if (locationError) {
       alert("Please fix the location error before submitting.");
       return;
@@ -255,16 +288,53 @@ function HigherEducationFormContent() {
             <div className="space-y-4">
               <div>
                 <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Full Name *</label>
-                <input className="w-full bg-slate-800/50 border border-slate-600 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded-xl p-3.5 transition-all outline-none" name="fullName" placeholder="Enter your full name" onChange={handleChange} value={formData.fullName} required />
+                <input 
+                  className={`w-full bg-slate-800/50 border ${errors.fullName ? 'border-rose-500 focus:ring-rose-500' : 'border-slate-600 focus:border-sky-500 focus:ring-sky-500'} focus:ring-1 rounded-xl p-3.5 transition-all outline-none`} 
+                  name="fullName" 
+                  placeholder="Enter your full name" 
+                  onChange={handleChange} 
+                  value={formData.fullName} 
+                  required 
+                />
+                {errors.fullName && (
+                  <p className="text-xs text-rose-400 mt-1.5 ml-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                    {errors.fullName}
+                  </p>
+                )}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Email Address *</label>
-                  <input className="w-full bg-slate-800/50 border border-slate-600 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded-xl p-3.5 transition-all outline-none" name="email" type="email" placeholder="john@example.com" onChange={handleChange} value={formData.email} required />
+                  <input 
+                    className={`w-full bg-slate-800/50 border ${errors.email ? 'border-rose-500 focus:ring-rose-500' : 'border-slate-600 focus:border-sky-500 focus:ring-sky-500'} focus:ring-1 rounded-xl p-3.5 transition-all outline-none`} 
+                    name="email" 
+                    type="email" 
+                    placeholder="john@example.com" 
+                    onChange={handleChange} 
+                    value={formData.email} 
+                    required 
+                  />
+                  {errors.email && (
+                    <p className="text-xs text-rose-400 mt-1.5 ml-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Phone Number *</label>
-                  <input className="w-full bg-slate-800/50 border border-slate-600 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded-xl p-3.5 transition-all outline-none" name="phone" placeholder="+91 9876543210" onChange={handleChange} value={formData.phone} required />
+                  <input 
+                    className={`w-full bg-slate-800/50 border ${errors.phone ? 'border-rose-500 focus:ring-rose-500' : 'border-slate-600 focus:border-sky-500 focus:ring-sky-500'} focus:ring-1 rounded-xl p-3.5 transition-all outline-none`} 
+                    name="phone" 
+                    placeholder="+91 9876543210" 
+                    onChange={handleChange} 
+                    value={formData.phone} 
+                    required 
+                  />
+                  {errors.phone && (
+                    <p className="text-xs text-rose-400 mt-1.5 ml-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                      {errors.phone}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
