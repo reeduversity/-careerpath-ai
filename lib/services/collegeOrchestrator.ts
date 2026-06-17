@@ -326,6 +326,7 @@ CRITICAL RULES:
 3. Only use the colleges from the provided list. Do not hallucinate.
 4. RANKING CRITERIA: When determining category (Dream|Target|Safe) and 'whyRecommended', analyze Affordability, Eligibility match, Career alignment, Placement strength, and ROI.
 5. BUDGET INTELLIGENCE: If the student's budget is slightly below stronger opportunities, you MUST explicitly mention in 'whyRecommended': How much extra budget is needed, what better colleges become accessible, and why increasing budget improves chances. (e.g. "Increasing your budget by ₹2–3 lakhs could unlock Tier-1 private colleges with stronger placements and better ROI.")
+6. STRICT EDUCATION LEVEL MATCHING: The user is applying for the Education Level: ${profile.educationLevel}. You MUST tailor all your descriptions and 'recommendedStreams' reasons strictly for this specific level (e.g., if it's PG, PhD, or Doctorate, explicitly mention advanced research and PG/PhD studies. NEVER output "for UG studies" or "for Undergrad" if the user is a PG or PhD candidate).
 
 ${isFallback ? "WARNING: None of the generated colleges perfectly matched the user's strict criteria (e.g. budget, country, exam). These are FALLBACK recommendations. In 'whyRecommended' or 'riskFactors', clearly explain why they are being shown despite failing some constraints (e.g., 'Exceeds budget', 'Different country'). You MUST still generate all other required fields (streams, scholarships, careers)." : "You MUST generate all required fields."}
 
