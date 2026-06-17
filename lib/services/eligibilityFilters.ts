@@ -50,14 +50,14 @@ export function enforceCollegeCutoffs(candidates: any[], profile: any): any[] {
 
     // Hardcoded safety rules based on domain
     if (candidate.domain === "ENGINEERING") {
-      if (stream && !stream.includes("PCM") && !stream.includes("SCIENCE")) {
+      if (stream && !stream.includes("PCM") && !stream.includes("SCIENCE") && !stream.includes("TECH") && !stream.includes("ENGG") && !stream.includes("ENGINEERING") && !stream.includes("BCA") && !stream.includes("MCA") && !stream.includes("CS") && !stream.includes("IT")) {
          passed = false;
-         blockReason = "Engineering strictly requires PCM stream.";
+         blockReason = "Engineering strictly requires PCM, Science, or Technical background.";
       }
     } else if (candidate.domain === "MEDICAL") {
-      if (stream && !stream.includes("PCB") && !stream.includes("SCIENCE")) {
+      if (stream && !stream.includes("PCB") && !stream.includes("SCIENCE") && !stream.includes("MBBS") && !stream.includes("BDS") && !stream.includes("PHARM") && !stream.includes("NURSING")) {
          passed = false;
-         blockReason = "Medical strictly requires PCB stream.";
+         blockReason = "Medical strictly requires PCB or Medical/Life Sciences background.";
       }
     }
 

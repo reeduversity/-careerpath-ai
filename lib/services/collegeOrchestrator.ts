@@ -182,7 +182,7 @@ Return raw JSON only.`;
       let fallbackColleges: any[] = [];
       
       if (isInternational) {
-        if (stream.includes("PCM") || stream.includes("SCIENCE")) {
+        if (stream.includes("PCM") || stream.includes("SCIENCE") || stream.includes("TECH") || stream.includes("ENGG") || stream.includes("ENGINEERING") || stream.includes("CS") || stream.includes("IT") || stream.includes("BCA") || stream.includes("MCA")) {
           fallbackColleges = [
             { name: "University of Toronto", domain: "ENGINEERING", requiredExam: "None", feesINR: 3500000, feesUSD: 42000, country: "Canada", officialWebsite: "https://www.utoronto.ca" },
             { name: "Technical University of Munich", domain: "ENGINEERING", requiredExam: "None", feesINR: 250000, feesUSD: 3000, country: "Germany", officialWebsite: "https://www.tum.de" },
@@ -195,7 +195,7 @@ Return raw JSON only.`;
             { name: "KTH Royal Institute of Technology", domain: "ENGINEERING", requiredExam: "None", feesINR: 1200000, feesUSD: 14000, country: "Sweden", officialWebsite: "https://www.kth.se" },
             { name: "Politecnico di Milano", domain: "ENGINEERING", requiredExam: "None", feesINR: 400000, feesUSD: 4800, country: "Italy", officialWebsite: "https://www.polimi.it" }
           ];
-        } else if (stream.includes("PCB")) {
+        } else if (stream.includes("PCB") || stream.includes("MBBS") || stream.includes("BDS") || stream.includes("PHARM") || stream.includes("NURSING")) {
           fallbackColleges = [
             { name: "University of Melbourne", domain: "MEDICAL", requiredExam: "None", feesINR: 4500000, feesUSD: 54000, country: "Australia", officialWebsite: "https://www.unimelb.edu.au" },
             { name: "King's College London", domain: "MEDICAL", requiredExam: "None", feesINR: 4000000, feesUSD: 48000, country: "UK", officialWebsite: "https://www.kcl.ac.uk" },
@@ -208,7 +208,7 @@ Return raw JSON only.`;
             { name: "KU Leuven", domain: "MEDICAL", requiredExam: "None", feesINR: 800000, feesUSD: 9500, country: "Belgium", officialWebsite: "https://www.kuleuven.be" },
             { name: "University of Queensland", domain: "MEDICAL", requiredExam: "None", feesINR: 4200000, feesUSD: 50000, country: "Australia", officialWebsite: "https://www.uq.edu.au" }
           ];
-        } else if (stream.includes("COMMERCE")) {
+        } else if (stream.includes("COMMERCE") || stream.includes("BBA") || stream.includes("MBA") || stream.includes("B.COM") || stream.includes("M.COM") || stream.includes("FINANCE")) {
           fallbackColleges = [
             { name: "London School of Economics", domain: "COMMERCE", requiredExam: "None", feesINR: 3000000, feesUSD: 36000, country: "UK", officialWebsite: "https://www.lse.ac.uk" },
             { name: "University of Sydney", domain: "COMMERCE", requiredExam: "None", feesINR: 2800000, feesUSD: 34000, country: "Australia", officialWebsite: "https://www.sydney.edu.au" },
@@ -236,7 +236,7 @@ Return raw JSON only.`;
           ];
         }
       } else {
-        if (stream.includes("PCM") || stream.includes("SCIENCE")) {
+        if (stream.includes("PCM") || stream.includes("SCIENCE") || stream.includes("TECH") || stream.includes("ENGG") || stream.includes("ENGINEERING") || stream.includes("CS") || stream.includes("IT") || stream.includes("BCA") || stream.includes("MCA")) {
           fallbackColleges = [
             { name: "Amity University", domain: "ENGINEERING", requiredExam: "None", feesINR: 350000, feesUSD: 4375, country: "India", officialWebsite: "https://www.amity.edu" },
             { name: "SRM Institute of Science and Technology", domain: "ENGINEERING", requiredExam: "None", feesINR: 250000, feesUSD: 3125, country: "India", officialWebsite: "https://www.srmist.edu.in" },
@@ -249,7 +249,7 @@ Return raw JSON only.`;
             { name: "Galgotias University", domain: "ENGINEERING", requiredExam: "None", feesINR: 160000, feesUSD: 2000, country: "India", officialWebsite: "https://www.galgotiasuniversity.edu.in" },
             { name: "Hindustan Institute of Technology and Science", domain: "ENGINEERING", requiredExam: "None", feesINR: 250000, feesUSD: 3125, country: "India", officialWebsite: "https://hindustanuniv.ac.in" }
           ];
-        } else if (stream.includes("PCB")) {
+        } else if (stream.includes("PCB") || stream.includes("MBBS") || stream.includes("BDS") || stream.includes("PHARM") || stream.includes("NURSING")) {
           fallbackColleges = [
             { name: "Kasturba Medical College (Management Quota)", domain: "MEDICAL", requiredExam: "None", feesINR: 1700000, feesUSD: 21250, country: "India", officialWebsite: "https://manipal.edu/kmc-manipal.html" },
             { name: "Saveetha Medical College", domain: "MEDICAL", requiredExam: "None", feesINR: 2400000, feesUSD: 30000, country: "India", officialWebsite: "https://saveethamedicalcollege.com" },
@@ -262,7 +262,7 @@ Return raw JSON only.`;
             { name: "Kalinga Institute of Medical Sciences", domain: "MEDICAL", requiredExam: "None", feesINR: 1600000, feesUSD: 20000, country: "India", officialWebsite: "https://kims.kiit.ac.in" },
             { name: "M.S. Ramaiah Medical College", domain: "MEDICAL", requiredExam: "None", feesINR: 2100000, feesUSD: 26250, country: "India", officialWebsite: "https://msrmc.ac.in" }
           ];
-        } else if (stream.includes("COMMERCE")) {
+        } else if (stream.includes("COMMERCE") || stream.includes("BBA") || stream.includes("MBA") || stream.includes("B.COM") || stream.includes("M.COM") || stream.includes("FINANCE")) {
           fallbackColleges = [
             { name: "Christ University", domain: "COMMERCE", requiredExam: "None", feesINR: 150000, feesUSD: 1875, country: "India", officialWebsite: "https://christuniversity.in" },
             { name: "Symbiosis School of Economics", domain: "COMMERCE", requiredExam: "None", feesINR: 200000, feesUSD: 2500, country: "India", officialWebsite: "https://sse.ac.in" },
@@ -370,9 +370,9 @@ Provide realistic and accurate estimates for "averagePackage", "highestPackage",
     
     // Fallback: Generate real, high-quality, and realistic placement stats and deep details programmatically
     const stream = (profile.currentQualification || "").toUpperCase();
-    const isPCM = stream.includes("PCM") || stream.includes("SCIENCE");
-    const isPCB = stream.includes("PCB");
-    const isCommerce = stream.includes("COMMERCE");
+    const isPCM = stream.includes("PCM") || stream.includes("SCIENCE") || stream.includes("TECH") || stream.includes("ENGG") || stream.includes("ENGINEERING") || stream.includes("CS") || stream.includes("IT") || stream.includes("BCA") || stream.includes("MCA");
+    const isPCB = stream.includes("PCB") || stream.includes("MBBS") || stream.includes("BDS") || stream.includes("PHARM") || stream.includes("NURSING");
+    const isCommerce = stream.includes("COMMERCE") || stream.includes("BBA") || stream.includes("MBA") || stream.includes("B.COM") || stream.includes("M.COM") || stream.includes("FINANCE");
     
     let fallbackPathways = ["Explore career opportunities in this domain"];
     if (isPCM) fallbackPathways = ["Software Engineer", "Data Scientist", "System Architect", "R&D Engineer"];
