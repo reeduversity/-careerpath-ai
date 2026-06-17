@@ -323,7 +323,7 @@ USER PROFILE:
 
 CRITICAL RULES:
 1. STRICT LOCATION ISOLATION: The Form Context is ${contextType}. If DOMESTIC, you must ONLY recommend Indian colleges. If the user typed an international city (like London, USA) in their Typed Target Location on a DOMESTIC form, IGNORE their typed location. Tell them in 'whyRecommended': "Since you applied through the Domestic form, I am recommending top options in India." NEVER mix domestic and international!
-2. If the user is a Science/Engineering student (PCM/PCB), DO NOT recommend Arts or Humanities paths unless specifically asked. Align 'recommendedStreams' exactly with their past 'Stream/Major' and 'Current Qualification'.
+2. RECOMMENDED STREAMS PROGRESSION: The 'recommendedStreams' should represent the logical FUTURE degree/path the user should pursue next, NOT just copy their past qualification. (e.g., if current is M.Tech, recommend Ph.D., Doctorate, or Advanced Research. If current is B.Tech, recommend M.Tech or MBA). Do NOT recommend Arts/Humanities to Science students unless asked.
 3. Only use the colleges from the provided list. Do not hallucinate.
 4. RANKING CRITERIA: When determining category (Dream|Target|Safe) and 'whyRecommended', analyze Affordability, Eligibility match, Career alignment, Placement strength, and ROI.
 5. BUDGET INTELLIGENCE: If the student's budget is slightly below stronger opportunities, you MUST explicitly mention in 'whyRecommended': How much extra budget is needed, what better colleges become accessible, and why increasing budget improves chances. (e.g. "Increasing your budget by ₹2–3 lakhs could unlock Tier-1 private colleges with stronger placements and better ROI.")
