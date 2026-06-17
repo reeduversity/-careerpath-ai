@@ -210,9 +210,33 @@ function HigherEducationFormContent() {
     }
   };
 
+  const validateStep2 = () => {
+    const newErrors: Record<string, string> = {};
+    if (!formData.boardUniversity.trim()) {
+      newErrors.boardUniversity = "Board or University is required.";
+    }
+    if (formData.educationLevel !== "10th" && !formData.currentQualification.trim()) {
+      newErrors.currentQualification = formData.educationLevel === "12th" 
+        ? "Stream is required." 
+        : "Degree & Branch is required.";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNextStep2 = () => {
+    if (validateStep2()) {
+      setStep(3);
+    }
+  };
+
   const handleSubmit = async () => {
     if (!validateStep1()) {
       setStep(1);
+      return;
+    }
+    if (!validateStep2()) {
+      setStep(2);
       return;
     }
     if (locationError) {
@@ -372,13 +396,23 @@ function HigherEducationFormContent() {
                   <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">
                     {formData.educationLevel === "12th" ? "Stream (e.g., PCM, PCB, Commerce) *" : "Degree & Branch (e.g., B.Tech CS, B.Com) *"}
                   </label>
-                  <input className="w-full bg-slate-800/50 border border-slate-600 focus:border-sky-500 rounded-xl p-3.5 outline-none" name="currentQualification" placeholder={formData.educationLevel === "12th" ? "PCM, Commerce, Arts..." : "B.Tech Computer Science..."} onChange={handleChange} value={formData.currentQualification} />
+                  <input className={`w-full bg-slate-800/50 border ${errors.currentQualification ? 'border-rose-500 focus:ring-rose-500' : 'border-slate-600 focus:border-sky-500 focus:ring-sky-500'} focus:ring-1 rounded-xl p-3.5 outline-none transition-all`} name="currentQualification" placeholder={formData.educationLevel === "12th" ? "PCM, Commerce, Arts..." : "B.Tech Computer Science..."} onChange={handleChange} value={formData.currentQualification} />
+                  {errors.currentQualification && (
+                    <p className="text-xs text-rose-400 mt-1.5 ml-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                      {errors.currentQualification}
+                    </p>
+                  )}
                 </div>
               )}
 
               <div>
                 <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Board / University *</label>
-                <input className="w-full bg-slate-800/50 border border-slate-600 focus:border-sky-500 rounded-xl p-3.5 outline-none" name="boardUniversity" placeholder="CBSE, State Board, Delhi University..." onChange={handleChange} value={formData.boardUniversity} />
+                <input className={`w-full bg-slate-800/50 border ${errors.boardUniversity ? 'border-rose-500 focus:ring-rose-500' : 'border-slate-600 focus:border-sky-500 focus:ring-sky-500'} focus:ring-1 rounded-xl p-3.5 outline-none transition-all`} name="boardUniversity" placeholder="CBSE, State Board, Delhi University..." onChange={handleChange} value={formData.boardUniversity} />
+                {errors.boardUniversity && (
+                  <p className="text-xs text-rose-400 mt-1.5 ml-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                    {errors.boardUniversity}
+                  </p>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -395,7 +429,7 @@ function HigherEducationFormContent() {
 
             <div className="flex gap-4 pt-4">
               <button className="w-1/3 bg-slate-800 hover:bg-slate-700 border border-slate-700 p-4 rounded-xl font-bold transition-all text-slate-300" onClick={() => setStep(1)}>Back</button>
-              <button className="w-2/3 bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-400 hover:to-sky-500 p-4 rounded-xl font-bold transition-all shadow-lg shadow-sky-500/25 flex items-center justify-center gap-2 group" onClick={() => setStep(3)}>
+              <button className="w-2/3 bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-400 hover:to-sky-500 p-4 rounded-xl font-bold transition-all shadow-lg shadow-sky-500/25 flex items-center justify-center gap-2 group" onClick={handleNextStep2}>
                 Next Step
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </button>

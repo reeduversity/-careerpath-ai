@@ -94,6 +94,7 @@ export default function ExamPrepForm() {
                     onChange={(e) => handleChange("fullName", e.target.value)} 
                     placeholder="Enter your full name" 
                     className={`h-12 bg-slate-950 rounded-xl ${errors.fullName ? 'border-rose-500 focus:ring-rose-500' : ''}`}
+                    required
                   />
                 </FieldWrapper>
 
@@ -105,6 +106,7 @@ export default function ExamPrepForm() {
                     onChange={(e) => handleChange("email", e.target.value)} 
                     placeholder="john@example.com" 
                     className={`h-12 bg-slate-950 rounded-xl ${errors.email ? 'border-rose-500 focus:ring-rose-500' : ''}`}
+                    required
                   />
                 </FieldWrapper>
 
@@ -115,6 +117,7 @@ export default function ExamPrepForm() {
                     onChange={(e) => handleChange("phone", e.target.value)} 
                     placeholder="+91 9876543210" 
                     className={`h-12 bg-slate-950 rounded-xl ${errors.phone ? 'border-rose-500 focus:ring-rose-500' : ''}`}
+                    required
                   />
                 </FieldWrapper>
               </div>
@@ -126,6 +129,7 @@ export default function ExamPrepForm() {
                   id="stage" 
                   value={values.stage} 
                   onChange={(e) => handleChange("stage", e.target.value)}
+                  required
                 >
                   <option value="">Select Stage</option>
                   <option value="After 10th">After 10th</option>
@@ -142,6 +146,7 @@ export default function ExamPrepForm() {
                   id="sector" 
                   value={values.sector} 
                   onChange={(e) => handleChange("sector", e.target.value)}
+                  required
                 >
                   <option value="">Select Sector</option>
                   <option value="Civil Services (UPSC/State PSC)">Civil Services (UPSC/State PSC)</option>
@@ -193,6 +198,7 @@ export default function ExamPrepForm() {
                   ]} 
                   value={values.hours} 
                   onChange={(e) => handleChange("hours", e.target.value)} 
+                  required
                 />
               </FieldWrapper>
 
@@ -206,6 +212,7 @@ export default function ExamPrepForm() {
                   ]} 
                   value={values.budget} 
                   onChange={(e) => handleChange("budget", e.target.value)} 
+                  required
                 />
               </FieldWrapper>
             </div>

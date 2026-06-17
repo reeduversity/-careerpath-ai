@@ -276,14 +276,23 @@ export async function analyzeResumeText(text: string) {
   const prompt = `You are a strict JSON-only API that extracts structured data from resumes.
 Extract the following fields from the given resume text. If a field cannot be found, output null (for strings) or empty array (for arrays).
 
+CRITICAL ATS EXTRACTION RULES (GOD-LEVEL CONCISENESS):
+1. Keep it concise. Remove fluff, repetitive phrases, and unnecessary words.
+2. Maintain consistent bullet structure: Action + Task + Result. Use strong action verbs (e.g., Engineered, Designed, Optimized).
+3. Do NOT repeat the exact same bullet point or phrase across different roles/projects.
+4. Add measurable impact if present in the original text (e.g., improved by 20%).
+5. Group skills properly and remove duplicates.
+6. Keep strong section hierarchy and ensure clean professional formatting.
+7. Prioritize target-role keywords. Keep high keyword match for ATS parsing.
+8. Make it premium, professional, concise, and recruiter-ready.
+
 Schema:
 {
   "fullName": "string | null",
   "email": "string | null",
   "phone": "string | null",
   "location": "string | null",
-  "currentCity": "string | null",
-  "currentState": "string | null (extract State/Province only e.g. Maharashtra, Delhi. DO NOT output 'India' or country names)",
+  "currentCity": "string | null (extract State/Province only e.g. Maharashtra, Delhi. DO NOT output 'India' or country names)",
   "profileType": "string | null (e.g. Technical/IT, Healthcare/Medical, Finance/Banking, Legal/Law, Engineering/Core, Arts/Design, Sales/Marketing, Management/HR, Education/Teaching, Media/Journalism, Other Non-Technical)",
   "careerGoal": "string | null (meaningful career objective)",
   "targetJobRole": "string | null (infer from skills + projects)",
@@ -299,12 +308,12 @@ Schema:
   "linkedin": "string | null (Extract full LinkedIn profile URL if present, e.g. https://linkedin.com/in/username)",
   "github": "string | null (Extract full GitHub profile URL if present, e.g. https://github.com/username)",
   "portfolio": "string | null (Extract personal portfolio or website URL if present)",
-  "education": ["string"],
-  "skills": ["string"],
-  "technicalSkills": ["string"],
-  "softSkills": ["string"],
-  "experience": ["string"],
-  "projects": ["string"],
+  "education": [{ "degree": "string", "institution": "string", "year": "string", "score": "string" }],
+  "skills": ["string (Deduplicated)"],
+  "technicalSkills": ["string (Deduplicated)"],
+  "softSkills": ["string (Deduplicated)"],
+  "experience": [{ "role": "string", "company": "string", "duration": "string", "description": "string (Concise Action-Task-Result bullet)" }],
+  "projects": [{ "name": "string", "techStack": "string", "description": "string (Concise Action-Task-Result bullet)" }],
   "certifications": ["string"],
   "achievements": ["string"]
 }

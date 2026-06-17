@@ -68,16 +68,45 @@ export async function orchestrateExamPrep(
   } else if (sec.includes("international")) {
     validExams = validExams.filter((e: any) => e.domain.startsWith("INTERNATIONAL") || e.domain === "LANGUAGE");
   } else if (sec.includes("undecided")) {
-    // Undecided: Recommend all valid exams for the user's educational stage
+    // Undecided: Recommend valid exams, but we will sort them later after stage filtering.
   }
 
   // Filter by Stage
-  if (stage.includes("10th") || stage.includes("12th")) {
+  if (stage.includes("10th")) {
+    validExams = validExams.filter((e: any) => e.minQualification === "10th" || e.minQualification === "ANY");
+  } else if (stage.includes("12th")) {
     validExams = validExams.filter((e: any) => e.minQualification === "12th" || e.minQualification === "10th" || e.minQualification === "ANY" || e.minQualification === "UG");
   } else if (stage.includes("PG") || stage.includes("Post") || stage.includes("Master") || stage.includes("MBA") || stage.includes("M.Tech") || stage.includes("M.Sc")) {
-    validExams = validExams.filter((e: any) => ["PG", "UG", "12th", "10th", "ANY"].includes(e.minQualification));
+    validExams = validExams.filter((e: any) => {
+      if (["JEE Main", "JEE Advanced", "NEET", "NDA", "BITSAT", "SAT"].includes(e.name)) return false;
+      return ["PG", "UG", "12th", "10th", "ANY"].includes(e.minQualification);
+    });
   } else if (stage.includes("Graduate") || stage.includes("Diploma") || stage.includes("UG") || stage.includes("Technical") || stage.includes("B.Tech") || stage.includes("B.Sc")) {
-    validExams = validExams.filter((e: any) => ["UG", "12th", "10th", "ANY"].includes(e.minQualification));
+    validExams = validExams.filter((e: any) => {
+      if (["JEE Main", "JEE Advanced", "NEET", "NDA", "BITSAT", "SAT"].includes(e.name)) return false;
+      return ["UG", "12th", "10th", "ANY"].includes(e.minQualification);
+    });
+  }
+
+  // Sort exams for undecided or general sectors so highest qualifications appear first
+  if (sec.includes("undecided") || validExams.length > 3) {
+    validExams.sort((a: any, b: any) => {
+      const rankMap: Record<string, number> = { "PG": 4, "UG": 3, "12th": 2, "10th": 1, "ANY": 0 };
+      const aRank = rankMap[a.minQualification] || 0;
+      const bRank = rankMap[b.minQualification] || 0;
+      
+      const isPG = stage.includes("PG") || stage.includes("Post") || stage.includes("Master");
+      const isUG = stage.includes("UG") || stage.includes("Graduate") || stage.includes("B.") || stage.includes("Technical");
+      
+      if (isPG) {
+        return bRank - aRank;
+      } else if (isUG) {
+        if (aRank === 3 && bRank !== 3) return -1;
+        if (bRank === 3 && aRank !== 3) return 1;
+        return bRank - aRank;
+      }
+      return 0; // maintain original order for 12th/10th
+    });
   }
 
   // PHASE 4: TARGET EXAM EXACT MATCH

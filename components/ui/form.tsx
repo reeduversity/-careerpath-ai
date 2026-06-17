@@ -86,7 +86,7 @@ interface RadioGroupProps extends React.InputHTMLAttributes<HTMLInputElement> {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export function RadioGroup({ name, options, value, onChange }: RadioGroupProps) {
+export function RadioGroup({ name, options, value, onChange, ...props }: RadioGroupProps) {
   return (
     <div className="grid gap-3">
       {options.map((option) => (
@@ -99,6 +99,7 @@ export function RadioGroup({ name, options, value, onChange }: RadioGroupProps) 
               checked={value === option.value}
               onChange={onChange}
               className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-slate-600 bg-slate-900 transition-all checked:border-sky-500 focus:outline-none focus:ring-4 focus:ring-sky-500/20"
+              {...(props as any)}
             />
             <span className="pointer-events-none absolute h-2.5 w-2.5 rounded-full bg-sky-500 opacity-0 transition-opacity peer-checked:opacity-100" />
           </div>
