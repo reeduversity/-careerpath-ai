@@ -12,7 +12,13 @@ try {
 }
 
 export function enforceCollegeCutoffs(candidates: any[], profile: any): any[] {
-  const twelfthPct = profile.twelfthPercentage || profile.percentage || 0;
+  let twelfthPct = profile.twelfthPercentage || profile.percentage || 0;
+  
+  // If the percentage is 10 or less, it's likely a CGPA. Convert it to a rough percentage.
+  if (twelfthPct > 0 && twelfthPct <= 10) {
+    twelfthPct = twelfthPct * 9.5;
+  }
+
   const tenthPct = profile.tenthPercentage || 0;
   const category = profile.category || "General";
   const stream = (profile.currentQualification || "").toUpperCase();
