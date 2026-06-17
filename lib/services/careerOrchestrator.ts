@@ -4,7 +4,7 @@ import { generateGroqResponse } from "./groqClient";
 import { prisma } from "@/lib/prisma";
 
 export async function orchestrateCareerPlan(
-  resumeProfileId: string, 
+  resumeProfileId: string,
   careerRoleId: string,
   jobInterest?: string,
   examName?: string,
@@ -12,7 +12,7 @@ export async function orchestrateCareerPlan(
   jobSeekerProfileId?: string
 ) {
   // Step 1: Fetch Career Role
-  let careerRoleTitle = careerRoleId; 
+  let careerRoleTitle = careerRoleId;
   try {
     const careerRole = await prisma.careerRole.findUnique({
       where: { id: careerRoleId }
@@ -25,7 +25,7 @@ export async function orchestrateCareerPlan(
   }
 
   if (!careerRoleTitle || careerRoleTitle.trim() === "" || careerRoleTitle === "undefined") {
-    careerRoleTitle = "Software Engineer"; 
+    careerRoleTitle = "Software Engineer";
   }
 
   // Step 1.5: Fetch JobSeekerProfile if available
@@ -60,7 +60,7 @@ export async function orchestrateCareerPlan(
   const missingSkills = skillGap.missingSkills || [];
 
   const isGov = (jobInterest || "").toLowerCase().includes("government") || (examName || "").match(/upsc|ssc|banking|ibps|sbi|railway|psc|nda|cds/i);
-  let targetSectorRule = isGov ? 
+  let targetSectorRule = isGov ?
     `USER IS A GOVERNMENT JOB ASPIRANT. STRICTLY suggest government jobs (UPSC, SSC CGL/CHSL, Banking IBPS/SBI, Railway, State PSC, Defence) under "privateJobPath". DO NOT suggest private corporate roles. Salaries must reflect Indian Government Pay Scales (e.g. 7th CPC).` :
     `USER IS A PRIVATE SECTOR ASPIRANT. Suggest private jobs, top multinational companies, and market-standard salaries.`;
 
@@ -134,9 +134,9 @@ RULES:
 DO NOT hallucinate formatting. Return pure JSON.`;
 
   const userMessage = `Generate the absolute best, highly realistic career plan and ATS score for a ${careerRoleTitle} with ${profileType || 'General'} profile. Existing skills: ${existingSkills.join(", ")}. Target Sector: ${isGov ? 'Government' : 'Private'}`;
-  
+
   console.log(`[Groq] Requesting orchestration for ${careerRoleTitle} with profileType: ${profileType}`);
-  
+
   let aiData: any;
   try {
     aiData = await generateGroqResponse(systemPrompt, userMessage, true);
@@ -165,7 +165,8 @@ DO NOT hallucinate formatting. Return pure JSON.`;
   const seekerForFilter = jobSeekerProfileId ? await prisma.jobSeekerProfile.findUnique({ where: { id: jobSeekerProfileId } }) : {};
   const validJobRoles = enforceJobEligibility(aiData.privateJobPath?.roles || [], seekerForFilter || {}, careerRoleTitle)
     .filter((j: any) => j.passed)
-    .map((j: any) => j.job);
+    .map((j: any) => j.job)
+    .slice(0, 6);
 
   return {
     careerRole: careerRoleTitle,
