@@ -82,6 +82,7 @@ CRITICAL RULES:
 4. MULTIPLE ENTRANCE EXAMS: If "Entrance Exams Taken" contains multiple exams (e.g. "JEE Main: 98 percentile | JEE Advanced: 5000 Rank | CUET: 750 Score"), you MUST recommend a balanced, high-quality mix of colleges matching ANY of the competitive exams they have taken (e.g., IITs for JEE Advanced, NITs/DTU for JEE Main, and Delhi University/Central Universities for CUET). Do not ignore any of the provided exams.
 5. REAL-WORLD ACCURACY: Only recommend real, actual, existing institutions (e.g. Delhi Technological University, Indian Institute of Technology Delhi, Netaji Subhas University of Technology, etc. in Delhi). Do not generate generic, fictional, or placeholder college names. Ensure fees are realistically estimated.
 6. DISTANCE & LOW BUDGET OPTIONS: If the user's budget is extremely low (e.g. Below 2 Lakhs) or they seek flexibility/distance learning, you MUST recommend Indira Gandhi National Open University (IGNOU) or similar public open universities in India. IGNOU has a domestic budget fit for almost all courses.
+7. POSTGRADUATE/PHD EXAM ASSOCIATION: If the user is applying for PG, Master's, or PhD, and has taken exams like "GATE", "UGC NET", or "GRE", you MUST strictly output that specific exam (e.g. "GATE") under the 'requiredExam' field for IITs, NITs, and top institutes. Do NOT output "JEE Main" or "JEE Advanced" for PG/PhD candidates, as that will cause the system to falsely reject them.
 
 Output a JSON array under "candidates" with fields:
 {
