@@ -78,7 +78,7 @@ export async function orchestrateExamPrep(
     validExams = validExams.filter((e: any) => e.minQualification === "12th" || e.minQualification === "10th" || e.minQualification === "ANY" || e.minQualification === "UG");
   } else if (stage.includes("PG") || stage.includes("Post") || stage.includes("Master") || stage.includes("MBA") || stage.includes("M.Tech") || stage.includes("M.Sc")) {
     validExams = validExams.filter((e: any) => {
-      if (["JEE Main", "JEE Advanced", "NEET", "NDA", "BITSAT", "SAT"].includes(e.name)) return false;
+      if (["JEE Main", "JEE Advanced", "NEET", "NDA", "BITSAT", "SAT", "CAT", "GRE", "GMAT"].includes(e.name)) return false;
       return ["PG", "UG", "12th", "10th", "ANY"].includes(e.minQualification);
     });
   } else if (stage.includes("Graduate") || stage.includes("Diploma") || stage.includes("UG") || stage.includes("Technical") || stage.includes("B.Tech") || stage.includes("B.Sc")) {
@@ -89,7 +89,7 @@ export async function orchestrateExamPrep(
   }
 
   // Sort exams for undecided or general sectors so highest qualifications appear first
-  if (sec.includes("undecided") || validExams.length > 3) {
+  if (sec.includes("undecided") || validExams.length > 6) {
     validExams.sort((a: any, b: any) => {
       const rankMap: Record<string, number> = { "PG": 4, "UG": 3, "12th": 2, "10th": 1, "ANY": 0 };
       const aRank = rankMap[a.minQualification] || 0;
@@ -136,8 +136,8 @@ export async function orchestrateExamPrep(
     };
   }
 
-  // Pick top 3 to send to AI
-  const candidatesToExplain = validExams.slice(0, 3);
+  // Pick top 5-6 to send to AI
+  const candidatesToExplain = validExams.slice(0, 6);
 
   // LAYER 9 & 11: AI Explainability Layer
   const systemPrompt = `You are an Explainability Engine for CareerPath AI.
