@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 const indianStates = [
   "Andaman and Nicobar Islands", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", 
@@ -172,6 +173,14 @@ function HigherEducationFormContent() {
     });
   };
 
+  const handleNextStep1 = () => {
+    if (!formData.fullName.trim() || !formData.email.trim() || !formData.phone.trim()) {
+      alert("Please fill in your Full Name, Email, and Phone Number to continue.");
+      return;
+    }
+    setStep(2);
+  };
+
   const handleSubmit = async () => {
     if (locationError) {
       alert("Please fix the location error before submitting.");
@@ -224,6 +233,11 @@ function HigherEducationFormContent() {
       <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-emerald-500/20 blur-[120px] rounded-full pointer-events-none"></div>
 
       <div className="max-w-2xl w-full bg-slate-900/80 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 shadow-2xl relative z-10">
+        <div className="mb-4">
+          <Link href="/" className="inline-block text-sky-400 hover:text-sky-300 transition-colors">
+            ← Back to Home
+          </Link>
+        </div>
         <div className="flex justify-between items-center mb-8 border-b border-slate-700/50 pb-4">
           <h2 className="text-3xl font-bold bg-gradient-to-r from-sky-400 to-emerald-400 bg-clip-text text-transparent">
             AI Pathway Builder
@@ -240,23 +254,23 @@ function HigherEducationFormContent() {
             
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Full Name</label>
-                <input className="w-full bg-slate-800/50 border border-slate-600 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded-xl p-3.5 transition-all outline-none" name="fullName" placeholder="Enter your full name" onChange={handleChange} value={formData.fullName} />
+                <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Full Name *</label>
+                <input className="w-full bg-slate-800/50 border border-slate-600 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded-xl p-3.5 transition-all outline-none" name="fullName" placeholder="Enter your full name" onChange={handleChange} value={formData.fullName} required />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Email Address</label>
-                  <input className="w-full bg-slate-800/50 border border-slate-600 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded-xl p-3.5 transition-all outline-none" name="email" type="email" placeholder="john@example.com" onChange={handleChange} value={formData.email} />
+                  <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Email Address *</label>
+                  <input className="w-full bg-slate-800/50 border border-slate-600 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded-xl p-3.5 transition-all outline-none" name="email" type="email" placeholder="john@example.com" onChange={handleChange} value={formData.email} required />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Phone Number</label>
-                  <input className="w-full bg-slate-800/50 border border-slate-600 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded-xl p-3.5 transition-all outline-none" name="phone" placeholder="+91 9876543210" onChange={handleChange} value={formData.phone} />
+                  <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Phone Number *</label>
+                  <input className="w-full bg-slate-800/50 border border-slate-600 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded-xl p-3.5 transition-all outline-none" name="phone" placeholder="+91 9876543210" onChange={handleChange} value={formData.phone} required />
                 </div>
               </div>
             </div>
             
             <div className="pt-4">
-              <button className="w-full bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-400 hover:to-sky-500 p-4 rounded-xl font-bold transition-all shadow-lg shadow-sky-500/25 flex items-center justify-center gap-2 group" onClick={() => setStep(2)}>
+              <button className="w-full bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-400 hover:to-sky-500 p-4 rounded-xl font-bold transition-all shadow-lg shadow-sky-500/25 flex items-center justify-center gap-2 group" onClick={handleNextStep1}>
                 Continue to Academics
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </button>
