@@ -157,7 +157,12 @@ export function enforceCollegeCutoffs(candidates: any[], profile: any): any[] {
 export function enforceJobEligibility(jobs: string[], profile: any, targetRole: string): { job: string, passed: boolean, reason: string }[] {
   const cgpa = profile.cgpa || 0;
   const degree = (profile.degree || "").toUpperCase();
-  const twelfthPct = profile.twelfthPercentage || 0;
+  let twelfthPct = profile.twelfthPercentage || 0;
+
+  // Scale CGPA to rough percentage if less than or equal to 10
+  if (twelfthPct > 0 && twelfthPct <= 10) {
+    twelfthPct = twelfthPct * 9.5;
+  }
 
   return jobs.map(job => {
     let passed = true;
