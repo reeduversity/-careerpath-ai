@@ -36,14 +36,16 @@ export function validateCandidates(candidates: Candidate[], constraints: Resolve
     }
 
     // Parse fees safely
-    let feesINR = typeof candidate.feesINR === 'string' ? parseFloat((candidate.feesINR as string).replace(/[^0-9.]/g, '')) : candidate.feesINR;
-    let feesUSD = typeof candidate.feesUSD === 'string' ? parseFloat((candidate.feesUSD as string).replace(/[^0-9.]/g, '')) : candidate.feesUSD;
+    let strINR = typeof candidate.feesINR === 'string' ? (candidate.feesINR as string).toLowerCase() : "";
+    let strUSD = typeof candidate.feesUSD === 'string' ? (candidate.feesUSD as string).toLowerCase() : "";
+    let feesINR = typeof candidate.feesINR === 'string' ? parseFloat(strINR.replace(/[^0-9.]/g, '')) : candidate.feesINR;
+    let feesUSD = typeof candidate.feesUSD === 'string' ? parseFloat(strUSD.replace(/[^0-9.]/g, '')) : candidate.feesUSD;
     if (isNaN(feesINR as number)) feesINR = 0;
     if (isNaN(feesUSD as number)) feesUSD = 0;
 
-    // Normalizer: Convert decimal Lakhs (e.g. 1.2 or 1.5) or decimal USD to full integers
-    if (feesINR && feesINR < 100) feesINR = Math.round(feesINR * 100000);
-    if (feesUSD && feesUSD < 100) feesUSD = Math.round(feesUSD * 1000);
+    // Normalizer: Convert decimal Lakhs (e.g. 1.2, 15, 120 Lakhs) or decimal USD to full integers
+    if (feesINR && feesINR < 1000 && (strINR.includes("lakh") || strINR.includes("lac") || feesINR < 100)) feesINR = Math.round(feesINR * 100000);
+    if (feesUSD && feesUSD < 1000 && (strUSD.includes("k") || feesUSD < 100)) feesUSD = Math.round(feesUSD * 1000);
 
     candidate.feesINR = feesINR;
     candidate.feesUSD = feesUSD;

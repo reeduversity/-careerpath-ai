@@ -51,13 +51,13 @@ export async function orchestrateExamPrep(
   const sec = sector.toLowerCase();
   if (sec.includes("ssc")) {
     validExams = validExams.filter((e: any) => e.name.toUpperCase().includes("SSC") || e.domain === "GOVERNMENT");
-  } else if (sec.includes("engineering")) {
+  } else if (sec.includes("engineering") || sec.includes("tech") || sec.includes("it")) {
     validExams = validExams.filter((e: any) => e.name.toUpperCase().includes("JEE") || e.name.toUpperCase().includes("GATE") || e.domain === "ENGINEERING");
-  } else if (sec.includes("medical")) {
+  } else if (sec.includes("medical") || sec.includes("health") || sec.includes("pharma")) {
     validExams = validExams.filter((e: any) => e.name.toUpperCase().includes("NEET") || e.domain === "MEDICAL");
   } else if (sec.includes("banking")) {
     validExams = validExams.filter((e: any) => e.name.toUpperCase().includes("IBPS") || e.name.toUpperCase().includes("SBI") || e.name.toUpperCase().includes("RBI") || e.name.includes("PO"));
-  } else if (sec.includes("upsc") || sec.includes("government")) {
+  } else if (sec.includes("upsc") || sec.includes("government") || sec.includes("civil") || sec.includes("psc")) {
     validExams = validExams.filter((e: any) => e.name.toUpperCase().includes("UPSC") || e.domain === "GOVERNMENT");
   } else if (sec.includes("defense") || sec.includes("defence")) {
     validExams = validExams.filter((e: any) => e.domain === "DEFENCE");
@@ -74,9 +74,9 @@ export async function orchestrateExamPrep(
   // Filter by Stage
   if (stage.includes("10th") || stage.includes("12th")) {
     validExams = validExams.filter((e: any) => e.minQualification === "12th" || e.minQualification === "10th" || e.minQualification === "ANY" || e.minQualification === "UG");
-  } else if (stage.includes("PG") || stage.includes("Post")) {
+  } else if (stage.includes("PG") || stage.includes("Post") || stage.includes("Master") || stage.includes("MBA") || stage.includes("M.Tech") || stage.includes("M.Sc")) {
     validExams = validExams.filter((e: any) => ["PG", "UG", "12th", "10th", "ANY"].includes(e.minQualification));
-  } else if (stage.includes("Graduate") || stage.includes("Diploma") || stage.includes("UG") || stage.includes("Technical")) {
+  } else if (stage.includes("Graduate") || stage.includes("Diploma") || stage.includes("UG") || stage.includes("Technical") || stage.includes("B.Tech") || stage.includes("B.Sc")) {
     validExams = validExams.filter((e: any) => ["UG", "12th", "10th", "ANY"].includes(e.minQualification));
   }
 

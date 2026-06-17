@@ -39,13 +39,13 @@ export function evaluateEligibility(profile: any): EligibilityResult {
   let determinedStream = "ANY";
   const qualification = (profile.currentQualification || "").toUpperCase();
 
-  if (goal.includes("ENGINEER") || goal.includes("B.TECH") || goal.includes("CSE") || goal.includes("TECH") || qualification.includes("PCM")) {
+  if (goal.includes("ENGINEER") || goal.includes("B.TECH") || goal.includes("CSE") || goal.includes("TECH") || qualification.includes("PCM") || qualification.includes("TECH") || qualification.includes("ENGG") || qualification.includes("ENGINEERING") || qualification.includes("MCA") || qualification.includes("BCA") || qualification.includes("CS") || qualification.includes("IT")) {
     determinedStream = "PCM";
-  } else if (goal.includes("MBBS") || goal.includes("DOCTOR") || goal.includes("MEDICAL") || goal.includes("BDS") || qualification.includes("PCB")) {
+  } else if (goal.includes("MBBS") || goal.includes("DOCTOR") || goal.includes("MEDICAL") || goal.includes("BDS") || qualification.includes("PCB") || qualification.includes("MBBS") || qualification.includes("BDS") || qualification.includes("PHARM") || qualification.includes("NURSING")) {
     determinedStream = "PCB";
-  } else if (goal.includes("CA") || goal.includes("COMMERCE") || goal.includes("B.COM") || goal.includes("ACCOUNT") || qualification.includes("COMMERCE")) {
+  } else if (goal.includes("CA") || goal.includes("COMMERCE") || goal.includes("B.COM") || goal.includes("ACCOUNT") || qualification.includes("COMMERCE") || qualification.includes("BBA") || qualification.includes("MBA") || qualification.includes("B.COM") || qualification.includes("M.COM") || qualification.includes("FINANCE")) {
     determinedStream = "COMMERCE";
-  } else if (qualification.includes("ARTS") || qualification.includes("HUMANITIES")) {
+  } else if (qualification.includes("ARTS") || qualification.includes("HUMANITIES") || qualification.includes("DESIGN") || qualification.includes("BA") || qualification.includes("M.A")) {
     determinedStream = "ARTS";
   }
 
