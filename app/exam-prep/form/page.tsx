@@ -121,7 +121,7 @@ export default function ExamPrepForm() {
             </div>
 
             <div className="grid gap-8 md:grid-cols-2">
-              <FieldWrapper label="Current Education Stage" htmlFor="stage" error={errors.stage}>
+              <FieldWrapper label="Current Education Stage *" htmlFor="stage" error={errors.stage}>
                 <Select 
                   id="stage" 
                   value={values.stage} 
@@ -137,7 +137,7 @@ export default function ExamPrepForm() {
                 </Select>
               </FieldWrapper>
 
-              <FieldWrapper label="Target Sector" htmlFor="sector" error={errors.sector}>
+              <FieldWrapper label="Target Sector *" htmlFor="sector" error={errors.sector}>
                 <Select 
                   id="sector" 
                   value={values.sector} 
@@ -183,7 +183,7 @@ export default function ExamPrepForm() {
             </div>
 
             <div className="grid gap-8 md:grid-cols-2 pt-4 border-t border-slate-800">
-              <FieldWrapper label="Daily Study Hours Available" htmlFor="hours" error={errors.hours}>
+              <FieldWrapper label="Daily Study Hours Available *" htmlFor="hours" error={errors.hours}>
                 <RadioGroup 
                   name="hours" 
                   options={[
@@ -196,7 +196,7 @@ export default function ExamPrepForm() {
                 />
               </FieldWrapper>
 
-              <FieldWrapper label="Preparation Budget" htmlFor="budget" error={errors.budget}>
+              <FieldWrapper label="Preparation Budget *" htmlFor="budget" error={errors.budget}>
                 <RadioGroup 
                   name="budget" 
                   options={[
