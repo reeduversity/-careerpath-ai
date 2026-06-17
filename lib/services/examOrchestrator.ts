@@ -145,6 +145,7 @@ You MUST return a raw JSON object exactly matching this schema:
 
 RULES:
 - "recommendedExams": ONLY include the exams I provided above. Do not hallucinate others. Explain WHY they match the user. Assign a high matchScore.
+- STRICT STAGE MATCHING: The user is currently in the educational stage: ${stage}. You MUST tailor your language strictly to this stage. NEVER mention "after your UG" if they are already in PG/Master's, and vice versa. Make sure the 'whyRecommended' text logically respects their exact current stage and does not hallucinate younger or older educational milestones.
   For each recommended exam, you MUST:
   * Calculate "attemptsLeft" accurately based on the user's category (${category}):
     - UPSC Civil Services: General/EWS is "6 attempts (Age limit 32 years)", OBC is "9 attempts (Age limit 35 years)", SC/ST is "Unlimited attempts (Age limit 37 years)", PwD is "9 attempts (Age limit 42 years)".

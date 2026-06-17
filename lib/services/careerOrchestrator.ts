@@ -31,6 +31,7 @@ export async function orchestrateCareerPlan(
   // Step 1.5: Fetch JobSeekerProfile if available
   let jobPreferences = "";
   let isInternational = false;
+  let userExperienceLevel = "Unknown";
   if (jobSeekerProfileId) {
     try {
       const seeker = await prisma.jobSeekerProfile.findUnique({
@@ -38,6 +39,7 @@ export async function orchestrateCareerPlan(
       });
       if (seeker) {
         isInternational = seeker.jobSearchType === "international";
+        userExperienceLevel = seeker.experienceLevel || "Unknown";
         jobPreferences = `
 - Job Search Type: ${seeker.jobSearchType?.toUpperCase()}
 - Preferred Location/Country: ${seeker.preferredLocation} ${seeker.preferredCountry ? `(${seeker.preferredCountry})` : ''}
@@ -118,6 +120,7 @@ You MUST return a raw JSON object exactly matching this schema:
 
 RULES:
 - ${targetSectorRule}
+- STRICT EXPERIENCE MATCHING: The user has an experience level of ${userExperienceLevel}. You MUST tailor all your advice strictly to this level. NEVER address an experienced professional as a fresher or recent graduate, and vice versa. Adjust your tone, roadmap complexity, and resume feedback to match their exact seniority.
 - "inferredMissingSkills": If the missing skills provided are empty, infer EXACTLY what real-world, highly demanded skills are missing based on current market trends.
 - "atsScore": 0-100 score based strictly on missing vs existing skills.
 - "resumeFeedback": Extremely critical, actionable feedback to increase ATS score. Tell them exactly which keywords to add.
