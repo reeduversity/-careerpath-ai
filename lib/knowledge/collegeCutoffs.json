@@ -1,26 +1,26 @@
 [
   {
     "category": "Tier 1 Engineering",
-    "examples": ["IIT", "NIT", "BITS", "IIIT"],
-    "requiredStream": ["PCM"],
+    "examples": ["IIT", "NIT", "BITS", "IIIT", "IISc"],
+    "requiredStream": ["PCM", "TECH", "ENGG", "ENGINEERING", "MCA", "BCA", "CS", "IT"],
     "min12thPercentage": 75,
-    "requiredExams": ["JEE Main", "JEE Advanced", "BITSAT"],
+    "requiredExams": ["JEE Main", "JEE Advanced", "BITSAT", "GATE"],
     "message": "Tier 1 engineering institutes strictly require 75%+ in 12th PCM and valid competitive exam scores."
   },
   {
     "category": "State Engineering / Tier 2",
-    "examples": ["State CET Colleges", "VIT", "SRM", "Manipal"],
-    "requiredStream": ["PCM"],
+    "examples": ["State CET Colleges", "VIT", "SRM", "Manipal", "DTU", "NSUT", "Jadavpur"],
+    "requiredStream": ["PCM", "TECH", "ENGG", "ENGINEERING", "MCA", "BCA", "CS", "IT"],
     "min12thPercentage": 60,
     "requiredExams": [],
     "message": "Tier 2 or State colleges typically require at least 60% in 12th PCM."
   },
   {
     "category": "Medical Tier 1",
-    "examples": ["AIIMS", "GMC"],
-    "requiredStream": ["PCB"],
+    "examples": ["AIIMS", "GMC", "JIPMER", "CMC"],
+    "requiredStream": ["PCB", "MBBS", "BDS", "PHARM", "NURSING", "MEDICAL"],
     "min12thPercentage": 50,
-    "requiredExams": ["NEET"],
+    "requiredExams": ["NEET", "NEET PG"],
     "message": "Government medical colleges strictly require 50%+ in 12th PCB (for General) and NEET."
   },
   {
