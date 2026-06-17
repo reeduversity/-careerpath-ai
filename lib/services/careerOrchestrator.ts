@@ -121,14 +121,15 @@ You MUST return a raw JSON object exactly matching this schema:
 RULES:
 - ${targetSectorRule}
 - STRICT EXPERIENCE MATCHING: The user has an experience level of ${userExperienceLevel}. You MUST tailor all your advice strictly to this level. NEVER address an experienced professional as a fresher or recent graduate, and vice versa. Adjust your tone, roadmap complexity, and resume feedback to match their exact seniority.
+- "privateJobPath.roles": You MUST provide exactly 6 highly relevant roles.
+- "roadmap": Provide exactly 6 meaningful, role-specific, skill-gap based, and actionable stages. For "details", you MUST strictly include: What to do, Why it matters, and Expected Outcome. Do not use generic text.
+- "certifications": Provide exactly 6 real, 100% genuine certifications only. You MUST provide a 100% real, active URL to the official platform. Do NOT hallucinate links!
+- "netflixLearningPath": Create exactly 6 series for the "Binge Learning" plan. EACH series MUST contain exactly 5 to 7 episodes.
 - "inferredMissingSkills": If the missing skills provided are empty, infer EXACTLY what real-world, highly demanded skills are missing based on current market trends.
 - "atsScore": 0-100 score based strictly on missing vs existing skills.
 - "resumeFeedback": Extremely critical, actionable feedback to increase ATS score. Tell them exactly which keywords to add.
-- "netflixLearningPath": Create exactly 5 to 6 series for the "Binge Learning" plan. EACH series MUST contain exactly 5 to 7 episodes. DO NOT provide fewer than 5 series, and DO NOT provide fewer than 5 episodes per series. This is a strict requirement.
 - "readinessScore": Job/Interview readiness score out of 100 based on their profile.
 - "marketIntelligence": Provide REAL data. What are the trending skills in this exact role?
-- "roadmap": Make it highly meaningful, role-specific, skill-gap based, and actionable. Use exact stages: "Step 1: Foundation", "Step 2: Core Skills", "Step 3: Projects", "Step 4: Interview Prep", "Step 5: Job Strategy". For "details", you MUST strictly include: What to do, Why it matters, and Expected Outcome. Do not use generic text.
-- "certifications": Real, 100% genuine certifications only. You MUST provide a 100% real, active URL to the official platform (e.g. Coursera, Udemy, AWS, edX). Do NOT hallucinate links!
 
 DO NOT hallucinate formatting. Return pure JSON.`;
 

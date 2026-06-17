@@ -160,7 +160,7 @@ Return raw JSON only.`;
   });
 
   // Filter passed candidates and sort by match score
-  let passedCandidates = validationResults.filter(r => r.passed).sort((a, b) => b.matchScore - a.matchScore).slice(0, 10);
+  let passedCandidates = validationResults.filter(r => r.passed).sort((a, b) => b.matchScore - a.matchScore).slice(0, 6);
   let isFallback = false;
 
   if (passedCandidates.length === 0) {
@@ -171,7 +171,7 @@ Return raw JSON only.`;
     if (validationResults.length > 0) {
       passedCandidates = validationResults
         .sort((a, b) => b.eligibilityScore - a.eligibilityScore || b.matchScore - a.matchScore)
-        .slice(0, 10);
+        .slice(0, 6);
     }
       
     if (passedCandidates.length === 0) {
@@ -292,7 +292,7 @@ Return raw JSON only.`;
         }
       }
       
-      passedCandidates = fallbackColleges.map(c => ({
+      passedCandidates = fallbackColleges.slice(0, 6).map(c => ({
         candidate: c,
         passed: true,
         blockReason: "",
