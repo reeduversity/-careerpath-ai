@@ -378,7 +378,7 @@ export default function JobSeeker() {
               </div>
 
               <div className="grid gap-6 lg:grid-cols-2">
-                <FieldWrapper label="Profile Type" htmlFor="profileType" error={errors.profileType}>
+                <FieldWrapper label="Profile Type *" htmlFor="profileType" error={errors.profileType}>
                   <Select 
                     id="profileType" 
                     value={values.profileType} 
@@ -407,10 +407,10 @@ export default function JobSeeker() {
               </div>
 
               <div className="grid gap-6 lg:grid-cols-2">
-                <FieldWrapper label="Career Goal" htmlFor="careerGoal" error={errors.careerGoal}>
+                <FieldWrapper label="Career Goal *" htmlFor="careerGoal" error={errors.careerGoal}>
                   <Input id="careerGoal" value={values.careerGoal} onChange={(e) => handleChange("careerGoal", e.target.value)} placeholder="e.g., Move into data engineering" />
                 </FieldWrapper>
-                <FieldWrapper label="Target Job Role" htmlFor="targetJobRole" error={errors.targetJobRole}>
+                <FieldWrapper label="Target Job Role *" htmlFor="targetJobRole" error={errors.targetJobRole}>
                   <Input 
                     id="targetJobRole" 
                     value={values.targetJobRole} 
@@ -421,10 +421,10 @@ export default function JobSeeker() {
               </div>
 
               <div className="grid gap-6 lg:grid-cols-2">
-                <FieldWrapper label="Industry" htmlFor="industry" error={errors.industry}>
+                <FieldWrapper label="Industry *" htmlFor="industry" error={errors.industry}>
                   <Input id="industry" value={values.industry} onChange={(e) => handleChange("industry", e.target.value)} placeholder="e.g., Software, Finance" />
                 </FieldWrapper>
-                <FieldWrapper label="Degree" htmlFor="degree" error={errors.degree}>
+                <FieldWrapper label="Degree *" htmlFor="degree" error={errors.degree}>
                   <Input id="degree" value={values.degree} onChange={(e) => handleChange("degree", e.target.value)} placeholder="e.g., B.Tech, MBA" />
                 </FieldWrapper>
               </div>
@@ -463,7 +463,7 @@ export default function JobSeeker() {
               </div>
 
               <div className="grid gap-6 lg:grid-cols-2">
-                <FieldWrapper label="Experience Level" htmlFor="experienceLevel" error={errors.experienceLevel}>
+                <FieldWrapper label="Experience Level *" htmlFor="experienceLevel" error={errors.experienceLevel}>
                   <Select 
                     id="experienceLevel" 
                     value={values.experienceLevel} 
@@ -502,31 +502,31 @@ export default function JobSeeker() {
               </div>
 
               <div className="grid gap-6 lg:grid-cols-2">
-                <FieldWrapper label="Current City" htmlFor="currentCity" error={errors.currentCity}>
+                <FieldWrapper label="Current City *" htmlFor="currentCity" error={errors.currentCity}>
                   <Input id="currentCity" value={values.currentCity} onChange={(e) => handleChange("currentCity", e.target.value)} placeholder="e.g., Mumbai" />
                 </FieldWrapper>
-                <FieldWrapper label="Current State" htmlFor="currentState" error={errors.currentState}>
+                <FieldWrapper label="Current State *" htmlFor="currentState" error={errors.currentState}>
                   <Input id="currentState" value={values.currentState} onChange={(e) => handleChange("currentState", e.target.value)} placeholder="e.g., Maharashtra" />
                 </FieldWrapper>
               </div>
 
               <div className="grid gap-6 lg:grid-cols-2">
                 {values.jobSearchType === "international" ? (
-                  <FieldWrapper label="Preferred Country" htmlFor="preferredCountry" error={errors.preferredCountry}>
+                  <FieldWrapper label="Preferred Country *" htmlFor="preferredCountry" error={errors.preferredCountry}>
                     <Input id="preferredCountry" value={values.preferredCountry} onChange={(e) => handleChange("preferredCountry", e.target.value)} placeholder="e.g., USA, UK, Canada" />
                   </FieldWrapper>
                 ) : (
-                  <FieldWrapper label="Preferred Job Location" htmlFor="preferredLocation" error={errors.preferredLocation}>
+                  <FieldWrapper label="Preferred Job Location *" htmlFor="preferredLocation" error={errors.preferredLocation}>
                     <Input id="preferredLocation" value={values.preferredLocation} onChange={(e) => handleChange("preferredLocation", e.target.value)} placeholder="e.g., Remote / Bangalore" />
                   </FieldWrapper>
                 )}
-                <FieldWrapper label="Work Preference" htmlFor="workPreference" error={errors.workPreference}>
+                <FieldWrapper label="Work Preference *" htmlFor="workPreference" error={errors.workPreference}>
                   <RadioGroup name="workPref" options={workPrefs} value={values.workPreference} onChange={(e) => handleChange("workPreference", e.target.value)} />
                 </FieldWrapper>
               </div>
 
               <div className="grid gap-6 lg:grid-cols-2">
-                <FieldWrapper label="Salary Expectation" htmlFor="salaryExpectation" error={errors.salaryExpectation}>
+                <FieldWrapper label="Salary Expectation *" htmlFor="salaryExpectation" error={errors.salaryExpectation}>
                   <RadioGroup 
                     name="salary" 
                     options={values.jobSearchType === "international" ? salaryOptionsInternational : salaryOptionsDomestic} 
@@ -539,7 +539,7 @@ export default function JobSeeker() {
 
               <div>
                 <p className="text-sm uppercase tracking-[0.35em] text-sky-400">Resume Upload</p>
-                <h3 className="mt-3 text-lg font-medium text-white">Upload your resume (PDF or DOCX, max 5MB)</h3>
+                <h3 className="mt-3 text-lg font-medium text-white">Upload your resume (PDF or DOCX, max 5MB) *</h3>
               </div>
 
               <div className="grid gap-6 lg:grid-cols-2 items-center">

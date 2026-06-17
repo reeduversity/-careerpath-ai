@@ -357,7 +357,7 @@ function HigherEducationFormContent() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Current Education Level</label>
+                <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Current Education Level *</label>
                 <select className="w-full bg-slate-800/50 border border-slate-600 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded-xl p-3.5 transition-all outline-none appearance-none" name="educationLevel" onChange={handleEducationLevelChange} value={formData.educationLevel}>
                   <option value="10th">10th Standard Pass</option>
                   <option value="12th">12th Standard Pass</option>
@@ -370,14 +370,14 @@ function HigherEducationFormContent() {
               {formData.educationLevel !== "10th" && (
                 <div>
                   <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">
-                    {formData.educationLevel === "12th" ? "Stream (e.g., PCM, PCB, Commerce)" : "Degree & Branch (e.g., B.Tech CS, B.Com)"}
+                    {formData.educationLevel === "12th" ? "Stream (e.g., PCM, PCB, Commerce) *" : "Degree & Branch (e.g., B.Tech CS, B.Com) *"}
                   </label>
                   <input className="w-full bg-slate-800/50 border border-slate-600 focus:border-sky-500 rounded-xl p-3.5 outline-none" name="currentQualification" placeholder={formData.educationLevel === "12th" ? "PCM, Commerce, Arts..." : "B.Tech Computer Science..."} onChange={handleChange} value={formData.currentQualification} />
                 </div>
               )}
 
               <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Board / University</label>
+                <label className="block text-xs font-medium text-slate-400 mb-1 ml-1">Board / University *</label>
                 <input className="w-full bg-slate-800/50 border border-slate-600 focus:border-sky-500 rounded-xl p-3.5 outline-none" name="boardUniversity" placeholder="CBSE, State Board, Delhi University..." onChange={handleChange} value={formData.boardUniversity} />
               </div>
 
