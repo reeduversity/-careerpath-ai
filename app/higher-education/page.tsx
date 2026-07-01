@@ -13,7 +13,7 @@ export default function HigherEducation() {
         "Scholarship Guidance",
         "Entrance Exam Prep"
       ],
-      href: "/higher-education/form?type=domestic"
+      href: "/higher-education/domestic"
     },
     {
       id: "international",
@@ -26,7 +26,7 @@ export default function HigherEducation() {
         "Scholarship Opportunities",
         "Career Pathways"
       ],
-      href: "/higher-education/form?type=international"
+      href: "/higher-education/international"
     },
     {
       id: "exam-prep",
@@ -61,16 +61,16 @@ export default function HigherEducation() {
         {/* Education Type Cards */}
         <div className="grid md:grid-cols-3 gap-8">
           {options.map((option) => (
-            <Link key={option.id} href={option.href} className="group">
-              <div className="h-full rounded-2xl border border-slate-700 bg-gradient-to-br from-slate-800 to-slate-900 p-8 hover:border-sky-400 hover:shadow-lg hover:shadow-sky-500/20 transition-all duration-300 cursor-pointer">
-                <div className="flex flex-col h-full justify-between space-y-6">
+            <div key={option.id} className="group">
+              <div className="h-full rounded-2xl border border-slate-700 bg-gradient-to-br from-slate-800 to-slate-900 p-8 hover:border-sky-400 hover:shadow-lg hover:shadow-sky-500/20 transition-all duration-300 flex flex-col justify-between">
+                <div className="space-y-6">
                   {/* Icon */}
                   <div className="flex items-center justify-center w-20 h-20 rounded-xl bg-sky-500/10 border border-sky-500/30 group-hover:bg-sky-500/20 transition-colors">
                     <span className="text-5xl">{option.icon}</span>
                   </div>
 
                   {/* Content */}
-                  <div className="space-y-2 flex-1">
+                  <div className="space-y-2">
                     <h2 className="text-2xl font-bold text-slate-100 group-hover:text-sky-400 transition-colors">
                       {option.title}
                     </h2>
@@ -88,14 +88,16 @@ export default function HigherEducation() {
                       </li>
                     ))}
                   </ul>
+                </div>
 
-                  {/* CTA Button */}
-                  <div className="text-center w-full mt-4 px-6 py-3 rounded-lg bg-sky-500 text-white font-semibold hover:bg-sky-600 transition-colors group-hover:shadow-lg group-hover:shadow-sky-500/30">
+                {/* CTA Button */}
+                <Link href={option.href} className="block mt-6">
+                  <div className="text-center w-full px-6 py-3 rounded-lg bg-sky-500 text-white font-semibold hover:bg-sky-600 transition-colors group-hover:shadow-lg group-hover:shadow-sky-500/30">
                     Get Started →
                   </div>
-                </div>
+                </Link>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
 
