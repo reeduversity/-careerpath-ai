@@ -11,9 +11,8 @@ export default function HigherEducation() {
         "Stream & Board Selection",
         "College Recommendations",
         "Scholarship Guidance",
-        "Entrance Exam Prep"
       ],
-      href: "/higher-education/domestic"
+      href: "/higher-education/form?type=domestic"
     },
     {
       id: "international",
@@ -26,7 +25,7 @@ export default function HigherEducation() {
         "Scholarship Opportunities",
         "Career Pathways"
       ],
-      href: "/higher-education/international"
+      href: "/higher-education/form?type=international"
     },
     {
       id: "exam-prep",

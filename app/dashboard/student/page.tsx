@@ -280,222 +280,53 @@ function StudentDashboardContent() {
                 </button>
               </div>
 
-              <div className="p-6 md:p-8 space-y-10 overflow-y-auto max-h-[75vh] scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
-                
-                {/* 1. Overview */}
-                <section>
-                  <h3 className="text-xl font-bold text-sky-400 mb-4 flex items-center gap-2">
-                    <span>🏢</span> College Overview
+              <div className="p-6 md:p-8 space-y-8 overflow-y-auto max-h-[70vh]">
+                {/* Placements Grid */}
+                <div>
+                  <h3 className="text-xl font-bold text-emerald-400 mb-4 flex items-center gap-2">
+                    <span>📈</span> Placement & ROI Stats
                   </h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="bg-slate-800/40 p-4 rounded-xl border border-slate-700/50">
-                      <div className="text-xs text-slate-400">Type</div>
-                      <div className="text-sm font-semibold text-slate-200">Private University</div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700/50 text-center">
+                      <div className="text-sm text-slate-400 mb-1">Average Package</div>
+                      <div className="text-2xl font-bold text-emerald-300">{selectedCollege.deepDetails?.averagePackage || "N/A"}</div>
                     </div>
-                    <div className="bg-slate-800/40 p-4 rounded-xl border border-slate-700/50">
-                      <div className="text-xs text-slate-400">Established</div>
-                      <div className="text-sm font-semibold text-slate-200">2005</div>
+                    <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700/50 text-center">
+                      <div className="text-sm text-slate-400 mb-1">Highest Package</div>
+                      <div className="text-2xl font-bold text-sky-300">{selectedCollege.deepDetails?.highestPackage || "N/A"}</div>
                     </div>
-                    <div className="bg-slate-800/40 p-4 rounded-xl border border-slate-700/50">
-                      <div className="text-xs text-slate-400">Campus Area</div>
-                      <div className="text-sm font-semibold text-slate-200">600+ Acres</div>
-                    </div>
-                    <div className="bg-slate-800/40 p-4 rounded-xl border border-slate-700/50">
-                      <div className="text-xs text-slate-400">NIRF Ranking</div>
-                      <div className="text-sm font-semibold text-slate-200">Top 50</div>
+                    <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700/50 text-center">
+                      <div className="text-sm text-slate-400 mb-1">Placement Rate</div>
+                      <div className="text-2xl font-bold text-amber-300">{selectedCollege.deepDetails?.placementPercentage || "N/A"}</div>
                     </div>
                   </div>
-                </section>
-
-                {/* 2. Courses & Programs & 3. Admission */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <section>
-                    <h3 className="text-xl font-bold text-rose-400 mb-4 flex items-center gap-2">
-                      <span>🎓</span> Top Programs
-                    </h3>
-                    <ul className="space-y-3">
-                      <li className="bg-slate-800/40 p-3 rounded-lg border border-slate-700/50">
-                        <div className="font-semibold text-rose-300">B.Tech / B.E.</div>
-                        <div className="text-xs text-slate-400">Duration: 4 Years</div>
-                      </li>
-                      <li className="bg-slate-800/40 p-3 rounded-lg border border-slate-700/50">
-                        <div className="font-semibold text-rose-300">MBA / PGDM</div>
-                        <div className="text-xs text-slate-400">Duration: 2 Years</div>
-                      </li>
-                      <li className="bg-slate-800/40 p-3 rounded-lg border border-slate-700/50">
-                        <div className="font-semibold text-rose-300">Ph.D. Programs</div>
-                        <div className="text-xs text-slate-400">Duration: 3-5 Years</div>
-                      </li>
-                    </ul>
-                  </section>
-
-                  <section>
-                    <h3 className="text-xl font-bold text-amber-400 mb-4 flex items-center gap-2">
-                      <span>📝</span> Admission Process
-                    </h3>
-                    <div className="bg-slate-800/40 p-5 rounded-xl border border-slate-700/50 space-y-4">
-                      <div>
-                        <div className="text-sm font-semibold text-amber-300">Exams Accepted</div>
-                        <div className="text-sm text-slate-300">JEE Main, CUET, State CET, College Entrance</div>
-                      </div>
-                      <div>
-                        <div className="text-sm font-semibold text-amber-300">Eligibility</div>
-                        <div className="text-sm text-slate-300">Minimum 60% in 10+2 with relevant subjects.</div>
-                      </div>
-                      <div className="text-xs text-amber-400/80 mt-2 p-2 bg-amber-500/10 rounded border border-amber-500/20">
-                        Important: Application closes soon for upcoming batch.
-                      </div>
-                    </div>
-                  </section>
                 </div>
 
-                {/* 4. Fees Structure & 5. Scholarships */}
+                {/* Recruiters & Curriculum */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <section>
-                    <h3 className="text-xl font-bold text-fuchsia-400 mb-4 flex items-center gap-2">
-                      <span>💰</span> Estimated Costs
-                    </h3>
-                    <div className="bg-slate-800/40 p-5 rounded-xl border border-slate-700/50 space-y-3">
-                      <div className="flex justify-between items-center border-b border-slate-700/50 pb-2">
-                        <span className="text-sm text-slate-300">Tuition Fees (Annual)</span>
-                        <span className="font-bold text-fuchsia-300">{selectedCollege.fees}</span>
-                      </div>
-                      <div className="flex justify-between items-center border-b border-slate-700/50 pb-2">
-                        <span className="text-sm text-slate-300">Hostel & Mess</span>
-                        <span className="font-bold text-slate-200">₹1,20,000 / year</span>
-                      </div>
-                      <div className="flex justify-between items-center pt-1">
-                        <span className="text-sm font-semibold text-slate-300">Total 4-Year Est.</span>
-                        <span className="font-bold text-fuchsia-400">approx ₹12-15 Lakhs</span>
-                      </div>
-                    </div>
-                  </section>
-
-                  <section>
-                    <h3 className="text-xl font-bold text-emerald-400 mb-4 flex items-center gap-2">
-                      <span>🏆</span> Scholarships
-                    </h3>
-                    <div className="space-y-3">
-                      <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-lg">
-                        <div className="font-semibold text-emerald-300 text-sm">Merit Based Grant</div>
-                        <div className="text-xs text-slate-400 mt-1">Up to 50% tuition waiver for 90%+ in 12th.</div>
-                      </div>
-                      <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-lg">
-                        <div className="font-semibold text-emerald-300 text-sm">Need-Based Aid</div>
-                        <div className="text-xs text-slate-400 mt-1">Available for family income &lt; ₹5L/year.</div>
-                      </div>
-                    </div>
-                  </section>
-                </div>
-
-                {/* 6. Placement Statistics */}
-                <section>
-                  <h3 className="text-xl font-bold text-indigo-400 mb-4 flex items-center gap-2">
-                    <span>📈</span> Placement Statistics
-                  </h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                    <div className="bg-slate-800/40 p-4 rounded-xl border border-slate-700/50 text-center">
-                      <div className="text-xs text-slate-400 mb-1">Average Package</div>
-                      <div className="text-xl font-bold text-indigo-300">{selectedCollege.deepDetails?.averagePackage || "N/A"}</div>
-                    </div>
-                    <div className="bg-slate-800/40 p-4 rounded-xl border border-slate-700/50 text-center">
-                      <div className="text-xs text-slate-400 mb-1">Highest Package</div>
-                      <div className="text-xl font-bold text-sky-300">{selectedCollege.deepDetails?.highestPackage || "N/A"}</div>
-                    </div>
-                    <div className="bg-slate-800/40 p-4 rounded-xl border border-slate-700/50 text-center">
-                      <div className="text-xs text-slate-400 mb-1">Placement Rate</div>
-                      <div className="text-xl font-bold text-amber-300">{selectedCollege.deepDetails?.placementPercentage || "N/A"}</div>
-                    </div>
-                    <div className="bg-slate-800/40 p-4 rounded-xl border border-slate-700/50 text-center">
-                      <div className="text-xs text-slate-400 mb-1">Total Recruiters</div>
-                      <div className="text-xl font-bold text-emerald-300">400+</div>
-                    </div>
-                  </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-slate-300 mb-3">Top Recruiters</h4>
+                    <h3 className="text-lg font-bold text-indigo-400 mb-3 flex items-center gap-2">
+                      <span>👔</span> Top Recruiters
+                    </h3>
                     <div className="flex flex-wrap gap-2">
-                      {(selectedCollege.deepDetails?.topRecruiters || ["Amazon", "Microsoft", "TCS"]).map((recruiter: string, i: number) => (
-                        <span key={i} className="bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs px-3 py-1.5 rounded-lg">
+                      {(selectedCollege.deepDetails?.topRecruiters || ["Data pending"]).map((recruiter: string, i: number) => (
+                        <span key={i} className="bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-sm px-3 py-1.5 rounded-lg">
                           {recruiter}
                         </span>
                       ))}
                     </div>
                   </div>
-                </section>
-
-                {/* 7. Campus Life & 8. Why Match */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <section>
-                    <h3 className="text-xl font-bold text-orange-400 mb-4 flex items-center gap-2">
-                      <span>🏕️</span> Campus Life
+                  <div>
+                    <h3 className="text-lg font-bold text-rose-400 mb-3 flex items-center gap-2">
+                      <span>📚</span> Curriculum Highlights
                     </h3>
-                    <ul className="space-y-3">
-                      <li className="flex items-start gap-3">
-                        <span className="mt-1 text-orange-400">✓</span>
-                        <div className="text-sm text-slate-300">State-of-the-art innovation labs & libraries</div>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="mt-1 text-orange-400">✓</span>
-                        <div className="text-sm text-slate-300">50+ student clubs & technical societies</div>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="mt-1 text-orange-400">✓</span>
-                        <div className="text-sm text-slate-300">Modern hostel facilities with high-speed WiFi</div>
-                      </li>
+                    <ul className="space-y-2">
+                      {(selectedCollege.deepDetails?.curriculumHighlights || ["Data pending"]).map((highlight: string, i: number) => (
+                        <li key={i} className="flex items-start gap-2 text-sm text-slate-300">
+                          <span className="text-rose-500 mt-0.5">•</span> {highlight}
+                        </li>
+                      ))}
                     </ul>
-                  </section>
-
-                  <section>
-                    <h3 className="text-xl font-bold text-emerald-400 mb-4 flex items-center gap-2">
-                      <span>🎯</span> Why This Matches You
-                    </h3>
-                    <div className="bg-emerald-500/10 p-5 rounded-xl border border-emerald-500/20">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="text-2xl font-bold text-emerald-400">{selectedCollege.matchPercentage}% Match</div>
-                      </div>
-                      <p className="text-sm text-slate-300 leading-relaxed">
-                        {selectedCollege.whyRecommended || "Based on your academic profile, budget, and career goals, this institution provides an optimal balance of ROI and placement success rate for your desired stream."}
-                      </p>
-                    </div>
-                  </section>
-                </div>
-
-                {/* 9. Pros & Cons */}
-                <section>
-                  <h3 className="text-xl font-bold text-slate-200 mb-4 flex items-center gap-2">
-                    <span>⚖️</span> Pros & Cons
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-emerald-950/30 p-4 rounded-xl border border-emerald-900/50">
-                      <h4 className="font-bold text-emerald-400 mb-3">Advantages</h4>
-                      <ul className="space-y-2">
-                        <li className="text-sm text-slate-300 flex items-start gap-2"><span className="text-emerald-500">+</span> Excellent placement record</li>
-                        <li className="text-sm text-slate-300 flex items-start gap-2"><span className="text-emerald-500">+</span> Strong alumni network</li>
-                        <li className="text-sm text-slate-300 flex items-start gap-2"><span className="text-emerald-500">+</span> Industry-aligned curriculum</li>
-                      </ul>
-                    </div>
-                    <div className="bg-rose-950/30 p-4 rounded-xl border border-rose-900/50">
-                      <h4 className="font-bold text-rose-400 mb-3">Things to Consider</h4>
-                      <ul className="space-y-2">
-                        <li className="text-sm text-slate-300 flex items-start gap-2"><span className="text-rose-500">-</span> High competition for core roles</li>
-                        <li className="text-sm text-slate-300 flex items-start gap-2"><span className="text-rose-500">-</span> {selectedCollege.riskFactors || "Strict attendance policies"}</li>
-                      </ul>
-                    </div>
-                  </div>
-                </section>
-
-                {/* 10. Actions / Similar Colleges Footer */}
-                <div className="pt-6 border-t border-slate-800 flex flex-wrap gap-4 items-center justify-between">
-                  <div className="text-sm text-slate-400 flex items-center gap-2">
-                    <span>🔄</span> Similar options available on your dashboard
-                  </div>
-                  <div className="flex gap-3">
-                    <button className="px-4 py-2 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-800 transition-colors text-sm font-medium">
-                      Share
-                    </button>
-                    <button className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white transition-colors text-sm font-medium shadow-lg shadow-indigo-500/20">
-                      Bookmark College
-                    </button>
                   </div>
                 </div>
               </div>
